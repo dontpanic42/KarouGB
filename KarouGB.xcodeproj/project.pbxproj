@@ -7,15 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6557F5191A2DC44600F870DA /* DonkeyKongLand.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */; };
+		6557F51A1A2DC44600F870DA /* LegendOfZelda.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5111A2DC20600F870DA /* LegendOfZelda.gb */; };
+		6557F51B1A2DC44600F870DA /* SuperMarioLand.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5121A2DC20600F870DA /* SuperMarioLand.gb */; };
+		6557F51C1A2DC44600F870DA /* tetris11.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5131A2DC20600F870DA /* tetris11.gb */; };
+		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
+		6557F5211A2DCC0700F870DA /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F5201A2DCC0700F870DA /* osx.cpp */; };
 		65DC608B1A2DB51900D7415F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC608A1A2DB51900D7415F /* main.cpp */; };
 		65DC608D1A2DB51900D7415F /* KarouGB.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65DC608C1A2DB51900D7415F /* KarouGB.1 */; };
+		65DC60951A2DB53700D7415F /* sdl_io_provider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60941A2DB53700D7415F /* sdl_io_provider.cpp */; };
+		65DC60981A2DB56200D7415F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DC60971A2DB56200D7415F /* SDL2.framework */; };
+		65DC609E1A2DB5F300D7415F /* mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60991A2DB5F300D7415F /* mbc1.cpp */; };
+		65DC609F1A2DB5F300D7415F /* mbcrom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC609C1A2DB5F300D7415F /* mbcrom.cpp */; };
+		65DC60B71A2DB64D00D7415F /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A21A2DB64D00D7415F /* cpu.cpp */; };
+		65DC60B81A2DB64D00D7415F /* mmu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A51A2DB64D00D7415F /* mmu.cpp */; };
+		65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
+		65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AC1A2DB64D00D7415F /* buttons.cpp */; };
+		65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
+		65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
+		65DC60C71A2DB8E100D7415F /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60C51A2DB8E100D7415F /* ResourcePath.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		6557F5181A2DC43400F870DA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				6557F5191A2DC44600F870DA /* DonkeyKongLand.gb in CopyFiles */,
+				6557F51A1A2DC44600F870DA /* LegendOfZelda.gb in CopyFiles */,
+				6557F51B1A2DC44600F870DA /* SuperMarioLand.gb in CopyFiles */,
+				6557F51C1A2DC44600F870DA /* tetris11.gb in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		65DC60851A2DB51900D7415F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
+			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
 				65DC608D1A2DB51900D7415F /* KarouGB.1 in CopyFiles */,
@@ -25,9 +55,48 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = DonkeyKongLand.gb; sourceTree = "<group>"; };
+		6557F5111A2DC20600F870DA /* LegendOfZelda.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = LegendOfZelda.gb; sourceTree = "<group>"; };
+		6557F5121A2DC20600F870DA /* SuperMarioLand.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = SuperMarioLand.gb; sourceTree = "<group>"; };
+		6557F5131A2DC20600F870DA /* tetris11.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = tetris11.gb; sourceTree = "<group>"; };
+		6557F51D1A2DC77400F870DA /* timewarp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timewarp.cpp; sourceTree = "<group>"; };
+		6557F51E1A2DC77400F870DA /* timewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timewarp.h; sourceTree = "<group>"; };
+		6557F5201A2DCC0700F870DA /* osx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = osx.cpp; sourceTree = "<group>"; };
+		6557F5221A2DCFC000F870DA /* rom_bios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rom_bios.h; sourceTree = "<group>"; };
 		65DC60871A2DB51900D7415F /* KarouGB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KarouGB; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC608A1A2DB51900D7415F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		65DC608C1A2DB51900D7415F /* KarouGB.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = KarouGB.1; sourceTree = "<group>"; };
+		65DC60941A2DB53700D7415F /* sdl_io_provider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sdl_io_provider.cpp; path = ../sdl_io_provider.cpp; sourceTree = "<group>"; };
+		65DC60961A2DB54400D7415F /* sdl_io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sdl_io_provider.h; path = ../sdl_io_provider.h; sourceTree = "<group>"; };
+		65DC60971A2DB56200D7415F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
+		65DC60991A2DB5F300D7415F /* mbc1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mbc1.cpp; path = ../mbc1.cpp; sourceTree = "<group>"; };
+		65DC609A1A2DB5F300D7415F /* mbc1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc1.h; path = ../mbc1.h; sourceTree = "<group>"; };
+		65DC609B1A2DB5F300D7415F /* mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc.h; path = ../mbc.h; sourceTree = "<group>"; };
+		65DC609C1A2DB5F300D7415F /* mbcrom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mbcrom.cpp; path = ../mbcrom.cpp; sourceTree = "<group>"; };
+		65DC609D1A2DB5F300D7415F /* mbcrom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbcrom.h; path = ../mbcrom.h; sourceTree = "<group>"; };
+		65DC60A11A2DB61700D7415F /* io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = io_provider.h; path = KarouGB/io_provider.h; sourceTree = SOURCE_ROOT; };
+		65DC60A21A2DB64D00D7415F /* cpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cpu.cpp; path = KarouGB/cpu.cpp; sourceTree = SOURCE_ROOT; };
+		65DC60A31A2DB64D00D7415F /* cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpu.h; path = KarouGB/cpu.h; sourceTree = SOURCE_ROOT; };
+		65DC60A41A2DB64D00D7415F /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
+		65DC60A51A2DB64D00D7415F /* mmu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmu.cpp; sourceTree = "<group>"; };
+		65DC60A61A2DB64D00D7415F /* mmu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmu.h; sourceTree = "<group>"; };
+		65DC60A71A2DB64D00D7415F /* gpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu.cpp; sourceTree = "<group>"; };
+		65DC60A81A2DB64D00D7415F /* gpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gpu.h; sourceTree = "<group>"; };
+		65DC60AC1A2DB64D00D7415F /* buttons.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = buttons.cpp; sourceTree = "<group>"; };
+		65DC60AD1A2DB64D00D7415F /* buttons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = buttons.h; sourceTree = "<group>"; };
+		65DC60AE1A2DB64D00D7415F /* debug.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = debug.cpp; sourceTree = "<group>"; };
+		65DC60AF1A2DB64D00D7415F /* debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		65DC60B01A2DB64D00D7415F /* debug_translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug_translation.h; sourceTree = "<group>"; };
+		65DC60B11A2DB64D00D7415F /* cpu_inline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpu_inline.h; path = KarouGB/cpu_inline.h; sourceTree = SOURCE_ROOT; };
+		65DC60B21A2DB64D00D7415F /* cpu_mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpu_mapping.h; path = KarouGB/cpu_mapping.h; sourceTree = SOURCE_ROOT; };
+		65DC60B31A2DB64D00D7415F /* cpu_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpu_ops.h; path = KarouGB/cpu_ops.h; sourceTree = SOURCE_ROOT; };
+		65DC60B41A2DB64D00D7415F /* cpu_timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cpu_timing.h; path = KarouGB/cpu_timing.h; sourceTree = SOURCE_ROOT; };
+		65DC60B51A2DB64D00D7415F /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
+		65DC60B61A2DB64D00D7415F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
+		65DC60BE1A2DB70000D7415F /* os.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = os.h; path = KarouGB/os.h; sourceTree = SOURCE_ROOT; };
+		65DC60C11A2DB72900D7415F /* osx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osx.h; path = ../../osx.h; sourceTree = "<group>"; };
+		65DC60C51A2DB8E100D7415F /* ResourcePath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ResourcePath.mm; path = ../../ResourcePath.mm; sourceTree = "<group>"; };
+		65DC60C61A2DB8E100D7415F /* ResourcePath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ResourcePath.hpp; path = ../../ResourcePath.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,15 +104,83 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65DC60981A2DB56200D7415F /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6557F5001A2DC0D000F870DA /* memory */ = {
+			isa = PBXGroup;
+			children = (
+				65DC60991A2DB5F300D7415F /* mbc1.cpp */,
+				65DC609A1A2DB5F300D7415F /* mbc1.h */,
+				65DC609B1A2DB5F300D7415F /* mbc.h */,
+				65DC609C1A2DB5F300D7415F /* mbcrom.cpp */,
+				65DC609D1A2DB5F300D7415F /* mbcrom.h */,
+			);
+			path = memory;
+			sourceTree = "<group>";
+		};
+		6557F5011A2DC10300F870DA /* io */ = {
+			isa = PBXGroup;
+			children = (
+				65DC60A11A2DB61700D7415F /* io_provider.h */,
+				65DC60961A2DB54400D7415F /* sdl_io_provider.h */,
+				65DC60941A2DB53700D7415F /* sdl_io_provider.cpp */,
+			);
+			path = io;
+			sourceTree = "<group>";
+		};
+		6557F5031A2DC14200F870DA /* os */ = {
+			isa = PBXGroup;
+			children = (
+				65DC60BE1A2DB70000D7415F /* os.h */,
+				6557F5051A2DC14E00F870DA /* osx */,
+			);
+			path = os;
+			sourceTree = "<group>";
+		};
+		6557F5051A2DC14E00F870DA /* osx */ = {
+			isa = PBXGroup;
+			children = (
+				65DC60C51A2DB8E100D7415F /* ResourcePath.mm */,
+				65DC60C61A2DB8E100D7415F /* ResourcePath.hpp */,
+				65DC60C11A2DB72900D7415F /* osx.h */,
+				6557F5201A2DCC0700F870DA /* osx.cpp */,
+			);
+			path = osx;
+			sourceTree = "<group>";
+		};
+		6557F5061A2DC17B00F870DA /* cpu */ = {
+			isa = PBXGroup;
+			children = (
+				65DC60A21A2DB64D00D7415F /* cpu.cpp */,
+				65DC60A31A2DB64D00D7415F /* cpu.h */,
+				65DC60B11A2DB64D00D7415F /* cpu_inline.h */,
+				65DC60B21A2DB64D00D7415F /* cpu_mapping.h */,
+				65DC60B31A2DB64D00D7415F /* cpu_ops.h */,
+				65DC60B41A2DB64D00D7415F /* cpu_timing.h */,
+			);
+			path = cpu;
+			sourceTree = "<group>";
+		};
+		6557F50F1A2DC1F800F870DA /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */,
+				6557F5111A2DC20600F870DA /* LegendOfZelda.gb */,
+				6557F5121A2DC20600F870DA /* SuperMarioLand.gb */,
+				6557F5131A2DC20600F870DA /* tetris11.gb */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
 		65DC607E1A2DB51900D7415F = {
 			isa = PBXGroup;
 			children = (
+				65DC60971A2DB56200D7415F /* SDL2.framework */,
 				65DC60891A2DB51900D7415F /* KarouGB */,
 				65DC60881A2DB51900D7415F /* Products */,
 			);
@@ -60,8 +197,28 @@
 		65DC60891A2DB51900D7415F /* KarouGB */ = {
 			isa = PBXGroup;
 			children = (
+				6557F50F1A2DC1F800F870DA /* resources */,
+				6557F5061A2DC17B00F870DA /* cpu */,
+				6557F5031A2DC14200F870DA /* os */,
+				6557F5011A2DC10300F870DA /* io */,
+				6557F5001A2DC0D000F870DA /* memory */,
 				65DC608A1A2DB51900D7415F /* main.cpp */,
+				65DC60A41A2DB64D00D7415F /* types.h */,
+				65DC60A51A2DB64D00D7415F /* mmu.cpp */,
+				65DC60A61A2DB64D00D7415F /* mmu.h */,
+				65DC60A71A2DB64D00D7415F /* gpu.cpp */,
+				65DC60A81A2DB64D00D7415F /* gpu.h */,
+				65DC60AC1A2DB64D00D7415F /* buttons.cpp */,
+				65DC60AD1A2DB64D00D7415F /* buttons.h */,
+				65DC60AE1A2DB64D00D7415F /* debug.cpp */,
+				65DC60AF1A2DB64D00D7415F /* debug.h */,
+				65DC60B01A2DB64D00D7415F /* debug_translation.h */,
+				65DC60B51A2DB64D00D7415F /* timer.cpp */,
+				65DC60B61A2DB64D00D7415F /* timer.h */,
 				65DC608C1A2DB51900D7415F /* KarouGB.1 */,
+				6557F51D1A2DC77400F870DA /* timewarp.cpp */,
+				6557F51E1A2DC77400F870DA /* timewarp.h */,
+				6557F5221A2DCFC000F870DA /* rom_bios.h */,
 			);
 			path = KarouGB;
 			sourceTree = "<group>";
@@ -76,6 +233,7 @@
 				65DC60831A2DB51900D7415F /* Sources */,
 				65DC60841A2DB51900D7415F /* Frameworks */,
 				65DC60851A2DB51900D7415F /* CopyFiles */,
+				6557F5181A2DC43400F870DA /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -117,7 +275,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65DC60951A2DB53700D7415F /* sdl_io_provider.cpp in Sources */,
 				65DC608B1A2DB51900D7415F /* main.cpp in Sources */,
+				65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */,
+				65DC609E1A2DB5F300D7415F /* mbc1.cpp in Sources */,
+				6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */,
+				6557F5211A2DCC0700F870DA /* osx.cpp in Sources */,
+				65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */,
+				65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */,
+				65DC60B81A2DB64D00D7415F /* mmu.cpp in Sources */,
+				65DC60B71A2DB64D00D7415F /* cpu.cpp in Sources */,
+				65DC609F1A2DB5F300D7415F /* mbcrom.cpp in Sources */,
+				65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */,
+				65DC60C71A2DB8E100D7415F /* ResourcePath.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -197,6 +367,10 @@
 		65DC60911A2DB51900D7415F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -204,6 +378,10 @@
 		65DC60921A2DB51900D7415F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -227,6 +405,7 @@
 				65DC60921A2DB51900D7415F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
