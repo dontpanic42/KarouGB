@@ -71,11 +71,11 @@ public:
     
     virtual void generateSamples(T * stream, std::size_t length)
     {
-        std::lock_guard<std::mutex> guard_s_a(lock);
-        
         std::size_t i = 0;
         while(i < length)
         {
+            lock.lock();
+            
             /* Wenn keine signale vorhanden sind,
              fülle den Buffer mit Stille */
             if(signals.empty())
@@ -85,6 +85,7 @@ public:
                     stream[i++] = SIG_ZERO;
                 }
                 
+                lock.unlock();
                 return;
             }
             
@@ -146,32 +147,34 @@ public:
                     signals.pop();
                 }
             }
+            
+            lock.unlock();
         }
     }
     
     void setFrequencyDuty(double duty)
     {
-        lock.lock();
-        frequencyDuty = duty;
-        lock.unlock();
+        std::lock_guard<std::mutex> guard_s_f_a(lock);
+        
+        frequencyDuty = (duty == 0.)? 0.0001 : duty;
     }
     
     void setFrequency(double frequency)
     {
-        signal_t sig(frequency);
+        signal_t sig((frequency == 0.)? 0.0001 : frequency);
         
-        lock.lock();
+        std::lock_guard<std::mutex> guard_s_f_a(lock);
+        
         signals = std::queue<signal_t>();
         signals.push(frequency);
-        lock.unlock();
     }
     
     
     virtual void setAmplitude(Channel channel, double amplitude)
     {
-        lock.lock();
+        std::lock_guard<std::mutex> guard_s_f_a(lock);
+        
         amplitudes[channel] = amplitude;
-        lock.unlock();
     }
 };
 
