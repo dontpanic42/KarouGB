@@ -281,7 +281,8 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     
     //TODO: Für Save-Games, speichere/lade rambanks[0..n]
     
-    this->ramSizeKB = 0x02;
+    //WTF?
+    //this->ramSizeKB = 0x02;
     
     std::function<void(u16i, u08i, u08i *)> wfunc_write_rm = nullptr;
     if(this->ramSizeKB != 0x00)

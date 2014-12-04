@@ -16,6 +16,7 @@
 #include "debug.h"
 #include "buttons.h"
 #include "timewarp.h"
+#include "apu.h"
 
 int main(int argc, const char * argv[])
 {
@@ -36,6 +37,7 @@ int main(int argc, const char * argv[])
     Timer                       timer(mmu, cpu);
     Debugger                    dbg(cpu, mmu, c);
     Timewarp                    timewarp;
+    APU                         apu(mmu);
     
     ioprovider->init("KarouGB++");
     
@@ -44,7 +46,7 @@ int main(int argc, const char * argv[])
         timer.tick(c);
         cpu->execute(c);
         gpu.step(c);
-        
+        apu.tick(c);
 #ifndef ENABLE_FULL_SPEED
         timewarp.delay(c);
 #endif

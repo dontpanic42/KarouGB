@@ -26,6 +26,9 @@
 		65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
 		65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
 		65DC60C71A2DB8E100D7415F /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60C51A2DB8E100D7415F /* ResourcePath.mm */; };
+		65F7C38C1A30799F00F495CC /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C38A1A30799F00F495CC /* sound.cpp */; };
+		65F7C38F1A308D6000F495CC /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C38D1A308D6000F495CC /* apu.cpp */; };
+		65F7C3951A30915400F495CC /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C3931A30915400F495CC /* apu_squarewave_channel.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +100,15 @@
 		65DC60C11A2DB72900D7415F /* osx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = osx.h; path = ../../osx.h; sourceTree = "<group>"; };
 		65DC60C51A2DB8E100D7415F /* ResourcePath.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ResourcePath.mm; path = ../../ResourcePath.mm; sourceTree = "<group>"; };
 		65DC60C61A2DB8E100D7415F /* ResourcePath.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ResourcePath.hpp; path = ../../ResourcePath.hpp; sourceTree = "<group>"; };
+		65F7C3831A3076F200F495CC /* signal_generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = signal_generator.h; sourceTree = "<group>"; };
+		65F7C3851A30778C00F495CC /* squarewave_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squarewave_generator.h; sourceTree = "<group>"; };
+		65F7C38A1A30799F00F495CC /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sound.cpp; sourceTree = "<group>"; };
+		65F7C38B1A30799F00F495CC /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sound.h; sourceTree = "<group>"; };
+		65F7C38D1A308D6000F495CC /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu.cpp; sourceTree = "<group>"; };
+		65F7C38E1A308D6000F495CC /* apu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu.h; sourceTree = "<group>"; };
+		65F7C3911A308D6900F495CC /* apu_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_channel.h; sourceTree = "<group>"; };
+		65F7C3931A30915400F495CC /* apu_squarewave_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_squarewave_channel.cpp; sourceTree = "<group>"; };
+		65F7C3941A30915400F495CC /* apu_squarewave_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_squarewave_channel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -197,6 +209,7 @@
 		65DC60891A2DB51900D7415F /* KarouGB */ = {
 			isa = PBXGroup;
 			children = (
+				65F7C3811A3076BC00F495CC /* sound */,
 				6557F50F1A2DC1F800F870DA /* resources */,
 				6557F5061A2DC17B00F870DA /* cpu */,
 				6557F5031A2DC14200F870DA /* os */,
@@ -221,6 +234,30 @@
 				6557F5221A2DCFC000F870DA /* rom_bios.h */,
 			);
 			path = KarouGB;
+			sourceTree = "<group>";
+		};
+		65F7C3811A3076BC00F495CC /* sound */ = {
+			isa = PBXGroup;
+			children = (
+				65F7C3961A309B7E00F495CC /* rawaudio */,
+				65F7C38D1A308D6000F495CC /* apu.cpp */,
+				65F7C38E1A308D6000F495CC /* apu.h */,
+				65F7C3911A308D6900F495CC /* apu_channel.h */,
+				65F7C3931A30915400F495CC /* apu_squarewave_channel.cpp */,
+				65F7C3941A30915400F495CC /* apu_squarewave_channel.h */,
+			);
+			name = sound;
+			sourceTree = "<group>";
+		};
+		65F7C3961A309B7E00F495CC /* rawaudio */ = {
+			isa = PBXGroup;
+			children = (
+				65F7C3831A3076F200F495CC /* signal_generator.h */,
+				65F7C3851A30778C00F495CC /* squarewave_generator.h */,
+				65F7C38A1A30799F00F495CC /* sound.cpp */,
+				65F7C38B1A30799F00F495CC /* sound.h */,
+			);
+			name = rawaudio;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,8 +315,10 @@
 				65DC60951A2DB53700D7415F /* sdl_io_provider.cpp in Sources */,
 				65DC608B1A2DB51900D7415F /* main.cpp in Sources */,
 				65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */,
+				65F7C38C1A30799F00F495CC /* sound.cpp in Sources */,
 				65DC609E1A2DB5F300D7415F /* mbc1.cpp in Sources */,
 				6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */,
+				65F7C38F1A308D6000F495CC /* apu.cpp in Sources */,
 				6557F5211A2DCC0700F870DA /* osx.cpp in Sources */,
 				65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */,
 				65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */,
@@ -287,6 +326,7 @@
 				65DC60B71A2DB64D00D7415F /* cpu.cpp in Sources */,
 				65DC609F1A2DB5F300D7415F /* mbcrom.cpp in Sources */,
 				65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */,
+				65F7C3951A30915400F495CC /* apu_squarewave_channel.cpp in Sources */,
 				65DC60C71A2DB8E100D7415F /* ResourcePath.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

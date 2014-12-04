@@ -15,25 +15,6 @@
 #include <unordered_map>
 #include "io_provider.h"
 
-/* Kann gelöscht werden */
-//typedef unsigned char u08i;
-//typedef unsigned int u32i;
-//enum Button
-//{
-//    BTN_LEFT,
-//    BTN_RIGHT,
-//    BTN_UP,
-//    BTN_DOWN,
-//    
-//    BTN_A,
-//    BTN_B,
-//    BTN_SELECT,
-//    BTN_START,
-//    
-//    BTN_LAST
-//};
-/* Kann gelöscht werden ENDE */
-
 class SDLIOProvider : public IOProvider
 {
 public:

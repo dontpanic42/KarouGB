@@ -363,7 +363,7 @@ u08i GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y)
 
 u08i GPU::decodeColor(u08i value, u08i palette)
 {
-    u08i shade;
+    u08i shade = 0;
     
     switch(value & 0x03)
     {
