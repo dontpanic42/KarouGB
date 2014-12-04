@@ -23,7 +23,6 @@
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
 		65DC608B1A2DB51900D7415F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC608A1A2DB51900D7415F /* main.cpp */; };
-		65DC608D1A2DB51900D7415F /* KarouGB.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65DC608C1A2DB51900D7415F /* KarouGB.1 */; };
 		65DC60981A2DB56200D7415F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DC60971A2DB56200D7415F /* SDL2.framework */; };
 		65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
 		65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AC1A2DB64D00D7415F /* buttons.cpp */; };
@@ -51,7 +50,6 @@
 			dstPath = /usr/share/man/man1;
 			dstSubfolderSpec = 0;
 			files = (
-				65DC608D1A2DB51900D7415F /* KarouGB.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -97,7 +95,6 @@
 		659133AD1A30C0290085193B /* cpu_timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_timing.h; sourceTree = "<group>"; };
 		65DC60871A2DB51900D7415F /* KarouGB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KarouGB; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC608A1A2DB51900D7415F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		65DC608C1A2DB51900D7415F /* KarouGB.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = KarouGB.1; sourceTree = "<group>"; };
 		65DC60971A2DB56200D7415F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		65DC60A41A2DB64D00D7415F /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 		65DC60A71A2DB64D00D7415F /* gpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gpu.cpp; sourceTree = "<group>"; };
@@ -255,7 +252,6 @@
 				65DC60B01A2DB64D00D7415F /* debug_translation.h */,
 				65DC60B51A2DB64D00D7415F /* timer.cpp */,
 				65DC60B61A2DB64D00D7415F /* timer.h */,
-				65DC608C1A2DB51900D7415F /* KarouGB.1 */,
 				6557F51D1A2DC77400F870DA /* timewarp.cpp */,
 				6557F51E1A2DC77400F870DA /* timewarp.h */,
 				6557F5221A2DCFC000F870DA /* rom_bios.h */,
