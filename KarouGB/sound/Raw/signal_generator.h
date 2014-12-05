@@ -25,6 +25,7 @@ template<typename T, std::size_t NUM_CHANNELS>
 class SignalGenerator
 {
 public:
+    
     virtual ~SignalGenerator()
     {
     }

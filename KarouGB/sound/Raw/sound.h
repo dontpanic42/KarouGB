@@ -16,9 +16,10 @@
 
 #include "signal_generator.h"
 #include "squarewave_generator.h"
+#include "noise_generator.h"
 
 #define SOUND_BUFFER_SIZE 2048
-#define SOUND_NUM_GENERATORS 2
+#define SOUND_NUM_GENERATORS 3
 #define SOUND_NUM_CHANNELS 2
 class Sound
 {
@@ -27,21 +28,24 @@ public:
     typedef Uint8 buffer_value_t;
     
     typedef SquareWaveGenerator<value_t, SOUND_NUM_CHANNELS> sq_generator_t;
+    typedef NoiseGenerator<value_t, SOUND_NUM_CHANNELS>noise_generator_t;
 private:
     
     SDL_AudioSpec currentSpec;
     value_t buffer[SOUND_BUFFER_SIZE * SOUND_NUM_CHANNELS];
     
-    sq_generator_t square1;
-    sq_generator_t square2;
+    sq_generator_t      square1;
+    sq_generator_t      square2;
+    noise_generator_t   noise;
 public:
     Sound();
     ~Sound();
     
     void generateSamples(value_t * stream, std::size_t length);
     
-    sq_generator_t & getSquare1();
-    sq_generator_t & getSquare2();
+    sq_generator_t &    getSquare1();
+    sq_generator_t &    getSquare2();
+    noise_generator_t & getNoise();
 };
 
 #endif /* defined(__KarouGB__sound__) */

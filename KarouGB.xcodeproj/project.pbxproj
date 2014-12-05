@@ -28,6 +28,7 @@
 		65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AC1A2DB64D00D7415F /* buttons.cpp */; };
 		65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
 		65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
+		65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -106,6 +107,9 @@
 		65DC60B01A2DB64D00D7415F /* debug_translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug_translation.h; sourceTree = "<group>"; };
 		65DC60B51A2DB64D00D7415F /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		65DC60B61A2DB64D00D7415F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
+		65E763691A31B4890015EECF /* noise_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise_generator.h; sourceTree = "<group>"; };
+		65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_noise_channel.cpp; sourceTree = "<group>"; };
+		65E7636B1A31BC610015EECF /* apu_noise_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_noise_channel.h; sourceTree = "<group>"; };
 		65F7C38D1A308D6000F495CC /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apu.cpp; path = sound/apu.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -124,6 +128,8 @@
 		6555147D1A30BCAF007CAAD4 /* sound */ = {
 			isa = PBXGroup;
 			children = (
+				65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */,
+				65E7636B1A31BC610015EECF /* apu_noise_channel.h */,
 				6555147E1A30BCAF007CAAD4 /* apu.cpp */,
 				6555147F1A30BCAF007CAAD4 /* apu.h */,
 				655514801A30BCAF007CAAD4 /* apu_channel.h */,
@@ -137,6 +143,7 @@
 		655514831A30BCAF007CAAD4 /* raw */ = {
 			isa = PBXGroup;
 			children = (
+				65E763691A31B4890015EECF /* noise_generator.h */,
 				655514861A30BCAF007CAAD4 /* signal_generator.h */,
 				655514871A30BCAF007CAAD4 /* sound.cpp */,
 				655514881A30BCAF007CAAD4 /* sound.h */,
@@ -324,6 +331,7 @@
 				6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */,
 				659133AE1A30C0290085193B /* cpu.cpp in Sources */,
 				659133961A30BFEE0085193B /* mbc1.cpp in Sources */,
+				65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */,
 				6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */,
 				65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */,
 				6591339D1A30C0010085193B /* sdl_io_provider.cpp in Sources */,

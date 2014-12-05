@@ -13,7 +13,9 @@
 #include <memory>
 #include "cpu.h"
 #include "mmu.h"
+#include "sound.h"
 #include "apu_squarewave_channel.h"
+#include "apu_noise_channel.h"
 
 class APU
 {
@@ -22,8 +24,10 @@ private:
     
     Sound sound;
     
-    APUSquareWaveChannel channel1;
-    APUSquareWaveChannel channel2;
+    APUSquareWaveChannel    channel1;
+    APUSquareWaveChannel    channel2;
+    
+    APUNoiseChannel         channel4;
     
     
     void wfunc_nr51(u16i addr, u08i value, u08i * ptr);

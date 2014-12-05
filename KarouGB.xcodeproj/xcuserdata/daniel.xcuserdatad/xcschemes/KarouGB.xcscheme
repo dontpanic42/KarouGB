@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "SuperMarioLand.gb"
+            argument = "LegendOfZelda.gb"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

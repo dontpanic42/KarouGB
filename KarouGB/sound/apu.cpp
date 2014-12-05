@@ -13,14 +13,17 @@
 
 #define SND_CHANNEL1_REGISTER_OFFSET 0xFF10
 #define SND_CHANNEL2_REGISTER_OFFSET 0xFF15
+#define SND_CHANNEL4_REGISTER_OFFSET 0xFF1F
 
 #define SND_CHANNEL1_ENABLE
 #define SND_CHANNEL2_ENABLE
+#define SND_CHANNEL4_ENABLE
 
 APU::APU(std::shared_ptr<MMU> mmu)
 : mmu(mmu)
 , channel1(mmu, SND_CHANNEL1_REGISTER_OFFSET, sound.getSquare1())
 , channel2(mmu, SND_CHANNEL2_REGISTER_OFFSET, sound.getSquare2())
+, channel4(mmu, SND_CHANNEL4_REGISTER_OFFSET, sound.getNoise())
 {
     mmu->register_f_write(SND_NR50, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr50(addr, value, ptr);
@@ -54,6 +57,11 @@ void APU::wfunc_nr50(u16i addr, u08i value, u08i * ptr)
     channel2.setTerminalVolume(CHANNEL_LEFT, volTerm1);
     channel2.setTerminalVolume(CHANNEL_RIGHT, volTerm2);
 #endif
+    
+#ifdef SND_CHANNEL4_ENABLE
+    channel4.setTerminalVolume(CHANNEL_LEFT, volTerm1);
+    channel4.setTerminalVolume(CHANNEL_RIGHT, volTerm2);
+#endif
     (*ptr) = value;
 }
 
@@ -80,6 +88,10 @@ void APU::wfunc_nr51(u16i addr, u08i value, u08i * ptr)
     channel2.setTerminalEnabled(CHANNEL_RIGHT, value & BIT_5);
 #endif
     
+#ifdef SND_CHANNEL4_ENABLE
+    channel4.setTerminalEnabled(CHANNEL_LEFT, value & BIT_3);
+    channel4.setTerminalEnabled(CHANNEL_RIGHT, value & BIT_7);
+#endif
     (*ptr) = value;
 }
 
@@ -93,5 +105,9 @@ void APU::tick(const cpu::Context &c)
     
 #ifdef SND_CHANNEL2_ENABLE
     channel2.tick(c.T);
+#endif
+    
+#ifdef SND_CHANNEL4_ENABLE
+    channel4.tick(c.T);
 #endif
 }

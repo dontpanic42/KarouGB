@@ -21,13 +21,6 @@ APUSquareWaveChannel::APUSquareWaveChannel(std::shared_ptr<MMU> mmu,
 , reg_nrx2(mmu->getDMARef(SND_NRx2_OFFSET + baseRegister))
 , reg_nrx3(mmu->getDMARef(SND_NRx3_OFFSET + baseRegister))
 , reg_nrx4(mmu->getDMARef(SND_NRx4_OFFSET + baseRegister))
-
-, env_delay(0)
-, env_volume(0)
-, length(0)
-, length_enabled(false)
-, env_period(0)
-, env_init_volume(0)
 {
     mmu->register_f_write(SND_NRx1_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr11(addr, value, ptr);
@@ -65,7 +58,9 @@ APUSquareWaveChannel::APUSquareWaveChannel(std::shared_ptr<MMU> mmu,
 /* NR11 FF11 DDLL LLLL Duty, Length load (64-L) */
 void APUSquareWaveChannel::wfunc_nr11(u16i addr, u08i value, u08i *ptr)
 {
-    length = length_init = 64 - (value & 0x3F);
+//    length = length_init = 64 - (value & 0x3F);
+    setLength(64 - (value & 0x3F));
+    setInitialLength(64 - (value & 0x3F));
     
     double oldFrequencyDuty = frequencyDuty;
     switch((value & 0xC0) >> 6)
@@ -94,9 +89,9 @@ void APUSquareWaveChannel::wfunc_nr11(u16i addr, u08i value, u08i *ptr)
  */
 void APUSquareWaveChannel::wfunc_nr12(u16i addr, u08i value, u08i *ptr)
 {
-    env_init_volume = value >> 4;
-    env_dir = value & BIT_3;
-    env_period = value & (BIT_0 | BIT_1 | BIT_2);
+    setEnvelopeInitialVolume(value >> 4);
+    setEnvelopeDirection(value & BIT_3);
+    setEnvelopePeriod(value & (BIT_0 | BIT_1 | BIT_2));
     
     (*ptr) = value;
 }
@@ -113,11 +108,11 @@ void APUSquareWaveChannel::wfunc_nr13(u16i addr, u08i value, u08i *ptr)
     frequency = (frequency & ~0xFF) | value;
     if(frequency != oldFrequency)
     {
-        updateBaseSample();
+        updateGenerator();
     }
     
     /* ??? so bei BLARGG */
-    length = length_init;
+    resetLength();
 }
 
 /*
@@ -134,31 +129,23 @@ void APUSquareWaveChannel::wfunc_nr14(u16i addr, u08i value, u08i *ptr)
     frequency = ((value & 0x07) << 8) | (frequency & 0xFF);
     if(oldFrequency != frequency)
     {
-        updateBaseSample();
+        updateGenerator();
     }
     
-    length_enabled = value & 0x40;
-    
+    setLengthEnable(value & 0x40);
+    /* ??? so bei BLARGG */
+    resetLength();
+
     if(value & BIT_7)
     {
-        onTrigger();
+        /* Trigger */
+        resetEnvelope();
+        setInternalEnable(true);
+        updateVolume();
     }
-    
-    /* ??? so bei BLARGG */
-    length = length_init;
 }
 
-void APUSquareWaveChannel::onTrigger()
-{
-    length = length_init;
-    env_delay = env_period;
-    env_volume = env_init_volume;
-    internal_enable = true;
-    
-    updateVolume();
-}
-
-void APUSquareWaveChannel::updateBaseSample()
+void APUSquareWaveChannel::updateGenerator()
 {
     double real_freq = (frequency == 0)?
     131072. : 131072. / (2048. - (double) frequency);
@@ -168,79 +155,9 @@ void APUSquareWaveChannel::updateBaseSample()
     //updateSweepSample();
 }
 
-void APUSquareWaveChannel::updateVolume()
-{
-    if( !internal_enable ||
-       (!length && length_enabled) ||
-        !env_volume)
-    {
-        getGenerator().setAmplitude(CHANNEL_LEFT, 0.);
-        getGenerator().setAmplitude(CHANNEL_RIGHT, 0.);
-        
-        return;
-    }
-    
-    double env = (env_volume == 0)? 0. : static_cast<double>(env_volume) / 15.;
-    getGenerator().setAmplitude(CHANNEL_LEFT, getTerminalVolume(CHANNEL_LEFT) * env);
-    getGenerator().setAmplitude(CHANNEL_RIGHT, getTerminalVolume(CHANNEL_RIGHT) * env);
-}
-
 void APUSquareWaveChannel::onUpdateSweep()
 {
     
-}
-
-/* Volume Envelope update methode.
- Wird alle ~1/64 Sekunden Simmulationszeit
- aufgerufen */
-void APUSquareWaveChannel::onUpdateVolumeEnvelope()
-{
-    /* Wenn das delay 0 wird */
-    if(env_delay && !--env_delay)
-    {
-        /* Setzte das delay zurück */
-        env_delay = env_period;
-        /* Wenn der envelope incrementiert */
-        if(env_dir)
-        {
-            /* inkrementiere nur, wenn env_volume kleiner dem
-             maximum (15) ist */
-            if( env_volume < 15 )
-            {
-                env_volume++;
-                updateVolume();
-            }
-        }
-        /* Wenn der envelope decrementiert */
-        else
-        {
-            /* Dekrementiere nur, wenn env_volume größer
-             dem minimum (0) ist */
-            if( env_volume > 0)
-            {
-                env_volume--;
-                updateVolume();
-            }
-        }
-    }
-}
-
-void APUSquareWaveChannel::onUpdateLength()
-{
-    /* Wenn der length-counter aktiviert und nicht = 0 ist */
-    if( length_enabled && length > 0)
-    {
-        /* Dekrementiere den Length-Counter */
-        length--;
-        
-        /* Und deaktiviere den Channel */
-        if(length == 0)
-        {
-            internal_enable = false;
-        }
-        
-        updateVolume();
-    }
 }
 
 void APUSquareWaveChannel::tick(const u08i delta)
