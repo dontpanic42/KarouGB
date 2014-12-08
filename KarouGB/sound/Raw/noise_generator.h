@@ -63,9 +63,9 @@ public:
     , SIG_ZERO(static_cast<T>(0))
     , tap(TAP_MODE_7_BIT)
     , frequency(440.)
-    , shift_reg(0xFFFF)
+    , shift_reg(0x7FFF)
     , last_counter(0)
-    , last_sample(SIG_HIGH)
+    , last_sample(std::numeric_limits<T>::max())
     {
         for(std::size_t i = 0; i < NUM_CHANNELS; i++)
         {
@@ -136,8 +136,6 @@ public:
         lock_amp.lock();
         amplitudes[channel] = amplitude;
         lock_amp.unlock();
-        
-//        std::printf("ampl: %f\n", amplitude);
     }
 };
 

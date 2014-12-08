@@ -67,7 +67,7 @@ CartridgeType MMU::detectCartridgeType(char * buf, std::size_t size) {
 
 void MMU::setupMBC(const std::string & cartridgeFile)
 {
-    std::size_t buffsize;
+    std::size_t buffsize = 0;
     char * buffer = readRom(cartridgeFile, &buffsize);
     
     switch(detectCartridgeType(buffer, buffsize))

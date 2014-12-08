@@ -62,15 +62,15 @@ void Sound::generateSamples(value_t * stream, std::size_t length)
     
     /* Mixe SquareWave 1 in den Buffer */
     square1.generateSamples(&buffer[0], length);
-    SDL_MixAudioFormat(s, b, currentSpec.format, len, SDL_MIX_MAXVOLUME / SOUND_NUM_GENERATORS);
+    SDL_MixAudioFormat(s, b, currentSpec.format, len, SDL_MIX_MAXVOLUME * 1.0);
     
     /* Mixe SquareWave 2 in den Buffer */
     square2.generateSamples(&buffer[0], length);
-    SDL_MixAudioFormat(s, b, currentSpec.format, len, SDL_MIX_MAXVOLUME / SOUND_NUM_GENERATORS);
+    SDL_MixAudioFormat(s, b, currentSpec.format, len, SDL_MIX_MAXVOLUME * 0.5);
     
     /* Mixe SquareWave 2 in den Buffer */
     noise.generateSamples(&buffer[0], length);
-    SDL_MixAudioFormat(s, b, currentSpec.format, len, SDL_MIX_MAXVOLUME / SOUND_NUM_GENERATORS);
+    SDL_MixAudioFormat(s, b, currentSpec.format, len, SDL_MIX_MAXVOLUME * 0.33);
 }
 
 Sound::sq_generator_t & Sound::getSquare1()

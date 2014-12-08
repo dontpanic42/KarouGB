@@ -18,7 +18,7 @@
 class SDLIOProvider : public IOProvider
 {
 public:
-    typedef void(*drawfcn)(std::shared_ptr<SDL_Surface> surf, int x, int y, u32i color);
+    typedef void(*drawfcn)(const std::shared_ptr<SDL_Surface> & surface, int x, int y, u32i color);
 private:
     struct KeyCallback
     {

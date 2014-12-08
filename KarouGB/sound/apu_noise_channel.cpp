@@ -49,7 +49,7 @@ APUNoiseChannel::APUNoiseChannel(std::shared_ptr<MMU> mmu,
 
 void APUNoiseChannel::wfunc_nr11(u16i addr, u08i value, u08i *ptr)
 {
-    u08i len = 64 - (value & 0x3F);
+    u08i len = 64u - (value & 0x3F);
     
     setLength(len);
     setInitialLength(len);
@@ -72,8 +72,8 @@ void APUNoiseChannel::wfunc_nr13(u16i addr, u08i value, u08i *ptr)
                           Sound::noise_generator_t::TAP_MODE_7_BIT :
                           Sound::noise_generator_t::TAP_MODE_15_BIT);
     
-    double s = static_cast<double>(value & (BIT_4 | BIT_5 | BIT_6 | BIT_7) >> 4);
-    double r = static_cast<double>(value & (BIT_0 | BIT_1 | BIT_2));
+    double s = static_cast<double>(value & (BIT_4 | BIT_5 | BIT_6 | BIT_7) >> 4);   //max: dec 15
+    double r = static_cast<double>(value & (BIT_0 | BIT_1 | BIT_2));                //max: dec 7
     
     if(r == 0.)
     {

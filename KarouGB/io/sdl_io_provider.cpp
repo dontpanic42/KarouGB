@@ -19,14 +19,14 @@
 /* put_pixel_x-Funktionen von 
    http://stackoverflow.com/questions/6852055/how-can-i-modify-pixels-using-sdl
    übernommen... (jeweils die nolock variante) */
-static void put_pixel_32(std::shared_ptr<SDL_Surface> surface, int x, int y, u32i color)
+static void put_pixel_32(const std::shared_ptr<SDL_Surface> & surface, int x, int y, u32i color)
 {
     Uint8 * pixel = (Uint8*)surface->pixels;
     pixel += (y * surface->pitch) + (x * sizeof(Uint32));
     *((Uint32*)pixel) = color;
 }
 
-static void put_pixel_24(std::shared_ptr<SDL_Surface> surface, int x, int y, u32i color)
+static void put_pixel_24(const std::shared_ptr<SDL_Surface> & surface, int x, int y, u32i color)
 {
     Uint8 * pixel = (Uint8*)surface->pixels;
     pixel += (y * surface->pitch) + (x * sizeof(Uint8) * 3);
@@ -41,23 +41,23 @@ static void put_pixel_24(std::shared_ptr<SDL_Surface> surface, int x, int y, u32
 #endif
 }
 
-static void put_pixel_16(std::shared_ptr<SDL_Surface> surface, int x, int y, u32i color)
+static void put_pixel_16(const std::shared_ptr<SDL_Surface> & surface, int x, int y, u32i color)
 {
     Uint8 * pixel = (Uint8*)surface->pixels;
     pixel += (y * surface->pitch) + (x * sizeof(Uint16));
     *((Uint16*)pixel) = color & 0xFFFF;
 }
 
-static void put_pixel_8(std::shared_ptr<SDL_Surface> surface, int x, int y, u32i color)
+static void put_pixel_8(const std::shared_ptr<SDL_Surface> & surface, int x, int y, u32i color)
 {
     Uint8 * pixel = (Uint8*)surface->pixels;
     pixel += (y * surface->pitch) + (x * sizeof(Uint8));
     *pixel = color & 0xFF;
 }
 
-static SDLIOProvider::drawfcn getDrawFunction(const std::shared_ptr<SDL_Surface> surf)
+static SDLIOProvider::drawfcn getDrawFunction(const std::shared_ptr<SDL_Surface> & surface)
 {
-    switch(surf->format->BitsPerPixel)
+    switch(surface->format->BitsPerPixel)
     {
         case 8:
             return &put_pixel_8;
