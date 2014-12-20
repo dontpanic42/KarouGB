@@ -15,6 +15,7 @@
 #include "mmu.h"
 #include "io_provider.h"
 #include <memory>
+#include <queue>
 
 #define GPU_REG_ADDR_LCDC   0xFF40
 #define GPU_REG_ADDR_STAT   0xFF41
@@ -41,8 +42,12 @@
 #define GPU_TIMING_OAM      80
 #define GPU_TIMING_VRAM     172
 
-//#define RENDER_ON_SCANLINE
+#define GPU_SCREENWIDTH     160
+#define GPU_SCREENHEIGHT    144
 
+#define GPU_SPRITECOUNT     40
+
+//#define RENDER_ON_SCANLINE
 class GPU
 {
 private:
@@ -54,7 +59,7 @@ private:
         LCDC_STAT_OAM_VRAM = 3
     };
     
-    enum Colors
+    enum Color
     {
         COLOR_WHITE = 0,
         COLOR_LIGHT = 1,
@@ -68,14 +73,15 @@ private:
         u08i x;
         u08i tile;
         u08i attr;
-    };
+    } __attribute__((packed));
     
     std::shared_ptr<IOProvider> ioprovider;
     std::shared_ptr<MMU>      mmu;
     std::shared_ptr<cpu::Z80> cpu;
     
-//    u16i modeclock;
-//    u08i mode;
+    /* True, wenn der Pixel _NICHT_ transparent ist,
+       false, wenn der Pixel Transparent ist. */
+    bool alphabuffer[144*160];
     
     /* Neu */
     enum GPUMode
@@ -123,11 +129,11 @@ private:
     void renderWindow();
     
     //Read color data for a tile
-    u08i getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y);
+    Color getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y);
 //    u08i getSPTilePixel(const OAMData & sprite, u08i x, u08i y);
-    u08i getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16);
+    Color getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16);
     //Returns the actual color for color data read by readTileAt
-    u08i decodeColor(u08i value, u08i palette);
+    u08i decodeColor(Color value, u08i palette);
 public:
     GPU(std::shared_ptr<MMU> mmu,
         std::shared_ptr<IOProvider> ioprovider,

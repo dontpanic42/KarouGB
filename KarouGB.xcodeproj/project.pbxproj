@@ -419,6 +419,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "-DDISABLE_SOUND";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -431,6 +432,7 @@
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				OTHER_CFLAGS = "-DDISABLE_SOUND";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

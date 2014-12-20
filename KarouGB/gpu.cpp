@@ -60,7 +60,7 @@ GPU::GPU(std::shared_ptr<MMU> mmu,
     //Displaycontroller settings
     reg_lcdc = 0x00;
     
-//    mode = 0;
+    
     
     std::function<void(u16i, u08i, u08i*)> dma_cb = std::bind(&GPU::onDMATransfer,
                                                               this,
@@ -77,6 +77,8 @@ GPU::GPU(std::shared_ptr<MMU> mmu,
     
     mmu->register_f_write(GPU_REG_ADDR_DMA_TRANSF, dma_cb);
     mmu->register_f_write(GPU_REG_ADDR_LY, rly_cb);
+    
+    clearAlphaBuffer();
 }
 
 void GPU::onResetLy(u16i addr, u08i value, u08i * memptr)
@@ -131,8 +133,8 @@ void GPU::renderBackground()
     u08i y = line;
     u08i mapX, mapY;
     u16i mapLinear;
-    u08i tileX, tileY, tileIndex;
-    u08i pixel;
+    u08i tileX, tileY, tileIndex, rgbvalue;
+    Color pixel;
     
     /* Finde den BG-Map Index für die aktuelle y-position. */
     /* Das offset ergibt sich aus der y-Position + dem y-Scroll-offset. */
@@ -164,10 +166,16 @@ void GPU::renderBackground()
         
         /* Hole die Pixel-Daten aus der entsprechenden Tile */
         pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY);
+        
+        /* Schreibe in den alphabuffer, damit nachher die Sprite-Prioritäten 
+           bestimmt werden können
+           (pixel = 1..3=true; 0=false) */
+        alphabuffer[(line * GPU_SCREENWIDTH) + x] = pixel;
+        
         /* Übersetze die Codierte Farbe in RGB */
-        pixel = decodeColor(pixel, reg_bgp);
+        rgbvalue = decodeColor(pixel, reg_bgp);
         /* Zeichne den Pixel. */
-        ioprovider->draw(x, line, pixel, pixel, pixel);
+        ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
     }
     
 }
@@ -207,8 +215,8 @@ void GPU::renderWindow()
     u08i wx, wy;
     u08i mapX, mapY;
     u16i mapLinear;
-    u08i tileX, tileY, tileIndex;
-    u08i pixel;
+    u08i tileX, tileY, tileIndex, rgbvalue;
+    Color pixel;
     
     
     /* Die y-Position des gesuchten Fenster Pixels */
@@ -257,68 +265,110 @@ void GPU::renderWindow()
         
         /* Hole die Pixel-Daten aus der entsprechenden Tile */
         pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY);
+        
+        /* Das Fenster ist _nie_ transparent */
+        alphabuffer[(line * GPU_SCREENWIDTH) + x] = true;
+        
         /* Übersetze die Codierte Farbe in RGB */
-        pixel = decodeColor(pixel, reg_bgp);
+        rgbvalue = decodeColor(pixel, reg_bgp);
         /* Zeichne den Pixel. */
-        ioprovider->draw(x, line, pixel, pixel, pixel);
+        ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
     }
 }
 
 /** Rendert sprites, wenn aktiviert **/
 void GPU::renderSprites()
-{ 
-    if(reg_lcdc & BIT_1)
+{
+    if(!(reg_lcdc & BIT_1))
     {
-        OAMData sprite;
-        u08i tile_y;
-        u08i color;
+        return;
+    }
+    
+    /* Vorgehen: Suche die ersten 10 renderbaren Spirtes aus der OAM-Tabelle. Sortiere diese
+     nach x-coordinate. Rendere die mit größter x-coordinate zuerst. */
+    
+    /* Priority Queue, das maximal SPRITE_MAX_PER_SCANLINE elemente enthält, und das so
+     aufgesetzt ist, das das Sprite mit der größten x-Koordinate oben ist. */
+    auto comparator = [](const OAMData & a, const OAMData & b) { return a.x < b.x; };
+    std::priority_queue<OAMData, std::vector<OAMData>, decltype(comparator)> queue(comparator);
+    
+    OAMData sprite;
+    bool mode8x16 = reg_lcdc & BIT_2;
+    u08i maxVisibleY = (mode8x16)? 16 : 8;
+    
+    /* Counter für die Anzahl gezeichneter Sprites. */
+    /* Der GB kann maximal 10 Sprites in einer Scanline darstellen */
+    //    int drawcount = 0;
+    
+    int sx, sy;
+    /* Suche zeichenbare Sprites und speichere diese in 'candidates' */
+    for(u08i i = 0; i < GPU_SPRITECOUNT && queue.size() < SPRITE_MAX_PER_SCANLINE; i++)
+    {
+        u16i addr = SPRITE_ATTRIBUTE_TABLE + (i * sizeof(OAMData));   //4 byte per sprite
+        sprite = mmu->rs<OAMData>(addr);
+        sy = sprite.y - GPU_SPRITE_OAM_YOFFSET;
         
-        bool mode8x16 = reg_lcdc & BIT_2;
-        u08i maxVisibleY = (mode8x16)? 16 : 8;
-        
-        /* Counter für die Anzahl gezeichneter Sprites. */
-        /* Der GB kann maximal 10 Sprites in einer Scanline darstellen */
-        int drawcount = 0;
-        for(u08i i = 0; i < 40 && drawcount < SPRITE_MAX_PER_SCANLINE; i++)
+        //Wenn das Sprite in dieser Scanline sichtbar ist... */
+        if(sy <= line && sy + maxVisibleY > line)
         {
-            u16i addr = SPRITE_ATTRIBUTE_TABLE + (i * 4);   //4 byte per sprite
-            sprite = mmu->rs<OAMData>(addr);
-            sprite.x -= GPU_SPRITE_OAM_XOFFSET;
-            sprite.y -= GPU_SPRITE_OAM_YOFFSET;
-            
-            /* Wenn der 8x16-Sprite-mode aktiviert ist, ignoriere
-             das erste bit... */
-            if(mode8x16)
-            {
-                sprite.tile = sprite.tile & ~BIT_0;
-            }
-            
-            //when sprite is visible in this line...
-            if(sprite.y <= line && sprite.y + maxVisibleY > line)
-            {
-                u08i palette = (sprite.attr & BIT_4)? reg_obp1 : reg_obp0;
-                tile_y = line - sprite.y;
-                for(u08i tile_x = 0; tile_x < 8 && tile_x + sprite.x < 160; tile_x++)
-                {
-                    color = getSPTilePixel(sprite, tile_x, tile_y, mode8x16);
-                    if(color == 0)
-                    {
-                        //If color == 0 (Transparent), nothing gets drawn...
-                        continue;
-                    }
-                    
-                    color = decodeColor(color, palette);
-                    ioprovider->draw(sprite.x + tile_x, line, color, color, color);
-                }
-                
-                /* Anzahl der gerenderten Sprites erhöhen */
-                drawcount++;
-            }
+            /* Das sprite zum rendern vormerken */
+            queue.push(sprite);
         }
     }
+    
+    
+    /* Zeichne die Sprites im queue */
+    u08i tile_y;
+    Color color;
+    u08i rgbvalue;
+    
+    while(queue.size())
+    {
+        const OAMData & current_sprite = queue.top();
+        
+        /* Der sprite.x bzw. sprite.y wert gibt die koordinate des Sprites
+         relativ zum pixel RECHTS UNTEN des sprites an, d.h. die Koordinate
+         OBEN LINKS kann negativ werden! */
+        sy = current_sprite.y - GPU_SPRITE_OAM_YOFFSET;
+        sx = current_sprite.x - GPU_SPRITE_OAM_XOFFSET;
+        
+        tile_y = line - sy;
+        for(u08i tile_x = 0; tile_x < 8 && (tile_x + sx) < GPU_SCREENWIDTH; tile_x++)
+        {
+            /* wenn x < 0 muss nichts gezeichnet werden */
+            if(sx + tile_x < 0)
+            {
+                continue;
+            }
+            
+            /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
+             Wenn die pixelposition nicht transparenten bg oder transparentes
+             Window enthält*/
+            if((current_sprite.attr & BIT_7) &&
+               (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+            {
+                /* Zeichne nichts */
+                continue;
+            }
+            
+            color = getSPTilePixel(current_sprite, tile_x, tile_y, mode8x16);
+            
+            /* Wenn die Farbe transparent ist */
+            if(!color)
+            {
+                /* Zeichne garnichts */
+                continue;
+            }
+            
+            rgbvalue = decodeColor(color, (current_sprite.attr & BIT_4)? reg_obp1 : reg_obp0);
+            ioprovider->draw(sx + tile_x, line, rgbvalue, rgbvalue, rgbvalue);
+        } // for
+        queue.pop();
+    } // while
 }
 
-u08i GPU::getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16)
+
+GPU::Color GPU::getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16)
 {
     u08i maxYOffset = (mode8x16)? 15 : 7;
     //Y-Flip
@@ -326,16 +376,19 @@ u08i GPU::getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16)
     //X-Flip
     if(sprite.attr & BIT_5) x = 7 - x;
     
-    u16i addr = 0x8000 + (sprite.tile * 16) + (y * 2);
+    /* Wenn der 8x16-Sprite-mode aktiviert ist, ignoriere
+     das erste bit... */
+    u08i tile = (mode8x16)? sprite.tile & ~BIT_0 : sprite.tile;
+    u16i addr = 0x8000 + (tile * 16) + (y * 2);
     
     u08i value;
     value = (mmu->rb(addr)     & (BIT_0 << (7-x)))? 1 : 0;
     value+= (mmu->rb(addr + 1) & (BIT_0 << (7-x)))? 2 : 0;
     
-    return value;
+    return static_cast<Color>(value);
 }
 
-u08i GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y)
+GPU::Color GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y)
 {
     //Wenn das tileset 0x8800 gewählt ist, muss der index als
     //signed char interpretiert werden. index = 0 entspricht dann
@@ -358,14 +411,14 @@ u08i GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y)
     value = (mmu->rb(addr)     & (BIT_0 << (7-x)))? 1 : 0;
     value+= (mmu->rb(addr + 1) & (BIT_0 << (7-x)))? 2 : 0;
     
-    return value;
+    return static_cast<Color>(value);
 }
 
-u08i GPU::decodeColor(u08i value, u08i palette)
+u08i GPU::decodeColor(Color value, u08i palette)
 {
     u08i shade = 0;
     
-    switch(value & 0x03)
+    switch(value)
     {
         case 0: { shade =  palette & 0x03; break; }
         case 1: { shade = (palette & 0x0C) >> 2; break; }
@@ -387,7 +440,12 @@ void GPU::render()
 
 void GPU::clearAlphaBuffer()
 {
-    //memset(alphabuff, (u08i) 0, sizeof(u08i) * 160 * 144);
+    /* Initialisiere den Alphabuffer mit transparenz. Dies muss nach jedem vollständigen
+       Rendervorgang geschehen. Grund ist eine mögliche deaktivierung des BG. In dem fall
+       würden veraltete BG-Daten möglicherweise das Sprite-Rendering beeinflussen / unterdrücken */
+    std::fill_n(&alphabuffer[0], GPU_SCREENHEIGHT * GPU_SCREENWIDTH, false);
+//    /* Initialisiere den Spritebuffer */
+//    std::fill_n(&spritebuffer[0], GPU_SCREENHEIGHT * GPU_SCREENWIDTH, false);
 }
 
 void GPU::step(cpu::Context & c)

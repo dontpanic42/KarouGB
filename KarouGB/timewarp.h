@@ -27,7 +27,7 @@ private:
     const u64i cyclesPerMicrosecond;
 public:
     Timewarp();
-    void delay(cpu::Context c);
+    void tick(const cpu::Context & c);
 };
 
 #endif /* defined(__KarouGB__realtime__) */

@@ -20,12 +20,6 @@
 
 int main(int argc, const char * argv[])
 {
-    if(argc < 2)
-    {
-        std::printf("Usage: ./KarouGB cartridge_file_to_run.gb\n");
-        return EXIT_SUCCESS;
-    }
-    
     const std::string cartridge(argv[1]);
     
     std::shared_ptr<IOProvider> ioprovider =  std::make_shared<SDLIOProvider>();
@@ -37,7 +31,9 @@ int main(int argc, const char * argv[])
     Timer                       timer(mmu, cpu);
     Debugger                    dbg(cpu, mmu, c);
     Timewarp                    timewarp;
+#ifndef DISABLE_SOUND
     APU                         apu(mmu);
+#endif
     
     ioprovider->init("KarouGB++");
     
@@ -46,9 +42,11 @@ int main(int argc, const char * argv[])
         timer.tick(c);
         cpu->execute(c);
         gpu.step(c);
+#ifndef DISABLE_SOUND
         apu.tick(c);
+#endif
 #ifndef ENABLE_FULL_SPEED
-        timewarp.delay(c);
+        timewarp.tick(c);
 #endif
     }
     

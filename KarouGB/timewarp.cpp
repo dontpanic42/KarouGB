@@ -29,7 +29,7 @@ Timewarp::Timewarp()
 {
 }
 
-void Timewarp::delay(cpu::Context c)
+void Timewarp::tick(const cpu::Context & c)
 {
     u64i delta = c.clock.t - lastCycleCount;
     if(delta > delayAfterCycles)

@@ -1,6 +1,8 @@
 # Ignoriere Roms
 *.gb
 *.1
+KarouGB/mm
+KarouGB/mm/*
 KarouGB/rom_bios.h
 
 # Xcode
