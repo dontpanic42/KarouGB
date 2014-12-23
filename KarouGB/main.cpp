@@ -52,5 +52,6 @@ int main(int argc, const char * argv[])
     
     std::printf("Bye.\n");
     return EXIT_SUCCESS;
+    
 }
 

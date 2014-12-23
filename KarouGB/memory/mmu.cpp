@@ -284,13 +284,10 @@ void MMU::setup(const std::string & romFilename)
     }
     
     enableBootRom(true);
-    
-    register_f_write(MMU_REG_ADDR_BOOTROM_DISABLE,
-                     std::bind(&MMU::handleBootRomRegister,
-                               this,
-                               std::placeholders::_1,
-                               std::placeholders::_2,
-                               std::placeholders::_3));
+
+    register_f_write(MMU_REG_ADDR_BOOTROM_DISABLE, [this](u16i addr, u08i value, u08i * ptr) {
+        this->handleBootRomRegister(addr, value, ptr);
+    });
     
 #ifdef SERIAL_TO_CONSOLE_ENABLE
     register_f_write(0xFF01, debug_ouput_serial_write);

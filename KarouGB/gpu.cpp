@@ -59,24 +59,14 @@ GPU::GPU(std::shared_ptr<MMU> mmu,
     reg_scx = reg_scy = 0;
     //Displaycontroller settings
     reg_lcdc = 0x00;
+
+    mmu->register_f_write(GPU_REG_ADDR_DMA_TRANSF, [this](u16i addr, u08i value, u08i * ptr) {
+        this->onDMATransfer(addr, value, ptr);
+    });
     
-    
-    
-    std::function<void(u16i, u08i, u08i*)> dma_cb = std::bind(&GPU::onDMATransfer,
-                                                              this,
-                                                              std::placeholders::_1,
-                                                              std::placeholders::_2,
-                                                              std::placeholders::_3);
-    
-    //Reset ly callback
-    std::function<void(u16i, u08i, u08i*)> rly_cb = std::bind(&GPU::onResetLy,
-                                                              this,
-                                                              std::placeholders::_1,
-                                                              std::placeholders::_2,
-                                                              std::placeholders::_3);
-    
-    mmu->register_f_write(GPU_REG_ADDR_DMA_TRANSF, dma_cb);
-    mmu->register_f_write(GPU_REG_ADDR_LY, rly_cb);
+    mmu->register_f_write(GPU_REG_ADDR_LY, [this](u16i addr, u08i value, u08i * ptr) {
+        this->onResetLy(addr, value, ptr);
+    });
     
     clearAlphaBuffer();
 }

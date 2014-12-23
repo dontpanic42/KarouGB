@@ -8,6 +8,11 @@
 
 #include "timer.h"
 
+#define TIM_NUMCYCLES_4096      1024
+#define TIM_NUMCYCLES_262144    16
+#define TIM_NUMCYCLES_65536     64
+#define TIM_NUMCYCLES_16384     256
+
 Timer::Timer(std::shared_ptr<MMU> mmu, std::shared_ptr<cpu::Z80> cpu)
 : mmu(mmu)
 , cpu(cpu)
@@ -23,20 +28,13 @@ Timer::Timer(std::shared_ptr<MMU> mmu, std::shared_ptr<cpu::Z80> cpu)
 , tima_counter(0)
 , div_counter(0)
 {
-    std::function<void(u16i, u08i, u08i*)> set_input_clock = std::bind(&Timer::wfunc_onTimerControl,
-                                                              this,
-                                                              std::placeholders::_1,
-                                                              std::placeholders::_2,
-                                                              std::placeholders::_3);
+    mmu->register_f_write(TIM_REG_ADDR_CONTROL, [this](u16i addr, u08i value, u08i * ptr) {
+        this->wfunc_onTimerControl(addr, value, ptr);
+    });
     
-    std::function<void(u16i, u08i, u08i*)> reset_divider = std::bind(&Timer::wfunc_onResetDivider,
-                                                                       this,
-                                                                       std::placeholders::_1,
-                                                                       std::placeholders::_2,
-                                                                       std::placeholders::_3);
-    
-    mmu->register_f_write(TIM_REG_ADDR_CONTROL, set_input_clock);
-    mmu->register_f_write(TIM_REG_ADDR_DIVIDER, reset_divider);
+    mmu->register_f_write(TIM_REG_ADDR_DIVIDER, [this](u16i addr, u08i value, u08i * ptr) {
+        this->wfunc_onResetDivider(addr, value, ptr);
+    });
 }
 
 void Timer::wfunc_onTimerControl(u16i addr, u08i value, u08i * ptr)

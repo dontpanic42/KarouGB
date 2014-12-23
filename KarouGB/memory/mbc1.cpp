@@ -200,33 +200,21 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     }
     
     /* Callback für die Rom-Selection, untere bits
-       0x2000 - 0x3FFF */
-    std::function<void(u16i, u08i, u08i *)> wfunc_switch_lo = std::bind(&MBC1::wfunc_switchRomLow,
-                                                                        this,
-                                                                        std::placeholders::_1,
-                                                                        std::placeholders::_2,
-                                                                        std::placeholders::_3);
+     0x2000 - 0x3FFF */
+    auto wfunc_switch_lo = [this](u16i addr, u08i value, u08i * ptr) {
+        this->wfunc_switchRomLow(addr, value, ptr); };
     /* Callback für die Rom-Selection, obere bits
-       0x4000 - 0x5FFF */
-    std::function<void(u16i, u08i, u08i *)> wfunc_switch_hi = std::bind(&MBC1::wfunc_switchRomHigh,
-                                                                        this,
-                                                                        std::placeholders::_1,
-                                                                        std::placeholders::_2,
-                                                                        std::placeholders::_3);
+     0x4000 - 0x5FFF */
+    auto wfunc_switch_hi = [this](u16i addr, u08i value, u08i * ptr) {
+        this->wfunc_switchRomHigh(addr, value, ptr); };
     /* Callback für Ram-Enable
-       0x0000 - 0x1FFF */
-    std::function<void(u16i, u08i, u08i *)> wfunc_switch_rm = std::bind(&MBC1::wfunc_enableRam,
-                                                                        this,
-                                                                        std::placeholders::_1,
-                                                                        std::placeholders::_2,
-                                                                        std::placeholders::_3);
+     0x0000 - 0x1FFF */
+    auto wfunc_switch_rm = [this](u16i addr, u08i value, u08i * ptr) {
+        this->wfunc_enableRam(addr, value, ptr); };
     /* Callback für Rom/Ram Mode Select
-       0x6000 - 0x7FFF */
-    std::function<void(u16i, u08i, u08i *)> wfunc_switch_md = std::bind(&MBC1::wfunc_romRamModeselect,
-                                                                        this,
-                                                                        std::placeholders::_1,
-                                                                        std::placeholders::_2,
-                                                                        std::placeholders::_3);
+     0x6000 - 0x7FFF */
+    auto wfunc_switch_md = [this](u16i addr, u08i value, u08i * ptr) {
+        this->wfunc_romRamModeselect(addr, value, ptr); };
     
     //rw auf bank-ebene erfolgt immer mit dem offset 0, das heißt write(offset) mit 0 <= offset <= MMU_BANK_SIZE
     for(std::size_t i = 0; i < min_size; i++)
@@ -287,11 +275,8 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     std::function<void(u16i, u08i, u08i *)> wfunc_write_rm = nullptr;
     if(this->ramSizeKB != 0x00)
     {
-        wfunc_write_rm = std::bind(&MBC1::wfunc_writeRam,
-                                   this,
-                                   std::placeholders::_1,
-                                   std::placeholders::_2,
-                                   std::placeholders::_3);
+        wfunc_write_rm = [this](u16i addr, u08i value, u08i * ptr){
+            this->wfunc_writeRam(addr, value, ptr); };
     }
     
     /* Kein RAM in Cartridge */

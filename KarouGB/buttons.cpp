@@ -44,18 +44,13 @@ Buttons::Buttons(std::shared_ptr<MMU> mmu,
         ioprovider->registerButtonCallback( (Button) i, fonkp, fonkr);
     }
     
-    std::function<u08i(u16i, u08i *)> fonregr =         std::bind(&Buttons::onKeyRegRead,
-                                                                  this,
-                                                                  std::placeholders::_1,
-                                                                  std::placeholders::_2);
-    std::function<void(u16i, u08i, u08i *)> fonregw =   std::bind(&Buttons::onKeyRegWrite,
-                                                                  this,
-                                                                  std::placeholders::_1,
-                                                                  std::placeholders::_2,
-                                                                  std::placeholders::_3);
+    mmu->register_f_write(BTN_REG_ADDR, [this](u16i addr, u08i value, u08i * ptr) {
+        this->onKeyRegWrite(addr, value, ptr);
+    });
     
-    mmu->register_f_write(BTN_REG_ADDR, fonregw);
-    mmu->register_f_read (BTN_REG_ADDR, fonregr);
+    mmu->register_f_read(BTN_REG_ADDR, [this](u16i addr, u08i * ptr) {
+        return this->onKeyRegRead(addr, ptr);
+    });
 }
 
 void Buttons::onKeyPress(u08i btn)
