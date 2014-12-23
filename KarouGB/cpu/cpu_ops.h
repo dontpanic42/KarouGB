@@ -100,29 +100,29 @@ namespace opfuncs
     OP(LDrn_l)  { c.L = mmu.rb(c.PC); c.PC++; }
     
     OP(LDSPHL)  { c.SP = c.HL; }
-    OP(LDHLmn)  { mmu.wb(c.HL, mmu.rb(c.PC)); c.PC++; c.T = 12; }
+    OP(LDHLmn)  { mmu.wb(c.HL, mmu.rb(c.PC)); c.PC++;}
     OP(LDBCmA)  { mmu.wb(c.BC, c.A);  }
     OP(LDDEmA)  { mmu.wb(c.DE, c.A);  }
-    OP(LDmmA)   { mmu.wb(mmu.rw(c.PC), c.A); c.PC += 2; c.T = 16; }
+    OP(LDmmA)   { mmu.wb(mmu.rw(c.PC), c.A); c.PC += 2;}
     OP(LDABCm)  { c.A = mmu.rb(c.BC); }
     OP(LDADEm)  { c.A = mmu.rb(c.DE); }
-    OP(LDAmm)   { c.A = mmu.rb(mmu.rw(c.PC)); c.PC += 2; c.T = 16; }
+    OP(LDAmm)   { c.A = mmu.rb(mmu.rw(c.PC)); c.PC += 2;}
     
-    OP(LDBCnn)  { c.BC = mmu.rw(c.PC); c.PC += 2; c.T = 12; }
-    OP(LDDEnn)  { c.DE = mmu.rw(c.PC); c.PC += 2; c.T = 12; }
-    OP(LDHLnn)  { c.HL = mmu.rw(c.PC); c.PC += 2; c.T = 12; }
+    OP(LDBCnn)  { c.BC = mmu.rw(c.PC); c.PC += 2;}
+    OP(LDDEnn)  { c.DE = mmu.rw(c.PC); c.PC += 2;}
+    OP(LDHLnn)  { c.HL = mmu.rw(c.PC); c.PC += 2;}
     
-    OP(LDSPnn)  { c.SP = mmu.rw(c.PC); c.PC += 2; c.T = 12; }
-    OP(LDHLmm)  { u16i i = mmu.rw(c.PC); c.PC += 2; c.L = mmu.rb(i); c.H = mmu.rb(i+1); c.T = 20; }
-    OP(LDmmHL)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.HL); c.T = 20; }
-    OP(LDmmSP)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.SP); c.T = 20; }
+    OP(LDSPnn)  { c.SP = mmu.rw(c.PC); c.PC += 2;}
+    OP(LDHLmm)  { u16i i = mmu.rw(c.PC); c.PC += 2; c.L = mmu.rb(i); c.H = mmu.rb(i+1);}
+    OP(LDmmHL)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.HL);}
+    OP(LDmmSP)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.SP);}
     OP(LDHLIA)  { mmu.wb(c.HL, c.A); c.HL++; }
     OP(LDAHLI)  { c.A = mmu.rb(c.HL); c.HL++; }
     OP(LDHLDA)  { mmu.wb(c.HL, c.A); c.HL--; }
     OP(LDAHLD)  { c.A = mmu.rb(c.HL); c.HL--; }
     
-    OP(LDAIOn)  { c.A = mmu.rb(0xFF00 + mmu.rb(c.PC)); c.PC++; c.T = 12; }
-    OP(LDIOnA)  { mmu.wb(0xFF00 + mmu.rb(c.PC), c.A); c.PC++; c.T = 12; }
+    OP(LDAIOn)  { c.A = mmu.rb(0xFF00 + mmu.rb(c.PC)); c.PC++;}
+    OP(LDIOnA)  { mmu.wb(0xFF00 + mmu.rb(c.PC), c.A); c.PC++;}
     OP(LDAIOC)  { c.A = mmu.rb(0xFF00 + c.C); }
     OP(LDIOCA)  { mmu.wb(0xFF00 + c.C, c.A); }
     OP(LDHLSPn)
@@ -257,7 +257,6 @@ namespace opfuncs
         
         c.SP = static_cast<u16i>(result);
         c.PC++;
-        c.T = 16;
     }
     
     
@@ -297,7 +296,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPr_b)   {
@@ -306,7 +304,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPr_c)   {
@@ -315,7 +312,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPr_d)   {
@@ -324,7 +320,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPr_e)   {
@@ -333,7 +328,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPr_h)   {
@@ -342,7 +336,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPr_l)   {
@@ -351,7 +344,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPHL)   {
@@ -360,7 +352,6 @@ namespace opfuncs
         set_if(c, ZERO, c.A == number);
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
-        
     }
     
     OP(CPn)   {
@@ -370,7 +361,6 @@ namespace opfuncs
         set_if(c, HALFCARRY, ((c.A - number) & 0xF) > (c.A & 0xF));
         set(c, SUBTRACT);
         c.PC++;
-        
     }
     
     OP(ANDr_a)  { c.A &= c.A; clear_all(c); set_if(c, ZERO, c.A == 0); set(c, HALFCARRY); }
@@ -410,7 +400,7 @@ namespace opfuncs
     OP(INCr_e)  { c.E = inc(c, c.E); }
     OP(INCr_h)  { c.H = inc(c, c.H); }
     OP(INCr_l)  { c.L = inc(c, c.L); }
-    OP(INCHLm)  { mmu.wb(c.HL, inc(c, mmu.rb(c.HL))); c.T = 12; }
+    OP(INCHLm)  { mmu.wb(c.HL, inc(c, mmu.rb(c.HL)));}
     
     OP(DECr_a)  { c.A = dec(c, c.A); }
     OP(DECr_b)  { c.B = dec(c, c.B); }
@@ -419,7 +409,7 @@ namespace opfuncs
     OP(DECr_e)  { c.E = dec(c, c.E); }
     OP(DECr_h)  { c.H = dec(c, c.H); }
     OP(DECr_l)  { c.L = dec(c, c.L); }
-    OP(DECHLm)  { mmu.wb(c.HL, dec(c, mmu.rb(c.HL))); c.T = 12; }
+    OP(DECHLm)  { mmu.wb(c.HL, dec(c, mmu.rb(c.HL)));}
     
     OP(INCBC)   { c.BC++; }
     OP(INCDE)   { c.DE++; }
@@ -439,7 +429,7 @@ namespace opfuncs
     OP(BIT0e)   { set_if(c, ZERO, (c.E & 0x01) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT0h)   { set_if(c, ZERO, (c.H & 0x01) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT0l)   { set_if(c, ZERO, (c.L & 0x01) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT0n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x01) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT0n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x01) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT1a)   { set_if(c, ZERO, (c.A & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT1b)   { set_if(c, ZERO, (c.B & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -448,7 +438,7 @@ namespace opfuncs
     OP(BIT1e)   { set_if(c, ZERO, (c.E & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT1h)   { set_if(c, ZERO, (c.H & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT1l)   { set_if(c, ZERO, (c.L & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT1n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT1n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x02) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT2a)   { set_if(c, ZERO, (c.A & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT2b)   { set_if(c, ZERO, (c.B & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -457,7 +447,7 @@ namespace opfuncs
     OP(BIT2e)   { set_if(c, ZERO, (c.E & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT2h)   { set_if(c, ZERO, (c.H & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT2l)   { set_if(c, ZERO, (c.L & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT2n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT2n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x04) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT3a)   { set_if(c, ZERO, (c.A & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT3b)   { set_if(c, ZERO, (c.B & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -466,7 +456,7 @@ namespace opfuncs
     OP(BIT3e)   { set_if(c, ZERO, (c.E & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT3h)   { set_if(c, ZERO, (c.H & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT3l)   { set_if(c, ZERO, (c.L & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT3n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT3n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x08) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT4a)   { set_if(c, ZERO, (c.A & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT4b)   { set_if(c, ZERO, (c.B & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -475,7 +465,7 @@ namespace opfuncs
     OP(BIT4e)   { set_if(c, ZERO, (c.E & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT4h)   { set_if(c, ZERO, (c.H & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT4l)   { set_if(c, ZERO, (c.L & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT4n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT4n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x10) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT5a)   { set_if(c, ZERO, (c.A & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT5b)   { set_if(c, ZERO, (c.B & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -484,7 +474,7 @@ namespace opfuncs
     OP(BIT5e)   { set_if(c, ZERO, (c.E & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT5h)   { set_if(c, ZERO, (c.H & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT5l)   { set_if(c, ZERO, (c.L & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT5n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT5n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x20) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT6a)   { set_if(c, ZERO, (c.A & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT6b)   { set_if(c, ZERO, (c.B & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -493,7 +483,7 @@ namespace opfuncs
     OP(BIT6e)   { set_if(c, ZERO, (c.E & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT6h)   { set_if(c, ZERO, (c.H & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT6l)   { set_if(c, ZERO, (c.L & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT6n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT6n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x40) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(BIT7a)   { set_if(c, ZERO, (c.A & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT7b)   { set_if(c, ZERO, (c.B & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
@@ -502,7 +492,7 @@ namespace opfuncs
     OP(BIT7e)   { set_if(c, ZERO, (c.E & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT7h)   { set_if(c, ZERO, (c.H & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
     OP(BIT7l)   { set_if(c, ZERO, (c.L & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); }
-    OP(BIT7n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY); c.T = 16; }
+    OP(BIT7n)   { set_if(c, ZERO, (mmu.rb(c.HL) & 0x80) == 0); clear(c, SUBTRACT); set(c, HALFCARRY);}
     
     OP(RLA)     { c.A = rla(c, c.A); }
     OP(RLCA)    { c.A = rlca(c, c.A); }
@@ -516,7 +506,7 @@ namespace opfuncs
     OP(RLr_e)   { c.E = rla(c, c.E); set_if(c, ZERO, c.E == 0); }
     OP(RLr_h)   { c.H = rla(c, c.H); set_if(c, ZERO, c.H == 0); }
     OP(RLr_l)   { c.L = rla(c, c.L); set_if(c, ZERO, c.L == 0); }
-    OP(RLHL)    { u16i addr = c.HL; mmu.wb(addr, rla(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0); c.T = 16; }
+    OP(RLHL)    { u16i addr = c.HL; mmu.wb(addr, rla(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0);}
     
     ///nH = 0, CZ wird gesetzt
     OP(RLCr_a)  { c.A = rlca(c, c.A); set_if(c, ZERO, c.A == 0); }
@@ -526,7 +516,7 @@ namespace opfuncs
     OP(RLCr_e)  { c.E = rlca(c, c.E); set_if(c, ZERO, c.E == 0); }
     OP(RLCr_h)  { c.H = rlca(c, c.H); set_if(c, ZERO, c.H == 0); }
     OP(RLCr_l)  { c.L = rlca(c, c.L); set_if(c, ZERO, c.L == 0); }
-    OP(RLCHL)   { u16i addr = c.HL; mmu.wb(addr, rlca(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0); c.T = 16; }
+    OP(RLCHL)   { u16i addr = c.HL; mmu.wb(addr, rlca(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0);}
     
     OP(RRr_a)   { c.A = rra(c, c.A); set_if(c, ZERO, c.A == 0); }
     OP(RRr_b)   { c.B = rra(c, c.B); set_if(c, ZERO, c.B == 0); }
@@ -535,7 +525,7 @@ namespace opfuncs
     OP(RRr_e)   { c.E = rra(c, c.E); set_if(c, ZERO, c.E == 0); }
     OP(RRr_h)   { c.H = rra(c, c.H); set_if(c, ZERO, c.H == 0); }
     OP(RRr_l)   { c.L = rra(c, c.L); set_if(c, ZERO, c.L == 0); }
-    OP(RRHL)    { u16i addr = c.HL; mmu.wb(addr, rra(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0); c.T = 16; }
+    OP(RRHL)    { u16i addr = c.HL; mmu.wb(addr, rra(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0);}
     
     OP(RRCr_a)  { c.A = rrca(c, c.A); set_if(c, ZERO, c.A == 0); }
     OP(RRCr_b)  { c.B = rrca(c, c.B); set_if(c, ZERO, c.B == 0); }
@@ -544,7 +534,7 @@ namespace opfuncs
     OP(RRCr_e)  { c.E = rrca(c, c.E); set_if(c, ZERO, c.E == 0); }
     OP(RRCr_h)  { c.H = rrca(c, c.H); set_if(c, ZERO, c.H == 0); }
     OP(RRCr_l)  { c.L = rrca(c, c.L); set_if(c, ZERO, c.L == 0); }
-    OP(RRCHL)   { u16i addr = c.HL; mmu.wb(addr, rrca(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0); c.T = 16; }
+    OP(RRCHL)   { u16i addr = c.HL; mmu.wb(addr, rrca(c, mmu.rb(addr))); set_if(c, ZERO, mmu.rb(addr) == 0);}
     
     OP(SLAr_a)  { c.A = sla(c, c.A); }
     OP(SLAr_b)  { c.B = sla(c, c.B); }
@@ -553,7 +543,7 @@ namespace opfuncs
     OP(SLAr_e)  { c.E = sla(c, c.E); }
     OP(SLAr_h)  { c.H = sla(c, c.H); }
     OP(SLAr_l)  { c.L = sla(c, c.L); }
-    OP(SLAHL)  { mmu.wb(c.HL, sla(c, mmu.rb(c.HL))); c.T = 16; }
+    OP(SLAHL)  { mmu.wb(c.HL, sla(c, mmu.rb(c.HL)));}
     
     OP(SLLr_a)  { c.A = sll(c, c.A); }
     OP(SLLr_b)  { c.B = sll(c, c.B); }
@@ -570,7 +560,7 @@ namespace opfuncs
     OP(SRAr_e)  { c.E = sra(c, c.E); }
     OP(SRAr_h)  { c.H = sra(c, c.H); }
     OP(SRAr_l)  { c.L = sra(c, c.L); }
-    OP(SRAHL)   { mmu.wb(c.HL, sra(c, mmu.rb(c.HL))); c.T = 16; }
+    OP(SRAHL)   { mmu.wb(c.HL, sra(c, mmu.rb(c.HL)));}
     
     OP(SRLr_a)  { c.A = srl(c, c.A); }
     OP(SRLr_b)  { c.B = srl(c, c.B); }
@@ -579,47 +569,47 @@ namespace opfuncs
     OP(SRLr_e)  { c.E = srl(c, c.E); }
     OP(SRLr_h)  { c.H = srl(c, c.H); }
     OP(SRLr_l)  { c.L = srl(c, c.L); }
-    OP(SRLHL)   { mmu.wb(c.HL, srl(c, mmu.rb(c.HL))); c.T = 16; }
+    OP(SRLHL)   { mmu.wb(c.HL, srl(c, mmu.rb(c.HL)));}
     
     OP(CPL)     { c.A = ~c.A; set(c, HALFCARRY); set(c, SUBTRACT); }
     OP(CCF)     { flip(c, CARRY); clear(c, SUBTRACT); clear(c, HALFCARRY); }
     OP(SCF)     { set(c, CARRY); clear(c, SUBTRACT); clear(c, HALFCARRY); }
     
-    OP(PUSHAF)  { push<u16i>(c, mmu, c.AF); c.T = 16; }
-    OP(PUSHBC)  { push<u16i>(c, mmu, c.BC); c.T = 16; }
-    OP(PUSHDE)  { push<u16i>(c, mmu, c.DE); c.T = 16; }
-    OP(PUSHHL)  { push<u16i>(c, mmu, c.HL); c.T = 16; }
+    OP(PUSHAF)  { push<u16i>(c, mmu, c.AF);}
+    OP(PUSHBC)  { push<u16i>(c, mmu, c.BC);}
+    OP(PUSHDE)  { push<u16i>(c, mmu, c.DE);}
+    OP(PUSHHL)  { push<u16i>(c, mmu, c.HL);}
     
-    OP(POPAF)   { c.AF = pop<u16i>(c, mmu); c.FLAG &= FLAG_ALWAYS_ZERO_MASK; c.T = 16; }
-    OP(POPBC)   { c.BC = pop<u16i>(c, mmu); c.T = 16; }
-    OP(POPDE)   { c.DE = pop<u16i>(c, mmu); c.T = 16; }
-    OP(POPHL)   { c.HL = pop<u16i>(c, mmu); c.T = 16; }
+    OP(POPAF)   { c.AF = pop<u16i>(c, mmu); c.FLAG &= FLAG_ALWAYS_ZERO_MASK;}
+    OP(POPBC)   { c.BC = pop<u16i>(c, mmu);}
+    OP(POPDE)   { c.DE = pop<u16i>(c, mmu);}
+    OP(POPHL)   { c.HL = pop<u16i>(c, mmu);}
     
     OP(NOP)     { }
     OP(HALT)    { c.halt = 1; }
     OP(DI)      { c.ime = 0; }
     OP(EI)      { c.ime = 1; }
     
-    OP(RET)     { ret_if(c, mmu, true); c.T = 16; }
-    OP(RETI)    { ret_if(c, mmu, true); c.ime = 1; c.T = 16; }
+    OP(RET)     { ret_if(c, mmu, true);}
+    OP(RETI)    { ret_if(c, mmu, true); c.ime = 1;}
     OP(RETNZ)   { ret_if(c, mmu, !is_set(c, ZERO)); }
     OP(RETZ)    { ret_if(c, mmu, is_set(c, ZERO)); }
     OP(RETC)    { ret_if(c, mmu, is_set(c, CARRY)); }
     OP(RETNC)   { ret_if(c, mmu, !is_set(c, CARRY)); }
     
-    OP(RST00)   { push<u16i>(c, mmu, c.PC); c.PC = 0x00; c.T = 16; }
-    OP(RST08)   { push<u16i>(c, mmu, c.PC); c.PC = 0x08; c.T = 16; }
-    OP(RST10)   { push<u16i>(c, mmu, c.PC); c.PC = 0x10; c.T = 16; }
-    OP(RST18)   { push<u16i>(c, mmu, c.PC); c.PC = 0x18; c.T = 16; }
-    OP(RST20)   { push<u16i>(c, mmu, c.PC); c.PC = 0x20; c.T = 16; }
-    OP(RST28)   { push<u16i>(c, mmu, c.PC); c.PC = 0x28; c.T = 16; }
-    OP(RST30)   { push<u16i>(c, mmu, c.PC); c.PC = 0x30; c.T = 16; }
-    OP(RST38)   { push<u16i>(c, mmu, c.PC); c.PC = 0x38; c.T = 16; }
-    OP(RST40)   { push<u16i>(c, mmu, c.PC); c.PC = 0x40; c.T = 16; }
-    OP(RST48)   { push<u16i>(c, mmu, c.PC); c.PC = 0x48; c.T = 16; }
-    OP(RST50)   { push<u16i>(c, mmu, c.PC); c.PC = 0x50; c.T = 16; }
-    OP(RST58)   { push<u16i>(c, mmu, c.PC); c.PC = 0x58; c.T = 16; }
-    OP(RST60)   { push<u16i>(c, mmu, c.PC); c.PC = 0x60; c.T = 16; }
+    OP(RST00)   { push<u16i>(c, mmu, c.PC); c.PC = 0x00;}
+    OP(RST08)   { push<u16i>(c, mmu, c.PC); c.PC = 0x08;}
+    OP(RST10)   { push<u16i>(c, mmu, c.PC); c.PC = 0x10;}
+    OP(RST18)   { push<u16i>(c, mmu, c.PC); c.PC = 0x18;}
+    OP(RST20)   { push<u16i>(c, mmu, c.PC); c.PC = 0x20;}
+    OP(RST28)   { push<u16i>(c, mmu, c.PC); c.PC = 0x28;}
+    OP(RST30)   { push<u16i>(c, mmu, c.PC); c.PC = 0x30;}
+    OP(RST38)   { push<u16i>(c, mmu, c.PC); c.PC = 0x38;}
+    OP(RST40)   { push<u16i>(c, mmu, c.PC); c.PC = 0x40;}
+    OP(RST48)   { push<u16i>(c, mmu, c.PC); c.PC = 0x48;}
+    OP(RST50)   { push<u16i>(c, mmu, c.PC); c.PC = 0x50;}
+    OP(RST58)   { push<u16i>(c, mmu, c.PC); c.PC = 0x58;}
+    OP(RST60)   { push<u16i>(c, mmu, c.PC); c.PC = 0x60;}
     
     OP(CALLnn)  { push<u16i>(c, mmu, c.PC + 2); c.PC = mmu.rw(c.PC); }
     OP(CALLNZnn){ call_if(c, mmu, !is_set(c, ZERO)); }
@@ -628,13 +618,13 @@ namespace opfuncs
     OP(CALLCnn) { call_if(c, mmu, is_set(c, CARRY)); }
     
     OP(JPnn)    { jmp_if(c, mmu, true); }
-    OP(JPHL)    { c.PC = c.HL; c.T = 12; }
+    OP(JPHL)    { c.PC = c.HL; }
     OP(JPNZnn)  { jmp_if(c, mmu, !is_set(c, ZERO)); }
     OP(JPZnn)   { jmp_if(c, mmu, is_set(c, ZERO)); }
     OP(JPNCnn)  { jmp_if(c, mmu, !is_set(c, CARRY)); }
     OP(JPCnn)   { jmp_if(c, mmu, is_set(c, CARRY)); }
     
-    OP(JRn)     { jr_if(c, mmu, true); c.T = 12; }
+    OP(JRn)     { jr_if(c, mmu, true); }
     OP(JRNZn)   { jr_if(c, mmu, !is_set(c, ZERO)); }
     OP(JRZn)    { jr_if(c, mmu, is_set(c, ZERO)); }
     OP(JRNCn)   { jr_if(c, mmu, !is_set(c, CARRY)); }
@@ -647,7 +637,7 @@ namespace opfuncs
     OP(RES0e)   { c.E &= ~BIT_0; }
     OP(RES0h)   { c.H &= ~BIT_0; }
     OP(RES0l)   { c.L &= ~BIT_0; }
-    OP(RES0m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_0); c.T = 16; }
+    OP(RES0m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_0); }
     
     OP(RES1a)   { c.A &= ~BIT_1; }
     OP(RES1b)   { c.B &= ~BIT_1; }
@@ -656,7 +646,7 @@ namespace opfuncs
     OP(RES1e)   { c.E &= ~BIT_1; }
     OP(RES1h)   { c.H &= ~BIT_1; }
     OP(RES1l)   { c.L &= ~BIT_1; }
-    OP(RES1m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_1); c.T = 16; }
+    OP(RES1m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_1); }
     
     OP(RES2a)   { c.A &= ~BIT_2; }
     OP(RES2b)   { c.B &= ~BIT_2; }
@@ -665,7 +655,7 @@ namespace opfuncs
     OP(RES2e)   { c.E &= ~BIT_2; }
     OP(RES2h)   { c.H &= ~BIT_2; }
     OP(RES2l)   { c.L &= ~BIT_2; }
-    OP(RES2m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_2); c.T = 16; }
+    OP(RES2m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_2); }
     
     OP(RES3a)   { c.A &= ~BIT_3; }
     OP(RES3b)   { c.B &= ~BIT_3; }
@@ -674,7 +664,7 @@ namespace opfuncs
     OP(RES3e)   { c.E &= ~BIT_3; }
     OP(RES3h)   { c.H &= ~BIT_3; }
     OP(RES3l)   { c.L &= ~BIT_3; }
-    OP(RES3m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_3); c.T = 16; }
+    OP(RES3m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_3); }
     
     OP(RES4a)   { c.A &= ~BIT_4; }
     OP(RES4b)   { c.B &= ~BIT_4; }
@@ -683,7 +673,7 @@ namespace opfuncs
     OP(RES4e)   { c.E &= ~BIT_4; }
     OP(RES4h)   { c.H &= ~BIT_4; }
     OP(RES4l)   { c.L &= ~BIT_4; }
-    OP(RES4m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_4); c.T = 16; }
+    OP(RES4m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_4); }
     
     OP(RES5a)   { c.A &= ~BIT_5; }
     OP(RES5b)   { c.B &= ~BIT_5; }
@@ -692,7 +682,7 @@ namespace opfuncs
     OP(RES5e)   { c.E &= ~BIT_5; }
     OP(RES5h)   { c.H &= ~BIT_5; }
     OP(RES5l)   { c.L &= ~BIT_5; }
-    OP(RES5m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_5); c.T = 16; }
+    OP(RES5m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_5); }
     
     OP(RES6a)   { c.A &= ~BIT_6; }
     OP(RES6b)   { c.B &= ~BIT_6; }
@@ -701,7 +691,7 @@ namespace opfuncs
     OP(RES6e)   { c.E &= ~BIT_6; }
     OP(RES6h)   { c.H &= ~BIT_6; }
     OP(RES6l)   { c.L &= ~BIT_6; }
-    OP(RES6m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_6); c.T = 16; }
+    OP(RES6m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_6); }
     
     OP(RES7a)   { c.A &= ~BIT_7; }
     OP(RES7b)   { c.B &= ~BIT_7; }
@@ -710,7 +700,7 @@ namespace opfuncs
     OP(RES7e)   { c.E &= ~BIT_7; }
     OP(RES7h)   { c.H &= ~BIT_7; }
     OP(RES7l)   { c.L &= ~BIT_7; }
-    OP(RES7m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_7); c.T = 16; }
+    OP(RES7m)   { mmu.wb(c.HL, mmu.rb(c.HL) & ~BIT_7); }
     
     OP(SET0a)   { c.A |= BIT_0; }
     OP(SET0b)   { c.B |= BIT_0; }
@@ -719,7 +709,7 @@ namespace opfuncs
     OP(SET0e)   { c.E |= BIT_0; }
     OP(SET0h)   { c.H |= BIT_0; }
     OP(SET0l)   { c.L |= BIT_0; }
-    OP(SET0m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_0); c.T = 16; }
+    OP(SET0m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_0); }
     
     OP(SET1a)   { c.A |= BIT_1; }
     OP(SET1b)   { c.B |= BIT_1; }
@@ -728,7 +718,7 @@ namespace opfuncs
     OP(SET1e)   { c.E |= BIT_1; }
     OP(SET1h)   { c.H |= BIT_1; }
     OP(SET1l)   { c.L |= BIT_1; }
-    OP(SET1m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_1); c.T = 16; }
+    OP(SET1m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_1); }
     
     OP(SET2a)   { c.A |= BIT_2; }
     OP(SET2b)   { c.B |= BIT_2; }
@@ -737,7 +727,7 @@ namespace opfuncs
     OP(SET2e)   { c.E |= BIT_2; }
     OP(SET2h)   { c.H |= BIT_2; }
     OP(SET2l)   { c.L |= BIT_2; }
-    OP(SET2m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_2); c.T = 16; }
+    OP(SET2m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_2); }
     
     OP(SET3a)   { c.A |= BIT_3; }
     OP(SET3b)   { c.B |= BIT_3; }
@@ -746,7 +736,7 @@ namespace opfuncs
     OP(SET3e)   { c.E |= BIT_3; }
     OP(SET3h)   { c.H |= BIT_3; }
     OP(SET3l)   { c.L |= BIT_3; }
-    OP(SET3m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_3); c.T = 16; }
+    OP(SET3m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_3); }
     
     OP(SET4a)   { c.A |= BIT_4; }
     OP(SET4b)   { c.B |= BIT_4; }
@@ -755,7 +745,7 @@ namespace opfuncs
     OP(SET4e)   { c.E |= BIT_4; }
     OP(SET4h)   { c.H |= BIT_4; }
     OP(SET4l)   { c.L |= BIT_4; }
-    OP(SET4m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_4); c.T = 16; }
+    OP(SET4m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_4); }
     
     OP(SET5a)   { c.A |= BIT_5; }
     OP(SET5b)   { c.B |= BIT_5; }
@@ -764,7 +754,7 @@ namespace opfuncs
     OP(SET5e)   { c.E |= BIT_5; }
     OP(SET5h)   { c.H |= BIT_5; }
     OP(SET5l)   { c.L |= BIT_5; }
-    OP(SET5m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_5); c.T = 16; }
+    OP(SET5m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_5); }
     
     OP(SET6a)   { c.A |= BIT_6; }
     OP(SET6b)   { c.B |= BIT_6; }
@@ -773,7 +763,7 @@ namespace opfuncs
     OP(SET6e)   { c.E |= BIT_6; }
     OP(SET6h)   { c.H |= BIT_6; }
     OP(SET6l)   { c.L |= BIT_6; }
-    OP(SET6m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_6); c.T = 16; }
+    OP(SET6m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_6); }
     
     OP(SET7a)   { c.A |= BIT_7; }
     OP(SET7b)   { c.B |= BIT_7; }
@@ -782,7 +772,7 @@ namespace opfuncs
     OP(SET7e)   { c.E |= BIT_7; }
     OP(SET7h)   { c.H |= BIT_7; }
     OP(SET7l)   { c.L |= BIT_7; }
-    OP(SET7m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_7); c.T = 16; }
+    OP(SET7m)   { mmu.wb(c.HL, mmu.rb(c.HL) | BIT_7); }
     
     OP(DAA)     {
         
