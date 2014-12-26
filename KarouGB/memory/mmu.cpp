@@ -400,14 +400,14 @@ void MMU::ww(u16i addr, u16i value)
 
 u08i * MMU::getDMAPtr(u16i addr)
 {
-    lg::info(TAG, "Attach HWR DMA PTR -> 0x%X\n", addr);
+    lg::debug(TAG, "Attach HWR DMA PTR -> 0x%X\n", addr);
     return banks[get_bank(addr)]->memptr[get_offset(addr)];
 }
 
 
 u08i & MMU::getDMARef(u16i addr)
 {
-    lg::info(TAG, "Attach HWR DMA REF -> 0x%X\n", addr);
+    lg::debug(TAG, "Attach HWR DMA REF -> 0x%X\n", addr);
     return *banks[get_bank(addr)]->memptr[get_offset(addr)];
 }
 

@@ -17,13 +17,14 @@
 #include "buttons.h"
 #include "timewarp.h"
 #include "apu.h"
-#include "log.h"
 
 #ifdef VERBOSE
-    #define LOG_LEVEL lg::INFO
+    #define LOG_LEVEL lg::DBG
 #else
     #define LOG_LEVEL lg::WARN
 #endif
+
+#include "log.h"
 
 const std::string APP_NAME      ("KarouGB");
 const std::string APP_VERSION   ("v0.0.1");
@@ -48,6 +49,8 @@ int main(int argc, const char * argv[])
     
 #ifndef DISABLE_SOUND
     APU                         apu(mmu);
+#else
+    lg::warn(TAG, "Sound disabled.\n");
 #endif
     
     ioprovider->init(APP_TITLE);

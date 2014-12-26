@@ -19,9 +19,10 @@ namespace lg
 {
     enum log_level
     {
-        INFO = 0,
-        WARN = 1,
-        ERROR = 2
+        DBG = 0,
+        INFO = 1,
+        WARN = 2,
+        ERROR = 3
     };
     
     namespace internal
@@ -64,7 +65,7 @@ namespace lg
             , cv(cv)
             , queue(queue)
             , stopped(false)
-            , logLevel(INFO)
+            , logLevel(DBG)
             {
             }
             
@@ -243,21 +244,27 @@ namespace lg
     }
     
     template<typename... Ts>
-    void info(const std::string & tag, const std::string & message, const Ts & ... ts)
+    inline void info(const std::string & tag, const std::string & message, const Ts & ... ts)
     {
         print(INFO, "[info]", tag, message, ts...);
     }
     
     template<typename... Ts>
-    void warn(const std::string & tag, const std::string & message, const Ts & ... ts)
+    inline void warn(const std::string & tag, const std::string & message, const Ts & ... ts)
     {
         print(WARN, "[warn]", tag, message, ts...);
     }
     
     template<typename... Ts>
-    void error(const std::string & tag, const std::string & message, const Ts & ... ts)
+    inline void error(const std::string & tag, const std::string & message, const Ts & ... ts)
     {
         print(ERROR, "[errn]", tag, message, ts...);
+    }
+    
+    template<typename... Ts>
+    inline void debug(const std::string & tag, const std::string & message, const Ts & ... ts)
+    {
+        print(DBG, "[debg]", tag, message, ts...);
     }
 }
 
