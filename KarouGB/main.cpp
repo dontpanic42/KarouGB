@@ -17,9 +17,23 @@
 #include "buttons.h"
 #include "timewarp.h"
 #include "apu.h"
+#include "log.h"
+
+#ifdef VERBOSE
+    #define LOG_LEVEL lg::INFO
+#else
+    #define LOG_LEVEL lg::WARN
+#endif
+
+const std::string APP_NAME      ("KarouGB");
+const std::string APP_VERSION   ("v0.0.1");
+const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
+
+const std::string TAG("main");
 
 int main(int argc, const char * argv[])
 {
+    lg::setLevel(LOG_LEVEL);
     const std::string cartridge(argv[1]);
     
     std::shared_ptr<IOProvider> ioprovider =  std::make_shared<SDLIOProvider>();
@@ -31,11 +45,12 @@ int main(int argc, const char * argv[])
     Timer                       timer(mmu, cpu);
     Debugger                    dbg(cpu, mmu, c);
     Timewarp                    timewarp;
+    
 #ifndef DISABLE_SOUND
     APU                         apu(mmu);
 #endif
     
-    ioprovider->init("KarouGB++");
+    ioprovider->init(APP_TITLE);
     
     while(!ioprovider->isClosed() && dbg.poll())
     {
@@ -50,7 +65,7 @@ int main(int argc, const char * argv[])
 #endif
     }
     
-    std::printf("Bye.\n");
+    lg::info(TAG, "Bye.\n");
     return EXIT_SUCCESS;
     
 }

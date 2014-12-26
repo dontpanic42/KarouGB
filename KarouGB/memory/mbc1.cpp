@@ -20,6 +20,9 @@
 #define MBC1_CARTRIDGE_HEADER_ROM_SIZE 0x148
 #define MBC1_CARTRIDGE_HEADER_RAM_SIZE 0x149
 
+#include "log.h"
+const std::string TAG("mbc1");
+
 void wfunc_readonly(u16i addr, u08i value, u08i * ptr)
 {
     
@@ -143,7 +146,7 @@ void MBC1::activateRamBank(u08i bank)
     bank &= 0x03;
     if(numRamBanks <= bank)
     {
-        std::printf("MBC1: Selecting ram bank 0x%x from %d.\n", bank, numRamBanks);
+        lg::error(TAG, "MBC1: Selecting ram bank 0x%x from %d.\n", bank, numRamBanks);
         throw std::runtime_error("MBC1: Invalid ram select.");
     }
     
@@ -166,14 +169,15 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     bankingMode = ROM_BANKING_MODE;
     
     this->romSizeKB = 0x20 << buf[MBC1_CARTRIDGE_HEADER_ROM_SIZE];
-    std::printf("MBC1: rom size: %d\n", this->romSizeKB);
+    lg::info(TAG, "MBC1: rom size: %d\n", this->romSizeKB);
     this->ramSizeKB = buf[MBC1_CARTRIDGE_HEADER_RAM_SIZE];
-    std::printf("MBC1: ram size %d\n", this->ramSizeKB);
+    lg::info(TAG, "MBC1: ram size %d\n", this->ramSizeKB);
+
     
     std::size_t min_size = this->romSizeKB * 1024;
     if(min_size > size)
     {
-        std::printf("MBC1: error: file size (%lu byte) smaller than expected (%lu byte). File corrupted?\n", size, min_size);
+        lg::error(TAG, "MBC1: error: file size (%lu byte) smaller than expected (%lu byte). File corrupted?\n", size, min_size);
         throw std::runtime_error("MBC1 file size missmatch");
     }
     
@@ -184,7 +188,7 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     banks[0] = new MBC1Bank;
     banks[0]->bank[0] = new Memory(0);
     banks[0]->bank[1] = new Memory(1);
-    std::printf("MBC1: Create bank 0\n");
+    lg::info(TAG, "MBC1: Create bank 0\n");
     for(std::size_t i = 1; i < numBanks; i++) {
         banks[i] = new MBC1Bank;
         
@@ -195,7 +199,7 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
         /* Debug begin */
         u32i a = static_cast<u32i>(size - (0x4000 * i));
         u32i b = 0x4000;
-        std::printf("MBC1: Create bank %lu, size: 0x%x\n", i, (a < b)? a : b);
+        lg::info(TAG, "MBC1: Create bank %lu, size: 0x%x\n", i, (a < b)? a : b);
         /* Debug end */
     }
     
@@ -291,7 +295,7 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     {
         numRamBanks = 1;
         rambanks[0] = new Memory(5);
-        std::printf("MBC1: Create RAM bank 0\n");
+        lg::info(TAG, "MBC1: Create RAM bank 0\n");
         /* Setzte das Callback für Ram-Writes. Stellt sicher,
            das der Ram nicht beschrieben werden kann, wenn ram-enable
            nicht aktiviert ist. */
@@ -314,7 +318,7 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
         for(std::size_t x = 0; x < numRamBanks; x++)
         {
             rambanks[x] = new Memory(5);
-            std::printf("MBC1: Create RAM bank %lu\n", x);
+            lg::info(TAG, "MBC1: Create RAM bank %lu\n", x);
             
             /* Setzte das Callback für Ram-Writes. Stellt sicher,
              das der Ram nicht beschrieben werden kann, wenn ram-enable
@@ -330,7 +334,7 @@ void MBC1::mbcSetupCartridge(char * buf, std::size_t size)
     }
     else
     {
-        std::printf("MBC1: Unknown external RAM configuration with ram size id = 0x%x \n", this->romSizeKB);
+        lg::error(TAG, "MBC1: Unknown external RAM configuration with ram size id = 0x%x \n", this->romSizeKB);
         throw std::runtime_error("MBC1: Unknown external RAM configuration.");
     }
 }

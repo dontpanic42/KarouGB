@@ -94,6 +94,7 @@
 		659133AB1A30C0290085193B /* cpu_mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_mapping.h; sourceTree = "<group>"; };
 		659133AC1A30C0290085193B /* cpu_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_ops.h; sourceTree = "<group>"; };
 		659133AD1A30C0290085193B /* cpu_timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_timing.h; sourceTree = "<group>"; };
+		65BDB53C1A4DA167000678B8 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
 		65DC60871A2DB51900D7415F /* KarouGB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KarouGB; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC608A1A2DB51900D7415F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		65DC60971A2DB56200D7415F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -262,6 +263,7 @@
 				6557F51D1A2DC77400F870DA /* timewarp.cpp */,
 				6557F51E1A2DC77400F870DA /* timewarp.h */,
 				6557F5221A2DCFC000F870DA /* rom_bios.h */,
+				65BDB53C1A4DA167000678B8 /* log.h */,
 			);
 			path = KarouGB;
 			sourceTree = "<group>";

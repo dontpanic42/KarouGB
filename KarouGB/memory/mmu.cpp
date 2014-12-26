@@ -15,6 +15,9 @@
 #include <fstream>
 #include <cassert>
 
+#include "log.h"
+const std::string TAG("mmu");
+
 /* Kommentar entfernen, um die seriele Schnittstelle auf die Konsole umzuleiten */
 //SERIAL_TO_CONSOLE_ENABLE
 
@@ -46,20 +49,20 @@ CartridgeType MMU::detectCartridgeType(char * buf, std::size_t size) {
     assert(size > 0x0147);
     u08i header = buf[0x0147];
     
-    std::printf("Cartridge type id: 0x%x\n", header);
+    lg::info(TAG, "Cartridge type id: 0x%x\n", header);
     
     switch(header) {
         case ROM:
-            std::cout << "MMU: Cartridge Type: ROM" << std::endl;
+            lg::info(TAG, "MMU: Cartridge Type: ROM\n");
             return ROM;
         case ROM_MBC1:
-            std::cout << "MMU: Cartridge Type: ROM_MBC1" << std::endl;
+            lg::info(TAG, "MMU: Cartridge Type: ROM_MBC1\n");
             return ROM_MBC1;
         case ROM_MBC1_RAM:
-            std::cout << "MMU: Cartridge Type: ROM_MBC1_RAM" << std::endl;
+            lg::info(TAG, "MMU: Cartridge Type: ROM_MBC1_RAM\n");
             return ROM_MBC1_RAM;
         case ROM_MBC1_RAM_BATT:
-            std::cout << "MMU: Cartridge Type: ROM_MBC1_RAM_BATT" << std::endl;
+            lg::info(TAG, "MMU: Cartridge Type: ROM_MBC1_RAM_BATT\n");
             return ROM_MBC1_RAM_BATT;
         default: throw std::runtime_error("Unssuported Cartridge Type!");
     }
@@ -96,7 +99,7 @@ char * MMU::readRom(const std::string & filename, std::size_t * size)
     std::ifstream ifs(fname, std::ios::binary | std::ios::ate);
     if(!ifs.is_open())
     {
-        printf("MMU: Could not open '%s' for reading.\n", fname.c_str());
+        lg::error(TAG, "MMU: Could not open '%s' for reading.\n", fname.c_str());
         return nullptr;
     }
     
@@ -108,7 +111,7 @@ char * MMU::readRom(const std::string & filename, std::size_t * size)
     ifs.seekg(0, std::ios::beg);
     ifs.read(content, pos);
     
-    std::printf("MMU: Read 0x%x bytes from rom '%s'\n", (unsigned int) pos, filename.c_str());
+    lg::info(TAG, "MMU: Read 0x%x bytes from rom '%s'\n", (unsigned int) pos, filename.c_str());
     ifs.close();
     
     (*size) = (std::size_t) pos;
@@ -145,7 +148,7 @@ u08i Bank::read(u16i offset)
     
     if(!memptr[offset])
     {
-        std::printf("MMU: Read access violation @0x%x", (banknumber * MMU_BANKSIZE) + offset);
+        lg::warn(TAG, "MMU: Read access violation @0x%x", (banknumber * MMU_BANKSIZE) + offset);
         return 0;
     }
     
@@ -166,7 +169,7 @@ void Bank::write(u16i offset, u08i value)
     
     if(!memptr[offset])
     {
-        std::printf("MMU: Write access violation @0x%x", (banknumber * MMU_BANKSIZE) + offset);
+        lg::warn(TAG, "MMU: Write access violation @0x%x", (banknumber * MMU_BANKSIZE) + offset);
         return;
     }
     
@@ -224,7 +227,7 @@ MMU::~MMU()
 //TODO: Remove this!
 void on_write_debug(u16i addr, u08i value, u08i * ptr)
 {
-    std::printf("Writing to 0x%x\n", addr);
+    lg::info(TAG, "Writing to 0x%x\n", addr);
     (*ptr) = value;
     Debugger::getInstance()->interrupt();
 }
@@ -232,7 +235,7 @@ void on_write_debug(u16i addr, u08i value, u08i * ptr)
 #ifdef SERIAL_TO_CONSOLE_ENABLE
 void debug_ouput_serial_write(u16i addr, u08i value, u08i * ptr)
 {
-    std::printf("%c", value);
+    lg::info(TAG, "%c", value);
     (*ptr) = value;
 }
 #endif
@@ -397,14 +400,14 @@ void MMU::ww(u16i addr, u16i value)
 
 u08i * MMU::getDMAPtr(u16i addr)
 {
-    std::printf("Attach HWR DMA PTR -> 0x%X\n", addr);
+    lg::info(TAG, "Attach HWR DMA PTR -> 0x%X\n", addr);
     return banks[get_bank(addr)]->memptr[get_offset(addr)];
 }
 
 
 u08i & MMU::getDMARef(u16i addr)
 {
-    std::printf("Attach HWR DMA REF -> 0x%X\n", addr);
+    lg::info(TAG, "Attach HWR DMA REF -> 0x%X\n", addr);
     return *banks[get_bank(addr)]->memptr[get_offset(addr)];
 }
 
