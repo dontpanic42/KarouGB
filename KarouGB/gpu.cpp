@@ -434,8 +434,6 @@ void GPU::clearAlphaBuffer()
        Rendervorgang geschehen. Grund ist eine mögliche deaktivierung des BG. In dem fall
        würden veraltete BG-Daten möglicherweise das Sprite-Rendering beeinflussen / unterdrücken */
     std::fill_n(&alphabuffer[0], GPU_SCREENHEIGHT * GPU_SCREENWIDTH, false);
-//    /* Initialisiere den Spritebuffer */
-//    std::fill_n(&spritebuffer[0], GPU_SCREENHEIGHT * GPU_SCREENWIDTH, false);
 }
 
 void GPU::step(cpu::Context & c)

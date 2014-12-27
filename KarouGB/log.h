@@ -17,6 +17,7 @@
 #include <sstream>
 #include <iomanip>
 
+#define LOG_MAX_MESSAGE_LENGTH 256
 namespace lg
 {
     enum log_level
@@ -24,7 +25,11 @@ namespace lg
         DBG = 0,
         INFO = 1,
         WARN = 2,
-        ERROR = 3
+        ERROR = 3,
+        /* Höchstes Log-Level - sollte nicht für 
+           die Ausgabe von Log-Messages verwendet werden
+           (also nicht print(LOG_DISABLED,...) */
+        LOG_DISABLED = 4
     };
     
     namespace internal
@@ -235,8 +240,8 @@ namespace lg
                const std::string & message,
                const Ts & ... ts)
     {
-        char buffer[256];
-        std::snprintf(&buffer[0], 256, message.c_str(), ts...);
+        char buffer[LOG_MAX_MESSAGE_LENGTH];
+        std::snprintf(&buffer[0], LOG_MAX_MESSAGE_LENGTH, message.c_str(), ts...);
         
         std::string formated_string(&buffer[0]);
         

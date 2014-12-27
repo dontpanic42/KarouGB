@@ -32,16 +32,17 @@ Buttons::Buttons(std::shared_ptr<MMU> mmu,
 , cpu(cpu)
 , btn_select_dir(true)
 , btn_select_btn(false)
-//, reg_p1(mmu->getDMARef(0xFF00))
 {
-    std::function<void(u08i)> fonkp = std::bind(&Buttons::onKeyPress,
-                                                this, std::placeholders::_1);
-    std::function<void(u08i)> fonkr = std::bind(&Buttons::onKeyRelease,
-                                                this, std::placeholders::_1);
+    /* On Key Press Callback - wird aufgerufen, wenn der ioprovider
+       das drücken einer Taste registriert */
+    auto l_on_kp = [this](u08i btn) { this->onKeyPress(btn); };
+    /* On Key Release Callback - wird aufgerufen, wenn der ioprovider
+       das loslassen einer Taste registriert */
+    auto l_on_kr = [this](u08i btn) { this->onKeyRelease(btn); };
     
     for(u08i i = 0; i < BTN_LAST; i++)
     {
-        ioprovider->registerButtonCallback( (Button) i, fonkp, fonkr);
+        ioprovider->registerButtonCallback( (Button) i, l_on_kp, l_on_kr);
     }
     
     mmu->register_f_write(BTN_REG_ADDR, [this](u16i addr, u08i value, u08i * ptr) {

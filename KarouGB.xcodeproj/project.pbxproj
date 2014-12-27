@@ -143,7 +143,7 @@
 		65D9DC251A4EC7B20028D528 /* libgtest_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest_main.a; path = ../../../../../usr/local/lib/libgtest_main.a; sourceTree = "<group>"; };
 		65D9DC261A4EC7B20028D528 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = ../../../../../usr/local/lib/libgtest.a; sourceTree = "<group>"; };
 		65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = cpu_instrs.gb; sourceTree = "<group>"; };
-		65D9DC2A1A4ECB000028D528 /* mbc1test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc1test.h; path = test/mbc1test.h; sourceTree = "<group>"; };
+		65D9DC2A1A4ECB000028D528 /* mbc1test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc1test.h; path = ../KarouGB/test/mbc1test.h; sourceTree = "<group>"; };
 		65DC60871A2DB51900D7415F /* KarouGB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KarouGB; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC608A1A2DB51900D7415F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		65DC60971A2DB56200D7415F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -285,20 +285,11 @@
 		65D9DC181A4EC2770028D528 /* KarouGB Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
-				65D9DC221A4EC2A30028D528 /* tests */,
+				65D9DC2A1A4ECB000028D528 /* mbc1test.h */,
 				65D9DC191A4EC2770028D528 /* main.cpp */,
 				65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */,
 			);
 			path = "KarouGB Unit Tests";
-			sourceTree = "<group>";
-		};
-		65D9DC221A4EC2A30028D528 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				65D9DC2A1A4ECB000028D528 /* mbc1test.h */,
-			);
-			name = tests;
-			path = ../KarouGB;
 			sourceTree = "<group>";
 		};
 		65DC607E1A2DB51900D7415F = {

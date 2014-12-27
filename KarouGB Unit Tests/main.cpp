@@ -20,7 +20,7 @@ TEST(FactorialTest, Zero) {
 int main(int argc, char * argv[])
 {
     /* Deaktiviere Logging < ERROR */
-    lg::setLevel(lg::ERROR);
+    lg::setLevel(lg::LOG_DISABLED);
     
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

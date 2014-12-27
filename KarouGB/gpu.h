@@ -50,15 +50,7 @@
 //#define RENDER_ON_SCANLINE
 class GPU
 {
-private:
-    enum LCDCStat
-    {
-        LCDC_STAT_HBLANK = 0,
-        LCDC_STAT_VBLANK = 1,
-        LCDC_STAT_OAM = 2,
-        LCDC_STAT_OAM_VRAM = 3
-    };
-    
+private:    
     enum Color
     {
         COLOR_WHITE = 0,
@@ -81,7 +73,7 @@ private:
     
     /* True, wenn der Pixel _NICHT_ transparent ist,
        false, wenn der Pixel Transparent ist. */
-    bool alphabuffer[144*160];
+    bool alphabuffer[GPU_SCREENWIDTH * GPU_SCREENHEIGHT];
     
     /* Neu */
     enum GPUMode
@@ -115,7 +107,6 @@ private:
     u08i & reg_wx;      //Window x + 7
     u08i & reg_wy;      //Window y
     
-//    bool alphabuff[160 * 144];
     u08i colors[4];
     
     void clearAlphaBuffer();
