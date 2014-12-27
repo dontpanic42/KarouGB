@@ -14,6 +14,8 @@
 #include <thread>
 #include <memory>
 #include <chrono>
+#include <sstream>
+#include <iomanip>
 
 namespace lg
 {
@@ -66,6 +68,10 @@ namespace lg
             , queue(queue)
             , stopped(false)
             , logLevel(DBG)
+            {
+            }
+            
+            virtual ~Worker()
             {
             }
             
@@ -234,8 +240,12 @@ namespace lg
         
         std::string formated_string(&buffer[0]);
         
+        std::stringstream ss;
+        ss << std::setw(10) << std::to_string(internal::getDefaultLog().getTimeSinceCreation().count());
+        std::string timeString(ss.str() + ":");
+        
         std::string prefixed_message;
-        prefixed_message += std::to_string(internal::getDefaultLog().getTimeSinceCreation().count());
+        prefixed_message += timeString;
         prefixed_message += levelName + " ";
         prefixed_message += tag + ":";
         prefixed_message += formated_string;
