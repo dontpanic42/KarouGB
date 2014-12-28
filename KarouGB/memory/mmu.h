@@ -79,6 +79,12 @@
         char cartridgeType;
         CartridgeType detectCartridgeType(char * buf, std::size_t size);
     public:
+        typedef std::function<void(u16i, u08i, u08i *)> writer_t;
+        typedef std::function<u08i(u16i, u08i *)>       reader_t;
+        
+        const static writer_t WRITER_READ_ONLY;
+        const static reader_t READER_WRITE_ONLY;
+        
         MMU(const std::string & romFilename);
         ~MMU();
         

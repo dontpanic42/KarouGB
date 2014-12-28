@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		651958E61A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
+		651958E71A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
 		6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6555147E1A30BCAF007CAAD4 /* apu.cpp */; };
 		6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
@@ -99,6 +101,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		651958E41A50089E00A18E8A /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
+		651958E51A50089E00A18E8A /* mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem.h; sourceTree = "<group>"; };
 		6555147E1A30BCAF007CAAD4 /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu.cpp; sourceTree = "<group>"; };
 		6555147F1A30BCAF007CAAD4 /* apu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu.h; sourceTree = "<group>"; };
 		655514801A30BCAF007CAAD4 /* apu_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_channel.h; sourceTree = "<group>"; };
@@ -185,6 +189,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		651958E31A50089E00A18E8A /* mem */ = {
+			isa = PBXGroup;
+			children = (
+				651958E41A50089E00A18E8A /* mem.cpp */,
+				651958E51A50089E00A18E8A /* mem.h */,
+			);
+			path = mem;
+			sourceTree = "<group>";
+		};
 		6555147D1A30BCAF007CAAD4 /* sound */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,6 +329,7 @@
 		65DC60891A2DB51900D7415F /* KarouGB */ = {
 			isa = PBXGroup;
 			children = (
+				651958E31A50089E00A18E8A /* mem */,
 				659133A71A30C0290085193B /* cpu */,
 				6591339E1A30C0150085193B /* os */,
 				659133991A30C0010085193B /* io */,
@@ -428,6 +442,7 @@
 				65D9DC331A4ECBAD0028D528 /* debug.cpp in Sources */,
 				65D9DC341A4ECBAD0028D528 /* timer.cpp in Sources */,
 				65D9DC351A4ECBAD0028D528 /* timewarp.cpp in Sources */,
+				651958E71A50089E00A18E8A /* mem.cpp in Sources */,
 				65D9DC2C1A4ECB890028D528 /* ResourcePath.mm in Sources */,
 				65D9DC2B1A4ECB430028D528 /* main.cpp in Sources */,
 			);
@@ -452,6 +467,7 @@
 				659133961A30BFEE0085193B /* mbc1.cpp in Sources */,
 				65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */,
 				6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */,
+				651958E61A50089E00A18E8A /* mem.cpp in Sources */,
 				65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */,
 				6591339D1A30C0010085193B /* sdl_io_provider.cpp in Sources */,
 			);

@@ -45,6 +45,9 @@ void debug_discard_write(u16i addr, u08i value, u08i * ptr)
     
 }
 
+const MMU::reader_t MMU::READER_WRITE_ONLY = [](u16i, u08i *) { return 0x00; };
+const MMU::writer_t MMU::WRITER_READ_ONLY =  [](u16i, u08i, u08i *) { };
+
 CartridgeType MMU::detectCartridgeType(char * buf, std::size_t size) {
     assert(size > 0x0147);
     u08i header = buf[0x0147];
