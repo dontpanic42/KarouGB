@@ -12,7 +12,7 @@
 #include <iostream>
 #include <memory>
 #include "types.h"
-#include "mmu.h"
+#include "mem.h"
 #include "signal_generator.h"
 
 #define SND_NRx0_OFFSET 0x00

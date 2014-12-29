@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "cpu.h"
-#include "mmu.h"
+#include "mem.h"
 
 #define TIM_REG_ADDR_DIVIDER    0xFF04  //div
 #define TIM_REG_ADDR_COUNTER    0xFF05  //tima

@@ -12,7 +12,7 @@
 #include "ResourcePath.hpp"
 #include <fstream>
 
-#include "mmu.h"
+#include "cart_loader.h"
 
 const std::string CARTRIDGE("cpu_instrs.gb");
 
@@ -60,13 +60,16 @@ protected:
 public:
     std::size_t bufsize;
     unsigned char * buffer;
-    MMU mmu;
+    std::shared_ptr<MMU> mmu;
+    std::shared_ptr<KCartridgeLoader> cartloader;
     
     MMU_MBC1_Test()
     : buffer(nullptr)
     , bufsize(0)
-    , mmu(CARTRIDGE)
+    , cartloader(KCartridgeLoader::load(CARTRIDGE))
+    , mmu(nullptr)
     {
+        mmu = cartloader->getMemory();
     }
 };
 
@@ -78,40 +81,40 @@ TEST_F(MMU_MBC1_Test, BufferIsFilled)
 TEST_F(MMU_MBC1_Test, Banks0And1Loaded)
 {
     /* Deaktiviere das Boot-Rom */
-    mmu.wb(0xFF50, 0x01);
+    mmu->wb(0xFF50, 0x01);
     
     /* Teste das ROM mit Banks 0 und 1. Diese sollten sowohl in der mmu
      als auch im rom (buffer) linear vorliegen */
     for(std::size_t i = 0; i <= 0x7FFF && i < bufsize; i++)
     {
-        ASSERT_EQ(mmu.rb(i), buffer[i]) << "ROM Sollte in Bank 0 und 1 linear gleich der Cartridge sein.";
+        ASSERT_EQ(mmu->rb(i), buffer[i]) << "ROM Sollte in Bank 0 und 1 linear gleich der Cartridge sein.";
     }
 }
 
 TEST_F(MMU_MBC1_Test, Bank2Loaded)
 {
     /* Deaktiviere das Boot-Rom */
-    mmu.wb(0xFF50, 0x01);
+    mmu->wb(0xFF50, 0x01);
     
     /* Aktiviere Bank 2 */
-    mmu.wb(0x2000, 0x02);
+    mmu->wb(0x2000, 0x02);
     ASSERT_GT(bufsize, 0x7FFF + 0x4000) << "Die Test-Cartridge bestitzt keine Bank 2.";
     for(std::size_t i = 0x4000; i <= 0x7FFF && i < bufsize; i++)
     {
-        ASSERT_EQ(mmu.rb(i), buffer[i + 0x4000]) << "Bank 2 sollte den Bufferwerten mit offset 0x4000 gleichen.";
+        ASSERT_EQ(mmu->rb(i), buffer[i + 0x4000]) << "Bank 2 sollte den Bufferwerten mit offset 0x4000 gleichen.";
     }
 }
 
 TEST_F(MMU_MBC1_Test, Bank3Loaded)
 {
     /* Deaktiviere das Boot-Rom */
-    mmu.wb(0xFF50, 0x01);
+    mmu->wb(0xFF50, 0x01);
     
     /* Aktiviere Bank 3 */
-    mmu.wb(0x2000, 0x03);
+    mmu->wb(0x2000, 0x03);
     for(std::size_t i = 0x4000; i <= 0x7FFF && bufsize > (i + 0xC000); i++)
     {
-        ASSERT_EQ(mmu.rb(i), buffer[i + 0xC000]) << "Bank 3 sollte den Bufferwerten mit offset 0xC000 gleichen.";
+        ASSERT_EQ(mmu->rb(i), buffer[i + 0xC000]) << "Bank 3 sollte den Bufferwerten mit offset 0xC000 gleichen.";
     }
 }
 
@@ -119,27 +122,27 @@ TEST_F(MMU_MBC1_Test, WorkingRamTest)
 {
     for(std::size_t i = 0xC000; i <= 0xDFFF; i++)
     {
-        mmu.wb(i, 0x42);
-        ASSERT_EQ(mmu.rb(i), 0x42) << "Das RAM kann nicht geschrieben werden. (" << i << ")";
+        mmu->wb(i, 0x42);
+        ASSERT_EQ(mmu->rb(i), 0x42) << "Das RAM kann nicht geschrieben werden. (" << i << ")";
     }
     
     /* Teste die RAM-Shadowing area */
     for(std::size_t i = 0xE000; i <= 0xFDFF; i++)
     {
-        ASSERT_EQ(mmu.rb(i), 0x42) << "ROM Shadowing fehlerhaft. (" << i << ")";
+        ASSERT_EQ(mmu->rb(i), 0x42) << "ROM Shadowing fehlerhaft. (" << i << ")";
     }
 }
 
 TEST_F(MMU_MBC1_Test, Bank0And1LoadedAfterBankSwitch)
 {
     /* Deaktiviere das Boot-Rom */
-    mmu.wb(0xFF50, 0x01);
+    mmu->wb(0xFF50, 0x01);
     
     /* Aktiviere Bank 1 */
-    mmu.wb(0x2000, 0x01);
+    mmu->wb(0x2000, 0x01);
     for(std::size_t i = 0x4000; i <= 0x7FFF && i < bufsize; i++)
     {
-        ASSERT_EQ(mmu.rb(i), buffer[i]) << "ROM Sollte in Bank 0 und 1 linear gleich der Cartridge sein.";
+        ASSERT_EQ(mmu->rb(i), buffer[i]) << "ROM Sollte in Bank 0 und 1 linear gleich der Cartridge sein.";
     }
 }
 

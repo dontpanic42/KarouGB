@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "io_provider.h"
-#include "mmu.h"
+#include "mem.h"
 #include "cpu.h"
 
 #define BTN_REG_ADDR 0xFF00

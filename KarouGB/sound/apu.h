@@ -12,7 +12,7 @@
 #include <iostream>
 #include <memory>
 #include "cpu.h"
-#include "mmu.h"
+#include "mem.h"
 #include "sound.h"
 #include "apu_squarewave_channel.h"
 #include "apu_noise_channel.h"

@@ -11,16 +11,12 @@
 
 #include "log.h"
 #include "mbc1test.h"
-
-
-TEST(FactorialTest, Zero) {
-    EXPECT_EQ(1, 1);
-}
+#include "newmemtest.h"
 
 int main(int argc, char * argv[])
 {
     /* Deaktiviere Logging < ERROR */
-    lg::setLevel(lg::LOG_DISABLED);
+    //lg::setLevel(lg::LOG_DISABLED);
     
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

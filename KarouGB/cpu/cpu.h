@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "types.h"
-#include "mmu.h"
+#include "mem.h"
 
 #define CPU_REG_ADDR_IE 0xFFFF
 #define CPU_REG_ADDR_IF 0xFF0F

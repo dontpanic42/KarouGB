@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "cpu.h"
-#include "mmu.h"
+#include "mem.h"
 #include "gpu.h"
 #include <vector>
 #include <deque>

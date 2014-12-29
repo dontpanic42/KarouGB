@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		651958E61A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
 		651958E71A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
+		65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
+		65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
+		65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
+		65381CB61A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
 		6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6555147E1A30BCAF007CAAD4 /* apu.cpp */; };
 		6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
@@ -17,9 +21,6 @@
 		6557F51B1A2DC44600F870DA /* SuperMarioLand.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5121A2DC20600F870DA /* SuperMarioLand.gb */; };
 		6557F51C1A2DC44600F870DA /* tetris11.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5131A2DC20600F870DA /* tetris11.gb */; };
 		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
-		659133961A30BFEE0085193B /* mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133901A30BFEE0085193B /* mbc1.cpp */; };
-		659133971A30BFEE0085193B /* mbcrom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133921A30BFEE0085193B /* mbcrom.cpp */; };
-		659133981A30BFEE0085193B /* mmu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133941A30BFEE0085193B /* mmu.cpp */; };
 		6591339D1A30C0010085193B /* sdl_io_provider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6591339B1A30C0010085193B /* sdl_io_provider.cpp */; };
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
@@ -27,9 +28,6 @@
 		65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */; };
 		65D9DC2B1A4ECB430028D528 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D9DC191A4EC2770028D528 /* main.cpp */; };
 		65D9DC2C1A4ECB890028D528 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
-		65D9DC2D1A4ECBAD0028D528 /* mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133901A30BFEE0085193B /* mbc1.cpp */; };
-		65D9DC2E1A4ECBAD0028D528 /* mbcrom.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133921A30BFEE0085193B /* mbcrom.cpp */; };
-		65D9DC2F1A4ECBAD0028D528 /* mmu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133941A30BFEE0085193B /* mmu.cpp */; };
 		65D9DC301A4ECBAD0028D528 /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C38D1A308D6000F495CC /* apu.cpp */; };
 		65D9DC311A4ECBAD0028D528 /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
 		65D9DC321A4ECBAD0028D528 /* buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AC1A2DB64D00D7415F /* buttons.cpp */; };
@@ -103,6 +101,13 @@
 /* Begin PBXFileReference section */
 		651958E41A50089E00A18E8A /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
 		651958E51A50089E00A18E8A /* mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem.h; sourceTree = "<group>"; };
+		651958E81A50264600A18E8A /* mem_mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem_mbc.h; sourceTree = "<group>"; };
+		65381CAC1A5154D0004433EA /* cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cartridge.cpp; sourceTree = "<group>"; };
+		65381CAD1A5154D0004433EA /* cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cartridge.h; sourceTree = "<group>"; };
+		65381CB01A515734004433EA /* cart_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_loader.h; sourceTree = "<group>"; };
+		65381CB11A515A19004433EA /* newmemtest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = newmemtest.h; sourceTree = "<group>"; };
+		65381CB31A515F8E004433EA /* cart_mbc1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc1.cpp; sourceTree = "<group>"; };
+		65381CB41A515F8E004433EA /* cart_mbc1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc1.h; sourceTree = "<group>"; };
 		6555147E1A30BCAF007CAAD4 /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu.cpp; sourceTree = "<group>"; };
 		6555147F1A30BCAF007CAAD4 /* apu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu.h; sourceTree = "<group>"; };
 		655514801A30BCAF007CAAD4 /* apu_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_channel.h; sourceTree = "<group>"; };
@@ -192,10 +197,24 @@
 		651958E31A50089E00A18E8A /* mem */ = {
 			isa = PBXGroup;
 			children = (
+				65381CB21A515F8E004433EA /* mbc */,
+				65381CB01A515734004433EA /* cart_loader.h */,
+				65381CAC1A5154D0004433EA /* cartridge.cpp */,
+				65381CAD1A5154D0004433EA /* cartridge.h */,
+				651958E81A50264600A18E8A /* mem_mbc.h */,
 				651958E41A50089E00A18E8A /* mem.cpp */,
 				651958E51A50089E00A18E8A /* mem.h */,
 			);
 			path = mem;
+			sourceTree = "<group>";
+		};
+		65381CB21A515F8E004433EA /* mbc */ = {
+			isa = PBXGroup;
+			children = (
+				65381CB31A515F8E004433EA /* cart_mbc1.cpp */,
+				65381CB41A515F8E004433EA /* cart_mbc1.h */,
+			);
+			path = mbc;
 			sourceTree = "<group>";
 		};
 		6555147D1A30BCAF007CAAD4 /* sound */ = {
@@ -301,6 +320,7 @@
 				65D9DC2A1A4ECB000028D528 /* mbc1test.h */,
 				65D9DC191A4EC2770028D528 /* main.cpp */,
 				65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */,
+				65381CB11A515A19004433EA /* newmemtest.h */,
 			);
 			path = "KarouGB Unit Tests";
 			sourceTree = "<group>";
@@ -434,9 +454,8 @@
 				65D9DC361A4ECBBF0028D528 /* cpu.cpp in Sources */,
 				65D9DC371A4ECBBF0028D528 /* osx.cpp in Sources */,
 				65D9DC381A4ECBBF0028D528 /* sdl_io_provider.cpp in Sources */,
-				65D9DC2D1A4ECBAD0028D528 /* mbc1.cpp in Sources */,
-				65D9DC2E1A4ECBAD0028D528 /* mbcrom.cpp in Sources */,
-				65D9DC2F1A4ECBAD0028D528 /* mmu.cpp in Sources */,
+				65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */,
+				65381CB61A515F8E004433EA /* cart_mbc1.cpp in Sources */,
 				65D9DC311A4ECBAD0028D528 /* gpu.cpp in Sources */,
 				65D9DC321A4ECBAD0028D528 /* buttons.cpp in Sources */,
 				65D9DC331A4ECBAD0028D528 /* debug.cpp in Sources */,
@@ -452,19 +471,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				659133971A30BFEE0085193B /* mbcrom.cpp in Sources */,
 				659133A61A30C0150085193B /* ResourcePath.mm in Sources */,
-				659133981A30BFEE0085193B /* mmu.cpp in Sources */,
 				659133A51A30C0150085193B /* osx.cpp in Sources */,
 				65DC608B1A2DB51900D7415F /* main.cpp in Sources */,
 				65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */,
 				6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */,
+				65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */,
+				65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */,
 				6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */,
 				65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */,
 				65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */,
 				6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */,
 				659133AE1A30C0290085193B /* cpu.cpp in Sources */,
-				659133961A30BFEE0085193B /* mbc1.cpp in Sources */,
 				65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */,
 				6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */,
 				651958E61A50089E00A18E8A /* mem.cpp in Sources */,

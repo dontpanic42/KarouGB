@@ -12,7 +12,7 @@
 #include <iostream>
 #include "types.h"
 #include "cpu.h"
-#include "mmu.h"
+#include "mem.h"
 #include "io_provider.h"
 #include <memory>
 #include <queue>

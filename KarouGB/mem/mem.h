@@ -3,13 +3,18 @@
 
 #include "log.h"
 #include "types.h"
+#include "cartridge.h"
 
 #define MEM_BANK_SIZE 0x2000
 #define MEM_NUM_BANKS 8
 #define MEM_SIZE MEM_BANK_SIZE * MEM_NUM_BANKS
 #define MEM_BOOTROM_SIZE 256
 
-class Memory
+#define MMU KMemory
+#define register_f_read intercept
+#define register_f_write intercept
+
+class KMemory
 {
 public:
     /* Typ für Schreib-Intercept Funktionen */
@@ -31,12 +36,17 @@ public:
         void copyFromBuffer(u08i * buffer,
                             std::size_t bufsize,
                             std::size_t bufferOffset = 0);
+        
+        /* Kopiert daten aus einer Cartridge, beginnend bei Cartridge[offset],
+           bis index >= cartridge.size() oder index >= BANK_SIZE */
+        void copyFromBuffer(const KCartridge & cart,
+                            std::size_t cartOffset);
     };
 private:
     /* Standard-Speicherbanks */
     bank_t   defaultBank[MEM_NUM_BANKS];
     /* Banks, die von den rb/wb methoden gelesen/geschrieben werden */
-    bank_t * aktiveBank [MEM_NUM_BANKS];
+    bank_t * activeBank [MEM_NUM_BANKS];
     /* Schreib-Intercept funktionen. Default: WRITER_NONE */
     writer_t writer[MEM_SIZE];
     /* Lese-Intercept funktionen. Default: READER_NONE */
@@ -62,7 +72,7 @@ public:
     /* Anzahl sichtbarer Bänke */
     const static std::size_t BANK_COUNT;
     
-    Memory();
+    KMemory();
     
     /* Blendet eine externe Speicherbank ein */
     void setActiveBank(u08i bankno, bank_t * bank);
@@ -75,19 +85,19 @@ public:
     /* Setzt ein Lese-Intercept für einen Addressraum */
     void intercept(u16i addr, u16i repeat, reader_t reader);
     /* Ließt ein byte aus dem (linearen) Speicher */
-    u08i rb(u16i addr);
+    u08i rb(u16i addr) const;
     /* Schreibt ein byte in den (linearen) Speicher */
     void wb(u16i addr, u08i value);
     /* Ließt ein word aus dem (linearen) Speicher */
-    u16i rw(u16i addr);
+    u16i rw(u16i addr) const;
     /* Schreibt ein word in den (linearen) Speicher */
     void ww(u16i addr, u16i value);
     /* Gibt eine Referenz auf eine Speicherzelle zurück */
-    u08i & getDMARef(u16i addr);
+    u08i & getDMARef(u16i addr) const;
     
     /* Ließt ein (gepacktes) Struct aus dem (linearen) Speicher */
     template<typename T>
-    T rs(u16i addr)
+    T rs(u16i addr) const
     {
         u08i buffer[sizeof(T)];
         for(u16i i = 0; i < sizeof(T); i++)

@@ -9,7 +9,6 @@
 #include <iostream>
 #include <memory>
 #include "sdl_io_provider.h"
-#include "mmu.h"
 #include "cpu.h"
 #include "timer.h"
 #include "gpu.h"
@@ -17,6 +16,7 @@
 #include "buttons.h"
 #include "timewarp.h"
 #include "apu.h"
+#include "cart_loader.h"
 
 #ifdef VERBOSE
     #define LOG_LEVEL lg::DBG
@@ -37,8 +37,11 @@ int main(int argc, const char * argv[])
     lg::setLevel(LOG_LEVEL);
     const std::string cartridge(argv[1]);
     
+    std::shared_ptr<KCartridgeLoader> loader(KCartridgeLoader::load(cartridge));
+    std::shared_ptr<KMemory> mmu = loader->getMemory();
+    
     std::shared_ptr<IOProvider> ioprovider =  std::make_shared<SDLIOProvider>();
-    std::shared_ptr<MMU>        mmu =         std::make_shared<MMU>(cartridge);
+    //std::shared_ptr<MMU>        mmu =         std::make_shared<MMU>(cartridge);
     std::shared_ptr<cpu::Z80>   cpu =         std::make_shared<cpu::Z80>(mmu);
     cpu::Context                c;
     GPU                         gpu(mmu, ioprovider, cpu);
