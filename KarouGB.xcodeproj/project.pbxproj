@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		651958E61A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
 		651958E71A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
+		65255BB91A518864003EC57D /* cart_mbc0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BB71A518864003EC57D /* cart_mbc0.cpp */; };
+		65255BBA1A518864003EC57D /* cart_mbc0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BB71A518864003EC57D /* cart_mbc0.cpp */; };
+		65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
+		65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
 		65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
@@ -102,6 +106,9 @@
 		651958E41A50089E00A18E8A /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
 		651958E51A50089E00A18E8A /* mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem.h; sourceTree = "<group>"; };
 		651958E81A50264600A18E8A /* mem_mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem_mbc.h; sourceTree = "<group>"; };
+		65255BB71A518864003EC57D /* cart_mbc0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc0.cpp; sourceTree = "<group>"; };
+		65255BB81A518864003EC57D /* cart_mbc0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc0.h; sourceTree = "<group>"; };
+		65255BBB1A518B13003EC57D /* cart_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_loader.cpp; sourceTree = "<group>"; };
 		65381CAC1A5154D0004433EA /* cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cartridge.cpp; sourceTree = "<group>"; };
 		65381CAD1A5154D0004433EA /* cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cartridge.h; sourceTree = "<group>"; };
 		65381CB01A515734004433EA /* cart_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_loader.h; sourceTree = "<group>"; };
@@ -199,6 +206,7 @@
 			children = (
 				65381CB21A515F8E004433EA /* mbc */,
 				65381CB01A515734004433EA /* cart_loader.h */,
+				65255BBB1A518B13003EC57D /* cart_loader.cpp */,
 				65381CAC1A5154D0004433EA /* cartridge.cpp */,
 				65381CAD1A5154D0004433EA /* cartridge.h */,
 				651958E81A50264600A18E8A /* mem_mbc.h */,
@@ -211,6 +219,8 @@
 		65381CB21A515F8E004433EA /* mbc */ = {
 			isa = PBXGroup;
 			children = (
+				65255BB71A518864003EC57D /* cart_mbc0.cpp */,
+				65255BB81A518864003EC57D /* cart_mbc0.h */,
 				65381CB31A515F8E004433EA /* cart_mbc1.cpp */,
 				65381CB41A515F8E004433EA /* cart_mbc1.h */,
 			);
@@ -459,7 +469,9 @@
 				65D9DC311A4ECBAD0028D528 /* gpu.cpp in Sources */,
 				65D9DC321A4ECBAD0028D528 /* buttons.cpp in Sources */,
 				65D9DC331A4ECBAD0028D528 /* debug.cpp in Sources */,
+				65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */,
 				65D9DC341A4ECBAD0028D528 /* timer.cpp in Sources */,
+				65255BBA1A518864003EC57D /* cart_mbc0.cpp in Sources */,
 				65D9DC351A4ECBAD0028D528 /* timewarp.cpp in Sources */,
 				651958E71A50089E00A18E8A /* mem.cpp in Sources */,
 				65D9DC2C1A4ECB890028D528 /* ResourcePath.mm in Sources */,
@@ -483,7 +495,9 @@
 				65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */,
 				6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */,
 				659133AE1A30C0290085193B /* cpu.cpp in Sources */,
+				65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */,
 				65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */,
+				65255BB91A518864003EC57D /* cart_mbc0.cpp in Sources */,
 				6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */,
 				651958E61A50089E00A18E8A /* mem.cpp in Sources */,
 				65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */,

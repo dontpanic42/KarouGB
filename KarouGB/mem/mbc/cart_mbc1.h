@@ -12,6 +12,13 @@ namespace kmbc_impl
     private:
         typedef KMemory::bank_t bank_t;
         
+        struct save_header_t
+        {
+            u32i version;
+            std::size_t size;
+            u32i magic;
+        };
+        
         enum BankingMode
         {
             ROM_BANKING_MODE,
@@ -47,6 +54,12 @@ namespace kmbc_impl
               const std::shared_ptr<cart_t> & cartridge);
         
         virtual void setup();
+        
+        virtual bool canSaveState();
+        /* Speichert den Inhalt des (Batteriegepufferten) Rams in einem ostream */
+        virtual void saveState(std::ostream & stream);
+        /* Lädt den Inhalt des (Batteriegepufferten) Rams aus einem istream */
+        virtual void loadState(std::istream & stream);
         
         /* TESTING **********************************/
         /* Gibt die größe des Roms in bytes zurück. */

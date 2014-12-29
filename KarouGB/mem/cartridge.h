@@ -6,6 +6,19 @@
 
 class KCartridge
 {
+public:
+    enum CartridgeType {
+        ROM                 = 0x00,
+        ROM_MBC1            = 0x01,
+        ROM_MBC1_RAM        = 0x02,
+        ROM_MBC1_RAM_BATT   = 0x03,
+        ROM_MBC2            = 0x05,
+        ROM_MBC2_BATT       = 0x06,
+        ROM_RAM             = 0x08,
+        ROM_RAM_BATT        = 0x09,
+        ROM_MM01            = 0x0B
+        /* ... */
+    };
 private:
     /* Repräsentiert den Cartridge-Header, beginnend ab
        Datei-Offset 0x0000 */

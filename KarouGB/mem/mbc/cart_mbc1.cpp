@@ -9,6 +9,9 @@
 namespace kmbc_impl
 {
     const std::string TAG("mbc1");
+    const s32i SAVE_MAGIC(0xDEAD);
+    const s32i SAVE_VERSION(0x0001);
+    
     const u08i ROM_LOW_MASK (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4);
     const u08i ROM_HIGH_MASK(BIT_5 | BIT_6);
     
@@ -226,6 +229,12 @@ namespace kmbc_impl
         return *ramBanks[activeRamBank].ptr[addr - 0xA000];
     }
     
+    bool KMBC1::canSaveState()
+    {
+        /* Kann speichern, wenn dies die batteriegepufferte Variante des MBC1 ist. */
+        return (cart()->header().cart_type == KCartridge::ROM_MBC1_RAM_BATT);
+    }
+    
     void KMBC1::onWriteRam(u16i addr, u08i value)
     {
         /* Wenn der Ram nicht aktiviert ist, kann er nicht geschrieben werden,
@@ -238,6 +247,55 @@ namespace kmbc_impl
         assert((addr - 0xA000) < 0x2000);
         
         (*ramBanks[activeRamBank].ptr[addr - 0xA000]) = value;
+    }
+    
+    /* Speichert den Inhalt des (Batteriegepufferten) Rams in einem ostream */
+    void KMBC1::saveState(std::ostream & stream)
+    {
+        save_header_t header;
+        header.version = SAVE_VERSION;
+        header.size = ramBanks.size();
+        header.magic = SAVE_MAGIC;
+        
+        stream.write((const char *) &header, sizeof(save_header_t));
+        
+        for(const KMemory::bank_t & bank : ramBanks)
+        {
+            stream.write((const char *) &bank.mem[0], KMemory::BANK_SIZE * sizeof(u08i));
+        }
+    }
+    
+    /* Lädt den Inhalt des (Batteriegepufferten) Rams aus einem istream */
+    void KMBC1::loadState(std::istream & stream)
+    {
+        save_header_t header;
+        stream.read((char *) &header, sizeof(save_header_t));
+        
+        if(header.version != SAVE_VERSION)
+        {
+            lg::error(TAG, "State loader: Version mismatch. (is: %u, should be: %u)\n",
+                      header.version, SAVE_VERSION);
+            return;
+        }
+        
+        if(header.size != ramBanks.size())
+        {
+            lg::error(TAG, "State loader: Bank size mismatch. (is: %u, should be: %u)\n",
+                      header.size, ramBanks.size());
+            return;
+        }
+        
+        if(header.magic != SAVE_MAGIC)
+        {
+            lg::error(TAG, "State loader: MAGIC mismatch. (is: %u, should be: %u)\n",
+                      header.magic, SAVE_MAGIC);
+            return;
+        }
+        
+        for(KMemory::bank_t & bank : ramBanks)
+        {
+            stream.read((char *) &bank.mem[0], KMemory::BANK_SIZE * sizeof(u08i));
+        }
     }
     
     /* TESTING **********************************/

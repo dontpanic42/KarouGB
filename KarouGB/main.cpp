@@ -17,6 +17,7 @@
 #include "timewarp.h"
 #include "apu.h"
 #include "cart_loader.h"
+#include "os.h"
 
 #ifdef VERBOSE
     #define LOG_LEVEL lg::DBG
@@ -56,6 +57,11 @@ int main(int argc, const char * argv[])
     lg::warn(TAG, "Sound disabled.\n");
 #endif
     
+    if(argc > 2)
+    {
+        loader->loadState(resourcePath() + std::string(argv[2]));
+    }
+    
     ioprovider->init(APP_TITLE);
     
     while(!ioprovider->isClosed() && dbg.poll())
@@ -70,6 +76,8 @@ int main(int argc, const char * argv[])
         timewarp.tick(c);
 #endif
     }
+    
+    loader->saveState(resourcePath() + loader->createAutosaveFilename());
     
     lg::info(TAG, "Bye.\n");
     return EXIT_SUCCESS;

@@ -6,7 +6,6 @@
 #include "mem.h"
 #include "cartridge.h"
 #include "mem_mbc.h"
-#include "cart_mbc1.h"
 
 class KCartridgeLoader
 {
@@ -20,49 +19,21 @@ private:
     
     std::shared_ptr<KMBC> mbc;
     
-    void setupMBC()
-    {
-        using namespace kmbc_impl;
-        
-        mbc = std::make_shared<KMBC1>(getMemory(), getCartridge());
-        mbc->setup();
-    }
+    void setupMBC();
     
-    KCartridgeLoader(const std::string & cartname)
-    : cartname(cartname)
-    , memory(new memory_t())
-    , cart(new cart_t())
-    , mbc(nullptr)
-    {
-        cart->load(cartname);
-        setupMBC();
-    }
+    KCartridgeLoader(const std::string & cartname);
 public:
-    static std::shared_ptr<KCartridgeLoader> load(const std::string & cartname)
-    {
-        std::shared_ptr<KCartridgeLoader> loader(new KCartridgeLoader(cartname));
-        return loader;
-    }
+    static std::shared_ptr<KCartridgeLoader> load(const std::string & cartname);
     
-    const std::string & getCartridgeName() const
-    {
-        return cartname;
-    }
+    const std::string & getCartridgeName() const;
+    const std::shared_ptr<memory_t> & getMemory() const;
+    const std::shared_ptr<cart_t> & getCartridge() const;
+    const std::shared_ptr<KMBC> & getMBC() const;
     
-    const std::shared_ptr<memory_t> & getMemory() const
-    {
-        return memory;
-    }
-    
-    const std::shared_ptr<cart_t> & getCartridge() const
-    {
-        return cart;
-    }
-    
-    const std::shared_ptr<KMBC> & getMBC() const
-    {
-        return mbc;
-    }
+    std::string createAutosaveFilename();
+    bool canSaveState();
+    void loadState(const std::string & filename);
+    void saveState(const std::string & filename);
 };
 
 
