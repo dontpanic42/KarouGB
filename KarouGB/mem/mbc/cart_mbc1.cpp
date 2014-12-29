@@ -147,7 +147,12 @@ namespace kmbc_impl
     
     void KMBC1::regWriteRamEnable(u08i value)
     {
+        bool oldState = ramEnabled;
         ramEnabled = ((value & 0x0F) == 0x0A);
+        if(oldState != ramEnabled)
+        {
+            lg::debug(TAG, (ramEnabled)? "Ram enabled\n" : "Ram disabled\n");
+        }
     }
     
     void KMBC1::regWriteSwitchLo(u08i value)
