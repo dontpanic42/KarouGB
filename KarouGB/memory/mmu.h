@@ -125,7 +125,7 @@
 //                wb(addr + i, buffer[i]);
 //            }
 //        }
-//        
+//
 //        //Get a pointer / reference directly to a memory cell, without the internal 'bank'
 //        //redirections or restrictions (meant for hardware registers)
 //        u08i * getDMAPtr(u16i addr);

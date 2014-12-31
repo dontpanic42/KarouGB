@@ -46,7 +46,8 @@ enum Bit
     BIT_4 = 0x10,
     BIT_5 = 0x20,
     BIT_6 = 0x40,
-    BIT_7 = 0x80
+    BIT_7 = 0x80,
+    BIT_8 = 0x100
 };
 
 enum Interrupt

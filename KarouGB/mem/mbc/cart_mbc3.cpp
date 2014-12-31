@@ -1,4 +1,4 @@
-#include "cart_mbc1.h"
+#include "cart_mbc3.h"
 #include "log.h"
 #include <cassert>
 #include <cmath>
@@ -7,34 +7,29 @@
 #define RAMSIZE_TO_BYTES(x) (((x == 0)? 0 : (x == 1)? 2 : (x ==2)? 8 : 32) * 0x400)
 
 namespace kmbc_impl
-{
-    const std::string TAG("mbc1");
-    const s32i SAVE_MAGIC(0xDEAD);
+{   
+    const std::string TAG("mbc3");
+    const s32i SAVE_MAGIC(0xBEEF);
     const s32i SAVE_VERSION(0x0001);
     
-    const u08i ROM_LOW_MASK (BIT_0 | BIT_1 | BIT_2 | BIT_3 | BIT_4);
-    const u08i ROM_HIGH_MASK(BIT_5 | BIT_6);
-    
-    KMBC1::KMBC1(const std::shared_ptr<memory_t> & memory,
+    KMBC3::KMBC3(const std::shared_ptr<memory_t> & memory,
                  const std::shared_ptr<cart_t> & cartridge)
     : KMBC(memory, cartridge)
-    , currentHighRomBank(1)
-    , currentBankingMode(ROM_BANKING_MODE)
     , romSizeBytes(0)
     , ramSizeBytes(0)
     , ramEnabled(false)
     , activeRamBank(0)
+    , latchLastWrite(0x42) // Nicht 0x00!
+    , rtcVisible(false)
     {
-        
     }
     
-    void KMBC1::setup()
+    void KMBC3::setup()
     {
         assert(cart() != nullptr);
         
         romSizeBytes = ROMSIZE_TO_BYTES(cart()->header().rom_size);
         ramSizeBytes = RAMSIZE_TO_BYTES(cart()->header().ram_size);
-        currentBankingMode = ROM_BANKING_MODE;
         
         lg::debug(TAG, "Rom size: %u bytes.\n", romSizeBytes);
         lg::debug(TAG, "Ram size: %u bytes.\n", ramSizeBytes);
@@ -45,7 +40,7 @@ namespace kmbc_impl
         setupRam();
     }
     
-    void KMBC1::setupRom()
+    void KMBC3::setupRom()
     {
         /* Anzahl der _memory_ banks, die erzeugt werden müssen */
         std::size_t numRomBanks = static_cast<std::size_t>(std::ceil(static_cast<double>(romSizeBytes) /
@@ -71,8 +66,7 @@ namespace kmbc_impl
         
         if(numRomBanks >= 4)
         {
-            currentHighRomBank = 1;
-            activateHighRom(currentHighRomBank);
+            activateHighRom(1);
         }
         else
         {
@@ -80,7 +74,7 @@ namespace kmbc_impl
         }
     }
     
-    void KMBC1::setupRam()
+    void KMBC3::setupRam()
     {
         ramEnabled = false;
         
@@ -103,26 +97,35 @@ namespace kmbc_impl
         ramBanks.resize(numRamBanks);
     }
     
-    void KMBC1::setupCallbacks()
+    void KMBC3::setupCallbacks()
     {
         /* Lowbits der Rom-Bank */
         mem()->intercept(0x2000, 0x2000, [this](u16i, u08i val, u08i *) {
-            this->regWriteSwitchLo(val);
+            this->regWriteSwitchRom(val);
         });
         /* Highbits der Rom-Bank ODER Ram-Bank nummer. */
         mem()->intercept(0x4000, 0x2000, [this](u16i, u08i val, u08i *) {
-            this->regWriteSwitchHi(val);
+            this->regWriteSwitchRam(val);
         });
+        
+        if(supportsRTC())
+        {
+            /* Wenn eine RTC vorhanden ist, erlaube das lesen der RTC register */
+            mem()->intercept(0x6000, 0x2000, [this](u16i, u08i val, u08i *) {
+                this->regWriteLatchClock(val);
+            });
+        }
+        else
+        {
+            /* Wenn keine RTC vorhanden ist, kann der bereich nicht geschrieben werden */
+            mem()->intercept(0x6000, 0x2000, KMemory::WRITER_READ_ONLY);
+        }
         
         if(ramSizeBytes)
         {
             /* Wenn Ram vorhanden ist, erlaube das aktivieren des Rams */
             mem()->intercept(0x0000, 0x2000, [this](u16i, u08i val, u08i *) {
                 this->regWriteRamEnable(val);
-            });
-            /* Wenn Ram vorhanden ist, erlaube das wechseln des Banking-Modes */
-            mem()->intercept(0x6000, 0x2000, [this](u16i, u08i val, u08i *) {
-                this->regWriteSwitchMode(val);
             });
             /* Wenn Ram vorhanden ist, sezte die entsprechenden lese/schreib funktionen */
             mem()->intercept(0xA000, 0x2000, [this](u16i addr, u08i val, u08i *) {
@@ -136,16 +139,14 @@ namespace kmbc_impl
         {
             /* Wenn kein Ram vorhanden ist, mache den Ram-Enable Speicherbereich read-only */
             mem()->intercept(0x0000, 0x2000, KMemory::WRITER_READ_ONLY);
-            /* Wenn kein Ram vorhanden ist, mache den Mode-Select Speicherbereich read-only */
-            mem()->intercept(0x6000, 0x2000, KMemory::WRITER_READ_ONLY);
             /* Wenn kein Ram vorhanden ist, kann in 0xA000-0xBFFF weder gelesen noch geschrieben
-               werden...*/
+             werden...*/
             mem()->intercept(0xA000, 0x2000, KMemory::WRITER_READ_ONLY);
             mem()->intercept(0xA000, 0x2000, KMemory::READER_WRITE_ONLY);
         }
     }
     
-    void KMBC1::regWriteRamEnable(u08i value)
+    void KMBC3::regWriteRamEnable(u08i value)
     {
         bool oldState = ramEnabled;
         ramEnabled = ((value & 0x0F) == 0x0A);
@@ -155,54 +156,62 @@ namespace kmbc_impl
         }
     }
     
-    void KMBC1::regWriteSwitchLo(u08i value)
+    void KMBC3::regWriteSwitchRom(u08i value)
     {
-        /* Setzte die unteren 5 Bits der RomBank */
-        currentHighRomBank &= ROM_HIGH_MASK;
-        currentHighRomBank |= value & ROM_LOW_MASK;
-        activateHighRom(currentHighRomBank);
+        /* Die Rom-Nummer wird durch die ersten 7 bit bezeichnet */
+        activateHighRom(value & 0x7F);
     }
     
-    void KMBC1::regWriteSwitchHi(u08i value)
+    void KMBC3::regWriteSwitchRam(u08i value)
     {
-        /* Die Funktion des Registers variiert je nach banking-Mode */
-        if(currentBankingMode == ROM_BANKING_MODE)
+        /* Wird eine zahl [0x00...0x03] geschrieben, wird die RAM-Bank
+           gewechselt. */
+        if(value <= 0x03)
         {
-            /* Setzte die oberen 2 Bit der Rom-Bank */
-            currentHighRomBank &= ROM_LOW_MASK;
-            currentHighRomBank |= (value << 5) & ROM_HIGH_MASK;
-            activateHighRom(currentHighRomBank);
+            activateRamBank(value);
+            rtcVisible = false;
+        }
+        else if(supportsRTC() && value >= 0x08 && value <= 0x0C)
+        {
+            /* Mappe RTC Register */
+            rtcVisible = true;
+            activeRTCRegister = (mbc3impl::RTC::rtc_register) (value - 0x08);
         }
         else
         {
-            /* Setzte die aktive ram-Bank */
-            activateRamBank(value);
+            rtcVisible = false;
         }
     }
     
-    void KMBC1::regWriteSwitchMode(u08i value)
+    /* Keine supportsRTC() guards notwendig, da das bei erstellen des 
+       Callbacks überprüft wird */
+    void KMBC3::regWriteLatchClock(u08i value)
     {
-        /* Wenn das erste Bit gesetzt ist: ROM_BANKING_MODE.
-           Sonst: RAM_BANKING_MODE */
-        currentBankingMode = (!(value & BIT_0))? ROM_BANKING_MODE : RAM_BANKING_MODE;
+        /* Um die Register zu aktualisieren, muss erst 0x00 geschrieben werden und
+           als nächste 0x01. */
+        if(latchLastWrite == 0x00 && value == 0x01)
+        {
+            rtc.updateLatch();
+        }
+        
+        latchLastWrite = value;
     }
     
     /* Setzt die Rombank, die im hohen Rom-Bereich
        (0x4000-0x8000) eingeblendet wird) */
-    void KMBC1::activateHighRom(u08i bankno)
+    void KMBC3::activateHighRom(u08i bankno)
     {
         std::size_t bank = static_cast<std::size_t>(bankno);
-        /* Die Banks 0, 20, 40 und 60 können nicht eingeblendet
-           werden, statt dessen verwende bankno+1 */
-        switch(bankno)
+
+        /* Bank 0 kann nicht im oberen Rom-Bereich eingeblendet werden, 
+           nim statt dessen Bank 1. (Im gegensatz zum MBC1 können die Banks
+           20, 40 und 60 problemlos verwendet werden. */
+        if(bank == 0)
         {
-            case 0x00: bank++; break;
-            case 0x20: bank++; break;
-            case 0x40: bank++; break;
-            case 0x60: bank++; break;
-            default: break;
+            bank++;
         }
         
+        /* Übersetzung membanks -> rombanks (2*membank::size = rombank::size) */
         std::size_t membank = bank * 2;
         if((membank + 1) >= romBanks.size())
         {
@@ -215,35 +224,46 @@ namespace kmbc_impl
         mem()->setActiveBank(3, romBanks[membank+1].get());
     }
     
-    void KMBC1::activateRamBank(u08i ramBank)
+    void KMBC3::activateRamBank(u08i ramBank)
     {
         activeRamBank = ramBank & 0x03;
     }
     
-    u08i KMBC1::onReadRam(u16i addr)
+    u08i KMBC3::onReadRam(u16i addr)
     {
         /* Wenn der Ram nicht aktiviert ist, kann er nicht gelesen werden,
            das selbe gilt, wenn eine nicht vorhandene Ram-Bank aktiviert wird */
+        if(rtcVisible)
+        {
+            return rtc.getRegister(activeRTCRegister);
+        }
+        
         if(!ramEnabled || activeRamBank >= ramBanks.size())
         {
             return 0x00;
         }
+        
         
         assert((addr - 0xA000) < 0x2000);
         
         return *ramBanks[activeRamBank].ptr[addr - 0xA000];
     }
     
-    bool KMBC1::canSaveState()
+    bool KMBC3::canSaveState()
     {
         /* Kann speichern, wenn dies die batteriegepufferte Variante des MBC1 ist. */
-        return (cart()->header().cart_type == KCartridge::ROM_MBC1_RAM_BATT);
+        return (cart()->header().cart_type == KCartridge::ROM_MBC3_RAM_BAT);
     }
     
-    void KMBC1::onWriteRam(u16i addr, u08i value)
+    void KMBC3::onWriteRam(u16i addr, u08i value)
     {
         /* Wenn der Ram nicht aktiviert ist, kann er nicht geschrieben werden,
          das selbe gilt, wenn eine nicht vorhandene Ram-Bank aktiviert wird */
+        if(rtcVisible)
+        {
+            rtc.setRegister(activeRTCRegister, value);
+        }
+        
         if(!ramEnabled || activeRamBank >= ramBanks.size())
         {
             return;
@@ -255,7 +275,7 @@ namespace kmbc_impl
     }
     
     /* Speichert den Inhalt des (Batteriegepufferten) Rams in einem ostream */
-    void KMBC1::saveState(std::ostream & stream)
+    void KMBC3::saveState(std::ostream & stream)
     {
         if(ramEnabled)
         {
@@ -269,6 +289,8 @@ namespace kmbc_impl
         
         stream.write((const char *) &header, sizeof(save_header_t));
         
+        rtc.saveState(stream);
+        
         for(const KMemory::bank_t & bank : ramBanks)
         {
             stream.write((const char *) &bank.mem[0], KMemory::BANK_SIZE * sizeof(u08i));
@@ -276,7 +298,7 @@ namespace kmbc_impl
     }
     
     /* Lädt den Inhalt des (Batteriegepufferten) Rams aus einem istream */
-    void KMBC1::loadState(std::istream & stream)
+    void KMBC3::loadState(std::istream & stream)
     {
         save_header_t header;
         stream.read((char *) &header, sizeof(save_header_t));
@@ -302,25 +324,33 @@ namespace kmbc_impl
             return;
         }
         
+        rtc.loadState(stream);
+        
         for(KMemory::bank_t & bank : ramBanks)
         {
             stream.read((char *) &bank.mem[0], KMemory::BANK_SIZE * sizeof(u08i));
         }
     }
     
+    bool KMBC3::supportsRTC() const
+    {
+        return (cart()->header().cart_type == KCartridge::ROM_MBC3_TIM_BAT ||
+                cart()->header().cart_type == KCartridge::ROM_MBC3_TIM_BAT_RAM);
+    }
+    
     /* TESTING **********************************/
     /* Gibt die größe des Roms in bytes zurück. */
-    std::size_t KMBC1::getRomSize()
+    std::size_t KMBC3::getRomSize()
     {
         return romSizeBytes;
     }
     /* Gibt die größe des Rams in bytes zurück. */
-    std::size_t KMBC1::getRamSize()
+    std::size_t KMBC3::getRamSize()
     {
         return ramSizeBytes;
     }
     /* Gibt die Anzahl der Memory-Banks zurück. */
-    std::size_t KMBC1::getNumRomBanks()
+    std::size_t KMBC3::getNumRomBanks()
     {
         return romBanks.size();
     }

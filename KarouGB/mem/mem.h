@@ -106,6 +106,17 @@ public:
         }
         return *( (T*) buffer );
     }
+    
+    /* Schreibt ein (gepacktes) Struct in den (linearen) Speicher */
+    template<typename T>
+    void ws(u16i addr, const T & s)
+    {
+        const u08i * buffer = (const u08i *) &s;
+        for(u16i i = 0; i < sizeof(T); i++)
+        {
+            wb(addr + i, buffer[i]);
+        }
+    }
 };
 
 #endif

@@ -16,7 +16,13 @@ public:
         ROM_MBC2_BATT       = 0x06,
         ROM_RAM             = 0x08,
         ROM_RAM_BATT        = 0x09,
-        ROM_MM01            = 0x0B
+        ROM_MM01            = 0x0B,
+        
+        ROM_MBC3            = 0x11,
+        ROM_MBC3_RAM        = 0x12,
+        ROM_MBC3_RAM_BAT    = 0x13,
+        ROM_MBC3_TIM_BAT    = 0x0F,
+        ROM_MBC3_TIM_BAT_RAM= 0x10
         /* ... */
     };
 private:

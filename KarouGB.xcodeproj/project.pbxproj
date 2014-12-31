@@ -29,6 +29,11 @@
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
+		65B135221A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
+		65B135231A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
+		65B135261A541C3F0004202E /* pokemon-red.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65B135251A541C0D0004202E /* pokemon-red.gb */; };
+		65D8DC3B1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
+		65D8DC3C1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
 		65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */; };
 		65D9DC2B1A4ECB430028D528 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D9DC191A4EC2770028D528 /* main.cpp */; };
 		65D9DC2C1A4ECB890028D528 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
@@ -64,6 +69,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				65B135261A541C3F0004202E /* pokemon-red.gb in CopyFiles */,
 				6557F5191A2DC44600F870DA /* DonkeyKongLand.gb in CopyFiles */,
 				6557F51A1A2DC44600F870DA /* LegendOfZelda.gb in CopyFiles */,
 				6557F51B1A2DC44600F870DA /* SuperMarioLand.gb in CopyFiles */,
@@ -152,7 +158,13 @@
 		659133AB1A30C0290085193B /* cpu_mapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_mapping.h; sourceTree = "<group>"; };
 		659133AC1A30C0290085193B /* cpu_ops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_ops.h; sourceTree = "<group>"; };
 		659133AD1A30C0290085193B /* cpu_timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_timing.h; sourceTree = "<group>"; };
+		65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc3_rtc.cpp; sourceTree = "<group>"; };
+		65B135211A5413B70004202E /* cart_mbc3_rtc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc3_rtc.h; sourceTree = "<group>"; };
+		65B135241A5414830004202E /* mbc3rtctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mbc3rtctest.h; sourceTree = "<group>"; };
+		65B135251A541C0D0004202E /* pokemon-red.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pokemon-red.gb"; sourceTree = "<group>"; };
 		65BDB53C1A4DA167000678B8 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
+		65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc3.cpp; sourceTree = "<group>"; };
+		65D8DC3A1A52A7DB00A06FBD /* cart_mbc3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc3.h; sourceTree = "<group>"; };
 		65D9DC171A4EC2770028D528 /* KarouGB Unit Tests */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "KarouGB Unit Tests"; sourceTree = BUILT_PRODUCTS_DIR; };
 		65D9DC191A4EC2770028D528 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = KarouGB_Unit_Tests.1; sourceTree = "<group>"; };
@@ -219,6 +231,10 @@
 		65381CB21A515F8E004433EA /* mbc */ = {
 			isa = PBXGroup;
 			children = (
+				65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */,
+				65B135211A5413B70004202E /* cart_mbc3_rtc.h */,
+				65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */,
+				65D8DC3A1A52A7DB00A06FBD /* cart_mbc3.h */,
 				65255BB71A518864003EC57D /* cart_mbc0.cpp */,
 				65255BB81A518864003EC57D /* cart_mbc0.h */,
 				65381CB31A515F8E004433EA /* cart_mbc1.cpp */,
@@ -258,6 +274,7 @@
 		6557F50F1A2DC1F800F870DA /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				65B135251A541C0D0004202E /* pokemon-red.gb */,
 				65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */,
 				6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */,
 				6557F5111A2DC20600F870DA /* LegendOfZelda.gb */,
@@ -331,6 +348,7 @@
 				65D9DC191A4EC2770028D528 /* main.cpp */,
 				65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */,
 				65381CB11A515A19004433EA /* newmemtest.h */,
+				65B135241A5414830004202E /* mbc3rtctest.h */,
 			);
 			path = "KarouGB Unit Tests";
 			sourceTree = "<group>";
@@ -461,12 +479,14 @@
 				65D9DC301A4ECBAD0028D528 /* apu.cpp in Sources */,
 				65D9DC3B1A4ECD500028D528 /* apu_squarewave_channel.cpp in Sources */,
 				65D9DC3C1A4ECD500028D528 /* sound.cpp in Sources */,
+				65D8DC3C1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */,
 				65D9DC361A4ECBBF0028D528 /* cpu.cpp in Sources */,
 				65D9DC371A4ECBBF0028D528 /* osx.cpp in Sources */,
 				65D9DC381A4ECBBF0028D528 /* sdl_io_provider.cpp in Sources */,
 				65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */,
 				65381CB61A515F8E004433EA /* cart_mbc1.cpp in Sources */,
 				65D9DC311A4ECBAD0028D528 /* gpu.cpp in Sources */,
+				65B135231A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */,
 				65D9DC321A4ECBAD0028D528 /* buttons.cpp in Sources */,
 				65D9DC331A4ECBAD0028D528 /* debug.cpp in Sources */,
 				65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */,
@@ -487,12 +507,14 @@
 				659133A51A30C0150085193B /* osx.cpp in Sources */,
 				65DC608B1A2DB51900D7415F /* main.cpp in Sources */,
 				65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */,
+				65D8DC3B1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */,
 				6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */,
 				65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */,
 				65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */,
 				6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */,
 				65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */,
 				65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */,
+				65B135221A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */,
 				6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */,
 				659133AE1A30C0290085193B /* cpu.cpp in Sources */,
 				65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */,

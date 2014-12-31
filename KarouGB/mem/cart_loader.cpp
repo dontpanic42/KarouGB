@@ -1,6 +1,7 @@
 #include "cart_loader.h"
 #include "cart_mbc0.h"
 #include "cart_mbc1.h"
+#include "cart_mbc3.h"
 #include <fstream>
 
 const std::string TAG("ctld");
@@ -39,10 +40,19 @@ void KCartridgeLoader::setupMBC()
             mbc = std::make_shared<KMBC1>(getMemory(), getCartridge());
             break;
         }
+        case KCartridge::ROM_MBC3:
+        case KCartridge::ROM_MBC3_RAM:
+        case KCartridge::ROM_MBC3_TIM_BAT:
+        case KCartridge::ROM_MBC3_TIM_BAT_RAM:
+        case KCartridge::ROM_MBC3_RAM_BAT:
+        {
+            mbc = std::make_shared<KMBC3>(getMemory(), getCartridge());
+            break;
+        }
         default:
         {
             lg::error(TAG, "Unsupported cartridge type: %u\n", getCartridge()->header().cart_type);
-            throw std::runtime_error("Unsupported MBC-Type.");
+            throw std::runtime_error("Unsupported MBC-Type." + std::to_string(getCartridge()->header().cart_type));
         }
     }
     

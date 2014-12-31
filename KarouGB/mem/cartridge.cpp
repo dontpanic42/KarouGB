@@ -41,6 +41,7 @@ void KCartridge::load(const std::string & filename)
     
     lg::info(TAG, "Loaded Cartridge %s\n", std::string(header().title, 0x0F).c_str());
     lg::info(TAG, "Loaded Cartridge size: %u\n", size());
+    lg::debug(TAG, "Cartridge Type: %u\n", header().cart_type);
     
     /* Überprüfe die header-checksum */
     checkChecksum();
