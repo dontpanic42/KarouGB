@@ -24,7 +24,7 @@ u08i btnmask[BTN_LAST] {
     BIT_3   //START
 };
 
-Buttons::Buttons(std::shared_ptr<MMU> mmu,
+Buttons::Buttons(std::shared_ptr<KMemory> mmu,
                  std::shared_ptr<IOProvider> ioprovider,
                  std::shared_ptr<cpu::Z80> cpu)
 : ioprovider(ioprovider)
@@ -45,11 +45,11 @@ Buttons::Buttons(std::shared_ptr<MMU> mmu,
         ioprovider->registerButtonCallback( (Button) i, l_on_kp, l_on_kr);
     }
     
-    mmu->register_f_write(BTN_REG_ADDR, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(BTN_REG_ADDR, [this](u16i addr, u08i value, u08i * ptr) {
         this->onKeyRegWrite(addr, value, ptr);
     });
     
-    mmu->register_f_read(BTN_REG_ADDR, [this](u16i addr, u08i * ptr) {
+    mmu->intercept(BTN_REG_ADDR, [this](u16i addr, u08i * ptr) {
         return this->onKeyRegRead(addr, ptr);
     });
 }

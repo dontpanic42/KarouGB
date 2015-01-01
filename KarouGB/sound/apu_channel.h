@@ -25,7 +25,7 @@ template<typename T>
 class APUChannel
 {
 private:
-    std::shared_ptr<MMU> mmu;
+    std::shared_ptr<KMemory> mmu;
     T & generator;
     u16i baseRegister;
     
@@ -67,7 +67,7 @@ private:
     
     terminal_status_t terminalStatus[CHANNEL_LAST];
 protected:
-    std::shared_ptr<MMU> getMMU() const
+    std::shared_ptr<KMemory> getMMU() const
     {
         return mmu;
     }
@@ -206,7 +206,9 @@ protected:
         }
     }
 public:
-    APUChannel(std::shared_ptr<MMU> mmu, u16i baseRegister, T & generator)
+    APUChannel(std::shared_ptr<KMemory> mmu,
+               u16i baseRegister,
+               T & generator)
     : mmu(mmu)
     , baseRegister(baseRegister)
     , generator(generator)

@@ -5,7 +5,7 @@
 
 #include "mem.h"
 #include "cartridge.h"
-#include "mem_mbc.h"
+#include "cart_mbc.h"
 
 class KCartridgeLoader
 {

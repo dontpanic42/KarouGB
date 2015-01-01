@@ -12,7 +12,7 @@
 namespace opfuncs
 {
     
-#define OPFSIG (Z80 & cpu, Context & c, MMU & mmu)
+#define OPFSIG (Z80 & cpu, Context & c, KMemory & mmu)
 #define OPFRET void
 #define OP(x) OPFRET x OPFSIG
     /** Beginn cpu instructions **/

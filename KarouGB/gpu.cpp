@@ -19,7 +19,7 @@
 #define SPRITE_ATTRIBUTE_TABLE 0xFE00
 #define SPRITE_MAX_PER_SCANLINE 10
 
-GPU::GPU(std::shared_ptr<MMU> mmu,
+GPU::GPU(std::shared_ptr<KMemory> mmu,
          std::shared_ptr<IOProvider> ioprovider,
          std::shared_ptr<cpu::Z80> cpu)
 //: modeclock(0)
@@ -60,11 +60,11 @@ GPU::GPU(std::shared_ptr<MMU> mmu,
     //Displaycontroller settings
     reg_lcdc = 0x00;
 
-    mmu->register_f_write(GPU_REG_ADDR_DMA_TRANSF, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(GPU_REG_ADDR_DMA_TRANSF, [this](u16i addr, u08i value, u08i * ptr) {
         this->onDMATransfer(addr, value, ptr);
     });
     
-    mmu->register_f_write(GPU_REG_ADDR_LY, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(GPU_REG_ADDR_LY, [this](u16i addr, u08i value, u08i * ptr) {
         this->onResetLy(addr, value, ptr);
     });
     

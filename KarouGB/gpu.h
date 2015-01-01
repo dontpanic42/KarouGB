@@ -68,7 +68,7 @@ private:
     } __attribute__((packed));
     
     std::shared_ptr<IOProvider> ioprovider;
-    std::shared_ptr<MMU>      mmu;
+    std::shared_ptr<KMemory>    mmu;
     std::shared_ptr<cpu::Z80> cpu;
     
     /* True, wenn der Pixel _NICHT_ transparent ist,
@@ -126,7 +126,7 @@ private:
     //Returns the actual color for color data read by readTileAt
     u08i decodeColor(Color value, u08i palette);
 public:
-    GPU(std::shared_ptr<MMU> mmu,
+    GPU(std::shared_ptr<KMemory> mmu,
         std::shared_ptr<IOProvider> ioprovider,
         std::shared_ptr<cpu::Z80> cpu);
     

@@ -13,7 +13,8 @@
 #define TIM_NUMCYCLES_65536     64
 #define TIM_NUMCYCLES_16384     256
 
-Timer::Timer(std::shared_ptr<MMU> mmu, std::shared_ptr<cpu::Z80> cpu)
+Timer::Timer(std::shared_ptr<KMemory> mmu,
+             std::shared_ptr<cpu::Z80> cpu)
 : mmu(mmu)
 , cpu(cpu)
 , reg_divider(mmu->getDMARef(TIM_REG_ADDR_DIVIDER))
@@ -28,11 +29,11 @@ Timer::Timer(std::shared_ptr<MMU> mmu, std::shared_ptr<cpu::Z80> cpu)
 , tima_counter(0)
 , div_counter(0)
 {
-    mmu->register_f_write(TIM_REG_ADDR_CONTROL, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(TIM_REG_ADDR_CONTROL, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_onTimerControl(addr, value, ptr);
     });
     
-    mmu->register_f_write(TIM_REG_ADDR_DIVIDER, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(TIM_REG_ADDR_DIVIDER, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_onResetDivider(addr, value, ptr);
     });
 }

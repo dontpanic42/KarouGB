@@ -11,20 +11,20 @@
 namespace opfuncs
 {
     template<typename T>
-    void push(Context & c, MMU & mmu, T value)
+    void push(Context & c, KMemory & mmu, T value)
     {
         throw std::runtime_error("Not implemented");
     }
     
     template<>
-    void push<u08i>(Context & c, MMU & mmu, u08i value)
+    void push<u08i>(Context & c, KMemory & mmu, u08i value)
     {
         c.SP -= 1;
         mmu.wb(c.SP, value);
     }
     
     template<>
-    void push<u16i>(Context & c, MMU & mmu, u16i value)
+    void push<u16i>(Context & c, KMemory & mmu, u16i value)
     {
         c.SP -= 1;
         mmu.wb(c.SP, (value >> 8) & 0xFF);
@@ -33,13 +33,13 @@ namespace opfuncs
     }
     
     template<typename T>
-    T pop(Context & c, MMU & mmu)
+    T pop(Context & c, KMemory & mmu)
     {
         throw std::runtime_error("Not implemented");
     }
     
     template<>
-    u08i pop<u08i>(Context & c, MMU & mmu)
+    u08i pop<u08i>(Context & c, KMemory & mmu)
     {
         u08i value = mmu.rb(c.SP);
         c.SP += 1;
@@ -47,7 +47,7 @@ namespace opfuncs
     }
     
     template<>
-    u16i pop<u16i>(Context & c, MMU & mmu)
+    u16i pop<u16i>(Context & c, KMemory & mmu)
     {
         u16i lo = mmu.rb(c.SP);
         c.SP += 1;
@@ -224,7 +224,7 @@ namespace opfuncs
         return (a << 1) | 1;
     }
     
-    inline void ret_if(Context & c, MMU & mmu, bool condition)
+    inline void ret_if(Context & c, KMemory & mmu, bool condition)
     {
         if(condition)
         {
@@ -233,7 +233,7 @@ namespace opfuncs
         }
     }
     
-    inline void call_if(Context & c, MMU & mmu, bool condition)
+    inline void call_if(Context & c, KMemory & mmu, bool condition)
     {
         
         if(condition)
@@ -248,7 +248,7 @@ namespace opfuncs
         }
     }
     
-    inline void jmp_if(Context & c, MMU & mmu, bool condition)
+    inline void jmp_if(Context & c, KMemory & mmu, bool condition)
     {
         if(condition)
         {
@@ -261,7 +261,7 @@ namespace opfuncs
         }
     }
     
-    inline void jr_if(Context & c, MMU & mmu, bool condition)
+    inline void jr_if(Context & c, KMemory & mmu, bool condition)
     {
         if(condition)
         {

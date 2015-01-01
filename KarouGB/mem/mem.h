@@ -10,10 +10,6 @@
 #define MEM_SIZE MEM_BANK_SIZE * MEM_NUM_BANKS
 #define MEM_BOOTROM_SIZE 256
 
-#define MMU KMemory
-#define register_f_read intercept
-#define register_f_write intercept
-
 class KMemory
 {
 public:

@@ -123,7 +123,7 @@ namespace cpu
     }
     
     
-    Z80::Z80(std::shared_ptr<MMU> mmu)
+    Z80::Z80(std::shared_ptr<KMemory> mmu)
     : mmu(mmu)
     , reg_ie(mmu->getDMARef(CPU_REG_ADDR_IE))
     , reg_if(mmu->getDMARef(CPU_REG_ADDR_IF))

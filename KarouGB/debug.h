@@ -43,7 +43,7 @@ private:
     };
     
     std::shared_ptr<cpu::Z80>   cpu;
-    std::shared_ptr<MMU>        mmu;
+    std::shared_ptr<KMemory>    mmu;
     const cpu::Context & c;
     
     std::vector<u16i> breakpoints;
@@ -71,7 +71,7 @@ public:
     static Debugger * getInstance();
     
     Debugger(std::shared_ptr<cpu::Z80>  cpu,
-             std::shared_ptr<MMU>       mmu,
+             std::shared_ptr<KMemory>   mmu,
              const cpu::Context &       c);
     
     void interrupt();

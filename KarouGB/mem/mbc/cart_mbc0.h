@@ -1,7 +1,7 @@
 #ifndef CART_MBC0_H
 #define CART_MBC0_H
 
-#include "mem_mbc.h"
+#include "cart_mbc.h"
 
 namespace kmbc_impl
 {

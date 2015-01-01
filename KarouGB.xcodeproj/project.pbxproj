@@ -111,7 +111,7 @@
 /* Begin PBXFileReference section */
 		651958E41A50089E00A18E8A /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
 		651958E51A50089E00A18E8A /* mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem.h; sourceTree = "<group>"; };
-		651958E81A50264600A18E8A /* mem_mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem_mbc.h; sourceTree = "<group>"; };
+		651958E81A50264600A18E8A /* cart_mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc.h; sourceTree = "<group>"; };
 		65255BB71A518864003EC57D /* cart_mbc0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc0.cpp; sourceTree = "<group>"; };
 		65255BB81A518864003EC57D /* cart_mbc0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc0.h; sourceTree = "<group>"; };
 		65255BBB1A518B13003EC57D /* cart_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_loader.cpp; sourceTree = "<group>"; };
@@ -137,13 +137,6 @@
 		6557F51D1A2DC77400F870DA /* timewarp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timewarp.cpp; sourceTree = "<group>"; };
 		6557F51E1A2DC77400F870DA /* timewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timewarp.h; sourceTree = "<group>"; };
 		6557F5221A2DCFC000F870DA /* rom_bios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rom_bios.h; sourceTree = "<group>"; };
-		6591338F1A30BFEE0085193B /* mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mbc.h; sourceTree = "<group>"; };
-		659133901A30BFEE0085193B /* mbc1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mbc1.cpp; sourceTree = "<group>"; };
-		659133911A30BFEE0085193B /* mbc1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mbc1.h; sourceTree = "<group>"; };
-		659133921A30BFEE0085193B /* mbcrom.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mbcrom.cpp; sourceTree = "<group>"; };
-		659133931A30BFEE0085193B /* mbcrom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mbcrom.h; sourceTree = "<group>"; };
-		659133941A30BFEE0085193B /* mmu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mmu.cpp; sourceTree = "<group>"; };
-		659133951A30BFEE0085193B /* mmu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mmu.h; sourceTree = "<group>"; };
 		6591339A1A30C0010085193B /* io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_provider.h; sourceTree = "<group>"; };
 		6591339B1A30C0010085193B /* sdl_io_provider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdl_io_provider.cpp; sourceTree = "<group>"; };
 		6591339C1A30C0010085193B /* sdl_io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_io_provider.h; sourceTree = "<group>"; };
@@ -221,7 +214,7 @@
 				65255BBB1A518B13003EC57D /* cart_loader.cpp */,
 				65381CAC1A5154D0004433EA /* cartridge.cpp */,
 				65381CAD1A5154D0004433EA /* cartridge.h */,
-				651958E81A50264600A18E8A /* mem_mbc.h */,
+				651958E81A50264600A18E8A /* cart_mbc.h */,
 				651958E41A50089E00A18E8A /* mem.cpp */,
 				651958E51A50089E00A18E8A /* mem.h */,
 			);
@@ -282,20 +275,6 @@
 				6557F5131A2DC20600F870DA /* tetris11.gb */,
 			);
 			path = resources;
-			sourceTree = "<group>";
-		};
-		6591338E1A30BFEE0085193B /* memory */ = {
-			isa = PBXGroup;
-			children = (
-				6591338F1A30BFEE0085193B /* mbc.h */,
-				659133901A30BFEE0085193B /* mbc1.cpp */,
-				659133911A30BFEE0085193B /* mbc1.h */,
-				659133921A30BFEE0085193B /* mbcrom.cpp */,
-				659133931A30BFEE0085193B /* mbcrom.h */,
-				659133941A30BFEE0085193B /* mmu.cpp */,
-				659133951A30BFEE0085193B /* mmu.h */,
-			);
-			path = memory;
 			sourceTree = "<group>";
 		};
 		659133991A30C0010085193B /* io */ = {
@@ -381,7 +360,6 @@
 				659133A71A30C0290085193B /* cpu */,
 				6591339E1A30C0150085193B /* os */,
 				659133991A30C0010085193B /* io */,
-				6591338E1A30BFEE0085193B /* memory */,
 				6555147D1A30BCAF007CAAD4 /* sound */,
 				6557F50F1A2DC1F800F870DA /* resources */,
 				65DC608A1A2DB51900D7415F /* main.cpp */,

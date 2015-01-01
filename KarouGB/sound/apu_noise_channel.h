@@ -23,7 +23,7 @@ private:
     u08i & reg_nrx4;
     
 public:
-    APUNoiseChannel(std::shared_ptr<MMU> mmu,
+    APUNoiseChannel(std::shared_ptr<KMemory> mmu,
                     u16i baseRegister,
                     Sound::noise_generator_t & generator);
     

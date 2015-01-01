@@ -19,17 +19,17 @@
 #define SND_CHANNEL2_ENABLE
 #define SND_CHANNEL4_ENABLE
 
-APU::APU(std::shared_ptr<MMU> mmu)
+APU::APU(std::shared_ptr<KMemory> mmu)
 : mmu(mmu)
 , channel1(mmu, SND_CHANNEL1_REGISTER_OFFSET, sound.getSquare1())
 , channel2(mmu, SND_CHANNEL2_REGISTER_OFFSET, sound.getSquare2())
 , channel4(mmu, SND_CHANNEL4_REGISTER_OFFSET, sound.getNoise())
 {
-    mmu->register_f_write(SND_NR50, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(SND_NR50, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr50(addr, value, ptr);
     });
     
-    mmu->register_f_write(SND_NR51, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(SND_NR51, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr51(addr, value, ptr);
     });
 }

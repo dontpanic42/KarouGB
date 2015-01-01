@@ -4,11 +4,11 @@ A simple project to help me understand hardware emulation and c++.
 
 ### What works
 
-Some games with an MBC-1 Chip or no MBC chip, like Super Mario Land, Legend of Zelda, Donkey Kong Land.
+Some games with an MBC-1/MBC-3 Chip or no MBC chip, like Super Mario Land, Legend of Zelda, Donkey Kong Land, Pokémon Red.
 
 ### What doesn't work
 
-Lots of stuff. Only pure ROM and MBC-1 cartridges are supported at the time (that means no Pokemon).
+Lots of stuff. Only pure ROM and MBC-1/MBC-3 cartridges are supported at the time.
 
 No sound support at all, although i'm working on that :-)
 

@@ -33,14 +33,14 @@ private:
     void wfunc_onTimerControl(u16i addr, u08i value, u08i * ptr);
     void wfunc_onResetDivider(u16i addr, u08i value, u08i * ptr);
     
-    std::shared_ptr<MMU> mmu;
+    std::shared_ptr<KMemory> mmu;
     std::shared_ptr<cpu::Z80> cpu;
 
     u08i & reg_divider;
     u08i & reg_counter;
     u08i & reg_modulo;
 public:
-    Timer(std::shared_ptr<MMU> mmu,
+    Timer(std::shared_ptr<KMemory> mmu,
           std::shared_ptr<cpu::Z80> cpu);
     
     void tick(const cpu::Context & c);

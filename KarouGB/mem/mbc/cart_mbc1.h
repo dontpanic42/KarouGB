@@ -1,7 +1,7 @@
 #ifndef kmbc1_h
 #define kmbc1_h
 
-#include "mem_mbc.h"
+#include "cart_mbc.h"
 #include <vector>
 #include <memory>
 

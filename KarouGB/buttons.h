@@ -20,7 +20,7 @@ class Buttons
 {
 private:
     std::shared_ptr<IOProvider> ioprovider;
-    std::shared_ptr<MMU>      mmu;
+    std::shared_ptr<KMemory>    mmu;
     std::shared_ptr<cpu::Z80> cpu;
     
     //u08i & reg_p1;
@@ -35,7 +35,7 @@ private:
     u08i onKeyRegRead(u16i addr, u08i * memptr);
     void onKeyRegWrite(u16i addr, u08i value, u08i * memptr);
 public:
-    Buttons(std::shared_ptr<MMU> mmu,
+    Buttons(std::shared_ptr<KMemory> mmu,
             std::shared_ptr<IOProvider> ioprovider,
             std::shared_ptr<cpu::Z80> cpu);
     

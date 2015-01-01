@@ -40,7 +40,7 @@ private:
     
     void updateGenerator();
 public:
-    APUSquareWaveChannel(std::shared_ptr<MMU> mmu,
+    APUSquareWaveChannel(std::shared_ptr<KMemory> mmu,
                          u16i baseRegister,
                          Sound::sq_generator_t & generator);
     

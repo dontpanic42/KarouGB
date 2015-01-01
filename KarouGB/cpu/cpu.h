@@ -84,7 +84,7 @@ namespace cpu
     
     class Z80;
     
-    typedef void (*OpFptr)(Z80 & cpu, Context & c, MMU & mmu);
+    typedef void (*OpFptr)(Z80 & cpu, Context & c, KMemory & mmu);
     
     class Z80
     {
@@ -96,14 +96,14 @@ namespace cpu
         static u08i optiming_00_branch_taken[256];
         static u08i optiming_CB[256];
         
-        std::shared_ptr<MMU> mmu;
+        std::shared_ptr<KMemory> mmu;
         
         u08i & reg_ie;  //Interrupt enable register
         u08i & reg_if;  //Interrupt flag register
         
         void checkInterrupts(Context & c);
     public:
-        Z80(std::shared_ptr<MMU> mmu);
+        Z80(std::shared_ptr<KMemory> mmu);
         void requestInterrupt(Interrupt ir);
         void execute(Context & c);
     };

@@ -52,7 +52,7 @@ namespace fmt
         std::cout << (int) value;
     }
     
-    void print_prompt(const cpu::Context & c, MMU & mmu)
+    void print_prompt(const cpu::Context & c, KMemory & mmu)
     {
         std::cout << "repl@";
         print_hexval(c.PC);
@@ -70,7 +70,7 @@ namespace fmt
         std::cout << "]: ";
     }
     
-    void print_memline(MMU & mmu, u16i start, u16i mark, u08i length)
+    void print_memline(KMemory & mmu, u16i start, u16i mark, u08i length)
     {
         std::cout << "   ";
         print_hexval(start);
@@ -97,7 +97,7 @@ namespace fmt
         std::cout << std::endl;
     }
     
-    void print_memdump(MMU & mmu, u16i addr)
+    void print_memdump(KMemory & mmu, u16i addr)
     {
         
         std::cout << std::endl;
@@ -142,7 +142,7 @@ Debugger * Debugger::getInstance()
 }
 
 Debugger::Debugger(std::shared_ptr<cpu::Z80>  cpu,
-                   std::shared_ptr<MMU>       mmu,
+                   std::shared_ptr<KMemory>   mmu,
                    const cpu::Context &       c)
 : cpu(cpu)
 , mmu(mmu)

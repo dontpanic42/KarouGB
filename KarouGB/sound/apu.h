@@ -20,7 +20,7 @@
 class APU
 {
 private:
-    std::shared_ptr<MMU> mmu;
+    std::shared_ptr<KMemory> mmu;
     
     Sound sound;
     
@@ -33,7 +33,7 @@ private:
     void wfunc_nr51(u16i addr, u08i value, u08i * ptr);
     void wfunc_nr50(u16i addr, u08i value, u08i * ptr);
 public:
-    APU(std::shared_ptr<MMU> mmu);
+    APU(std::shared_ptr<KMemory> mmu);
     
     void tick(const cpu::Context & c);
 };

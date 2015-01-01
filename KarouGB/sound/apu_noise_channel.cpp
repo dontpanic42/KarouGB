@@ -3,7 +3,7 @@
 
 #define CLOCK_INTERVAL 8192
 
-APUNoiseChannel::APUNoiseChannel(std::shared_ptr<MMU> mmu,
+APUNoiseChannel::APUNoiseChannel(std::shared_ptr<KMemory> mmu,
                                  u16i baseRegister,
                                  Sound::noise_generator_t & generator)
 : APUChannel(mmu, baseRegister, generator)
@@ -14,35 +14,35 @@ APUNoiseChannel::APUNoiseChannel(std::shared_ptr<MMU> mmu,
 , reg_nrx3(mmu->getDMARef(SND_NRx3_OFFSET + baseRegister))
 , reg_nrx4(mmu->getDMARef(SND_NRx4_OFFSET + baseRegister))
 {
-    mmu->register_f_write(SND_NRx1_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(SND_NRx1_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr11(addr, value, ptr);
     });
     
-    mmu->register_f_write(SND_NRx2_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(SND_NRx2_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr12(addr, value, ptr);
     });
     
-    mmu->register_f_write(SND_NRx3_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(SND_NRx3_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr13(addr, value, ptr);
     });
     
-    mmu->register_f_write(SND_NRx4_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
+    mmu->intercept(SND_NRx4_OFFSET + baseRegister, [this](u16i addr, u08i value, u08i * ptr) {
         this->wfunc_nr14(addr, value, ptr);
     });
     
-    mmu->register_f_read(SND_NRx1_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
+    mmu->intercept(SND_NRx1_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
         return reg_nrx1 | 0x3F;
     });
     
-    mmu->register_f_read(SND_NRx2_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
+    mmu->intercept(SND_NRx2_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
         return this->reg_nrx2 | 0x00;
     });
     
-    mmu->register_f_read(SND_NRx3_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
+    mmu->intercept(SND_NRx3_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
         return this->reg_nrx3 | 0xFF;
     });
     
-    mmu->register_f_read(SND_NRx4_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
+    mmu->intercept(SND_NRx4_OFFSET + baseRegister, [this](u16i addr, u08i * ptr) {
         return this->reg_nrx4 | 0xBF;
     });
 }
