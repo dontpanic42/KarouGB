@@ -13,6 +13,8 @@
 		65255BBA1A518864003EC57D /* cart_mbc0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BB71A518864003EC57D /* cart_mbc0.cpp */; };
 		65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
 		65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
+		6528F5B41A569A4000423B54 /* kemulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6528F5B21A569A4000423B54 /* kemulation.cpp */; };
+		6528F5BD1A56AC9F00423B54 /* kbgbemulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */; };
 		65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
@@ -115,6 +117,10 @@
 		65255BB71A518864003EC57D /* cart_mbc0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc0.cpp; sourceTree = "<group>"; };
 		65255BB81A518864003EC57D /* cart_mbc0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc0.h; sourceTree = "<group>"; };
 		65255BBB1A518B13003EC57D /* cart_loader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_loader.cpp; sourceTree = "<group>"; };
+		6528F5B21A569A4000423B54 /* kemulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kemulation.cpp; sourceTree = "<group>"; };
+		6528F5B31A569A4000423B54 /* kemulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kemulation.h; sourceTree = "<group>"; };
+		6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kbgbemulation.cpp; sourceTree = "<group>"; };
+		6528F5BC1A56AC9F00423B54 /* kbgbemulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kbgbemulation.h; sourceTree = "<group>"; };
 		65381CAC1A5154D0004433EA /* cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cartridge.cpp; sourceTree = "<group>"; };
 		65381CAD1A5154D0004433EA /* cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cartridge.h; sourceTree = "<group>"; };
 		65381CB01A515734004433EA /* cart_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_loader.h; sourceTree = "<group>"; };
@@ -219,6 +225,32 @@
 				651958E51A50089E00A18E8A /* mem.h */,
 			);
 			path = mem;
+			sourceTree = "<group>";
+		};
+		6528F5B11A569A2000423B54 /* emu */ = {
+			isa = PBXGroup;
+			children = (
+				65DC60A41A2DB64D00D7415F /* types.h */,
+				65F7C38D1A308D6000F495CC /* apu.cpp */,
+				65DC60A71A2DB64D00D7415F /* gpu.cpp */,
+				65DC60A81A2DB64D00D7415F /* gpu.h */,
+				65DC60AC1A2DB64D00D7415F /* buttons.cpp */,
+				65DC60AD1A2DB64D00D7415F /* buttons.h */,
+				65DC60AE1A2DB64D00D7415F /* debug.cpp */,
+				65DC60AF1A2DB64D00D7415F /* debug.h */,
+				65DC60B01A2DB64D00D7415F /* debug_translation.h */,
+				65DC60B51A2DB64D00D7415F /* timer.cpp */,
+				65DC60B61A2DB64D00D7415F /* timer.h */,
+				6557F51D1A2DC77400F870DA /* timewarp.cpp */,
+				6557F51E1A2DC77400F870DA /* timewarp.h */,
+				6557F5221A2DCFC000F870DA /* rom_bios.h */,
+				651958E31A50089E00A18E8A /* mem */,
+				659133A71A30C0290085193B /* cpu */,
+				6591339E1A30C0150085193B /* os */,
+				659133991A30C0010085193B /* io */,
+				6555147D1A30BCAF007CAAD4 /* sound */,
+			);
+			name = emu;
 			sourceTree = "<group>";
 		};
 		65381CB21A515F8E004433EA /* mbc */ = {
@@ -356,28 +388,14 @@
 		65DC60891A2DB51900D7415F /* KarouGB */ = {
 			isa = PBXGroup;
 			children = (
-				651958E31A50089E00A18E8A /* mem */,
-				659133A71A30C0290085193B /* cpu */,
-				6591339E1A30C0150085193B /* os */,
-				659133991A30C0010085193B /* io */,
-				6555147D1A30BCAF007CAAD4 /* sound */,
+				6528F5B11A569A2000423B54 /* emu */,
 				6557F50F1A2DC1F800F870DA /* resources */,
 				65DC608A1A2DB51900D7415F /* main.cpp */,
-				65DC60A41A2DB64D00D7415F /* types.h */,
-				65F7C38D1A308D6000F495CC /* apu.cpp */,
-				65DC60A71A2DB64D00D7415F /* gpu.cpp */,
-				65DC60A81A2DB64D00D7415F /* gpu.h */,
-				65DC60AC1A2DB64D00D7415F /* buttons.cpp */,
-				65DC60AD1A2DB64D00D7415F /* buttons.h */,
-				65DC60AE1A2DB64D00D7415F /* debug.cpp */,
-				65DC60AF1A2DB64D00D7415F /* debug.h */,
-				65DC60B01A2DB64D00D7415F /* debug_translation.h */,
-				65DC60B51A2DB64D00D7415F /* timer.cpp */,
-				65DC60B61A2DB64D00D7415F /* timer.h */,
-				6557F51D1A2DC77400F870DA /* timewarp.cpp */,
-				6557F51E1A2DC77400F870DA /* timewarp.h */,
-				6557F5221A2DCFC000F870DA /* rom_bios.h */,
 				65BDB53C1A4DA167000678B8 /* log.h */,
+				6528F5B21A569A4000423B54 /* kemulation.cpp */,
+				6528F5B31A569A4000423B54 /* kemulation.h */,
+				6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */,
+				6528F5BC1A56AC9F00423B54 /* kbgbemulation.h */,
 			);
 			path = KarouGB;
 			sourceTree = "<group>";
@@ -487,6 +505,7 @@
 				65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */,
 				65D8DC3B1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */,
 				6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */,
+				6528F5BD1A56AC9F00423B54 /* kbgbemulation.cpp in Sources */,
 				65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */,
 				65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */,
 				6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */,
@@ -497,6 +516,7 @@
 				659133AE1A30C0290085193B /* cpu.cpp in Sources */,
 				65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */,
 				65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */,
+				6528F5B41A569A4000423B54 /* kemulation.cpp in Sources */,
 				65255BB91A518864003EC57D /* cart_mbc0.cpp in Sources */,
 				6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */,
 				651958E61A50089E00A18E8A /* mem.cpp in Sources */,
