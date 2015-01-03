@@ -23,6 +23,8 @@
 #include "cart_loader.h"
 #include "os.h"
 
+#include "wxiopane.h"
+#include "wxioprovider.h"
 #include "log.h"
 
 class KBGBEmulation : public KEmulation
@@ -40,6 +42,8 @@ private:
     std::unique_ptr<Debugger> dbg;
     std::unique_ptr<Timewarp> timewarp;
     
+    IOPane * iopane;
+    
 #ifndef DISABLE_SOUND
     std::unique_ptr<APU> apu;
 #endif
@@ -56,7 +60,7 @@ protected:
     virtual void onInitialize();
     virtual void onTeardown();
 public:
-    KBGBEmulation(const std::string & filename);
+    KBGBEmulation(const std::string & filename, IOPane * iopane);
     ~KBGBEmulation();
 };
 

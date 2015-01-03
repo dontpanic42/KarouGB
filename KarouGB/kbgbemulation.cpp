@@ -7,6 +7,7 @@
 //
 
 #include "kbgbemulation.h"
+#include <cassert>
 
 const std::string APP_NAME      ("KarouGB");
 const std::string APP_VERSION   ("v0.0.1");
@@ -14,25 +15,29 @@ const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
 
 const std::string TAG("kbgb");
 
-KBGBEmulation::KBGBEmulation(const std::string & filename)
+KBGBEmulation::KBGBEmulation(const std::string & filename, IOPane * iopane)
 : initialized(false)
 , KEmulation(filename)
+, iopane(iopane)
 {
 }
 
 KBGBEmulation::~KBGBEmulation()
 {
-    std::printf("QuitEmulation\n");
-    quitEmulation();
-    std::printf("QuitEmulation called\n");
+    //std::printf("QuitEmulation\n");
+    //quitEmulation();
+    //std::printf("QuitEmulation called\n");
 }
 
 void KBGBEmulation::initEmulation()
 {
     loader = KCartridgeLoader::load(getCartridgeFile());
+    assert(loader);
     mmu = loader->getMemory();
+    assert(mmu);
     
-    ioprovider =std::make_shared<SDLIOProvider>();
+    ioprovider = std::shared_ptr<IOProvider>((IOProvider *) new WXIOProvider(iopane));
+    //ioprovider =std::make_shared<SDLIOProvider>();
     cpu =       std::make_shared<cpu::Z80>(mmu);
     
     c =         std::move(std::unique_ptr<cpu::Context>(new cpu::Context));
@@ -75,6 +80,7 @@ bool KBGBEmulation::onEmulationTick(bool paused)
 {   
     if(ioprovider->isClosed())
     {
+        std::printf("closed\n");
         return true;
     }
     
@@ -88,12 +94,12 @@ bool KBGBEmulation::onEmulationTick(bool paused)
         timer->tick(*c);
         cpu->execute(*c);
         gpu->step(*c);
-#ifndef DISABLE_SOUND
-        apu->tick(*c);
-#endif
-#ifndef ENABLE_FULL_SPEED
-        timewarp->tick(*c);
-#endif
+//#ifndef DISABLE_SOUND
+//        apu->tick(*c);
+//#endif
+//#ifndef ENABLE_FULL_SPEED
+//        timewarp->tick(*c);
+//#endif
     }
     
     return false;

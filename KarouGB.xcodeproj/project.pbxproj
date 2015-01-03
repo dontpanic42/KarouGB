@@ -59,6 +59,11 @@
 		65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
 		65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
 		65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */; };
+		65EECF581A57EB59005CC9D5 /* wxioprovider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */; };
+		65EECF5B1A57EBAD005CC9D5 /* wxiopane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */; };
+		65EECF5E1A57EBEC005CC9D5 /* wxapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5C1A57EBEC005CC9D5 /* wxapp.cpp */; };
+		65EECF611A580D35005CC9D5 /* wxmainframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */; };
+		65EECF641A581615005CC9D5 /* icn_play.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65EECF631A58148B005CC9D5 /* icn_play.png */; };
 		65F10D8F1A4F005600D78DD8 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC251A4EC7B20028D528 /* libgtest_main.a */; };
 		65F10D901A4F005600D78DD8 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC261A4EC7B20028D528 /* libgtest.a */; };
 		65F10D931A4F07A900D78DD8 /* cpu_instrs.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */; };
@@ -71,6 +76,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				65EECF641A581615005CC9D5 /* icn_play.png in CopyFiles */,
 				65B135261A541C3F0004202E /* pokemon-red.gb in CopyFiles */,
 				6557F5191A2DC44600F870DA /* DonkeyKongLand.gb in CopyFiles */,
 				6557F51A1A2DC44600F870DA /* LegendOfZelda.gb in CopyFiles */,
@@ -187,6 +193,15 @@
 		65E763691A31B4890015EECF /* noise_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise_generator.h; sourceTree = "<group>"; };
 		65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_noise_channel.cpp; sourceTree = "<group>"; };
 		65E7636B1A31BC610015EECF /* apu_noise_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_noise_channel.h; sourceTree = "<group>"; };
+		65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxioprovider.cpp; sourceTree = "<group>"; };
+		65EECF571A57EB59005CC9D5 /* wxioprovider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxioprovider.h; sourceTree = "<group>"; };
+		65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxiopane.cpp; sourceTree = "<group>"; };
+		65EECF5A1A57EBAD005CC9D5 /* wxiopane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxiopane.h; sourceTree = "<group>"; };
+		65EECF5C1A57EBEC005CC9D5 /* wxapp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxapp.cpp; sourceTree = "<group>"; };
+		65EECF5D1A57EBEC005CC9D5 /* wxapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxapp.h; sourceTree = "<group>"; };
+		65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxmainframe.cpp; sourceTree = "<group>"; };
+		65EECF601A580D35005CC9D5 /* wxmainframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxmainframe.h; sourceTree = "<group>"; };
+		65EECF631A58148B005CC9D5 /* icn_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_play.png; sourceTree = "<group>"; };
 		65F7C38D1A308D6000F495CC /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apu.cpp; path = sound/apu.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -299,6 +314,7 @@
 		6557F50F1A2DC1F800F870DA /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				65EECF621A58146E005CC9D5 /* icons */,
 				65B135251A541C0D0004202E /* pokemon-red.gb */,
 				65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */,
 				6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */,
@@ -388,6 +404,7 @@
 		65DC60891A2DB51900D7415F /* KarouGB */ = {
 			isa = PBXGroup;
 			children = (
+				65EECF551A57EB45005CC9D5 /* wxgui */,
 				6528F5B11A569A2000423B54 /* emu */,
 				6557F50F1A2DC1F800F870DA /* resources */,
 				65DC608A1A2DB51900D7415F /* main.cpp */,
@@ -398,6 +415,29 @@
 				6528F5BC1A56AC9F00423B54 /* kbgbemulation.h */,
 			);
 			path = KarouGB;
+			sourceTree = "<group>";
+		};
+		65EECF551A57EB45005CC9D5 /* wxgui */ = {
+			isa = PBXGroup;
+			children = (
+				65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */,
+				65EECF571A57EB59005CC9D5 /* wxioprovider.h */,
+				65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */,
+				65EECF5A1A57EBAD005CC9D5 /* wxiopane.h */,
+				65EECF5C1A57EBEC005CC9D5 /* wxapp.cpp */,
+				65EECF5D1A57EBEC005CC9D5 /* wxapp.h */,
+				65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */,
+				65EECF601A580D35005CC9D5 /* wxmainframe.h */,
+			);
+			name = wxgui;
+			sourceTree = "<group>";
+		};
+		65EECF621A58146E005CC9D5 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				65EECF631A58148B005CC9D5 /* icn_play.png */,
+			);
+			name = icons;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -502,6 +542,8 @@
 				659133A61A30C0150085193B /* ResourcePath.mm in Sources */,
 				659133A51A30C0150085193B /* osx.cpp in Sources */,
 				65DC608B1A2DB51900D7415F /* main.cpp in Sources */,
+				65EECF5B1A57EBAD005CC9D5 /* wxiopane.cpp in Sources */,
+				65EECF581A57EB59005CC9D5 /* wxioprovider.cpp in Sources */,
 				65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */,
 				65D8DC3B1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */,
 				6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */,
@@ -509,12 +551,14 @@
 				65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */,
 				65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */,
 				6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */,
+				65EECF611A580D35005CC9D5 /* wxmainframe.cpp in Sources */,
 				65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */,
 				65DC60BB1A2DB64D00D7415F /* buttons.cpp in Sources */,
 				65B135221A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */,
 				6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */,
 				659133AE1A30C0290085193B /* cpu.cpp in Sources */,
 				65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */,
+				65EECF5E1A57EBEC005CC9D5 /* wxapp.cpp in Sources */,
 				65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */,
 				6528F5B41A569A4000423B54 /* kemulation.cpp in Sources */,
 				65255BB91A518864003EC57D /* cart_mbc0.cpp in Sources */,
@@ -657,10 +701,59 @@
 				);
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/include",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = (
 					"-DDISABLE_SOUND",
 					"-DVERBOSE",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-I/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/wx/include/osx_cocoa-unicode-static-3.0",
+					"-I/Users/daniel/Downloads/wxWidgets-3.0.2/include",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D__WXMAC__",
+					"-D__WXOSX__",
+					"-D__WXOSX_COCOA__",
+				);
+				OTHER_LDFLAGS = (
+					"-L/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib",
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					System,
+					"-framework",
+					OpenGL,
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_xrc-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_webview-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_qa-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_baseu_net-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_html-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_adv-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_core-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_baseu_xml-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_baseu-3.0.a",
+					"-framework",
+					WebKit,
+					"-lexpat",
+					"-lwxregexu-3.0",
+					"-lwxtiff-3.0",
+					"-lwxjpeg-3.0",
+					"-lwxpng-3.0",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+					"-llzma",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -675,10 +768,59 @@
 				);
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/include",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				OTHER_CFLAGS = (
 					"-DDISABLE_SOUND",
 					"-DVERBOSE",
+				);
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-I/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/wx/include/osx_cocoa-unicode-static-3.0",
+					"-I/Users/daniel/Downloads/wxWidgets-3.0.2/include",
+					"-D_FILE_OFFSET_BITS=64",
+					"-D__WXMAC__",
+					"-D__WXOSX__",
+					"-D__WXOSX_COCOA__",
+				);
+				OTHER_LDFLAGS = (
+					"-L/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib",
+					"-framework",
+					IOKit,
+					"-framework",
+					Carbon,
+					"-framework",
+					Cocoa,
+					"-framework",
+					AudioToolbox,
+					"-framework",
+					System,
+					"-framework",
+					OpenGL,
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_xrc-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_webview-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_qa-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_baseu_net-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_html-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_adv-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_osx_cocoau_core-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_baseu_xml-3.0.a",
+					"/Users/daniel/Downloads/wxWidgets-3.0.2/build-static/lib/libwx_baseu-3.0.a",
+					"-framework",
+					WebKit,
+					"-lexpat",
+					"-lwxregexu-3.0",
+					"-lwxtiff-3.0",
+					"-lwxjpeg-3.0",
+					"-lwxpng-3.0",
+					"-lz",
+					"-lpthread",
+					"-liconv",
+					"-llzma",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

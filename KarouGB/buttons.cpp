@@ -8,6 +8,7 @@
 
 #include "buttons.h"
 #include "debug.h"
+#include <cassert>
 
 #define DIR_SELECTED BIT_4
 #define BTN_SELECTED BIT_5
@@ -33,6 +34,7 @@ Buttons::Buttons(std::shared_ptr<KMemory> mmu,
 , btn_select_dir(true)
 , btn_select_btn(false)
 {
+    assert(mmu);
     /* On Key Press Callback - wird aufgerufen, wenn der ioprovider
        das drücken einer Taste registriert */
     auto l_on_kp = [this](u08i btn) { this->onKeyPress(btn); };

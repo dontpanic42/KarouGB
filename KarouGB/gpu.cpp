@@ -165,6 +165,7 @@ void GPU::renderBackground()
         /* Übersetze die Codierte Farbe in RGB */
         rgbvalue = decodeColor(pixel, reg_bgp);
         /* Zeichne den Pixel. */
+        //std::printf("Trying to draw %u, %u\n", x, line);
         ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
     }
     

@@ -15,6 +15,9 @@
 class IOProvider
 {
 public:
+    typedef std::function<void(u08i)> on_press_t;
+    typedef std::function<void(u08i)> on_release_t;
+    
     virtual ~IOProvider() {};
 
     virtual void init(const std::string & wintitle) = 0;
@@ -28,8 +31,8 @@ public:
     virtual void printDebugString(const std::string & str) {};
     
     virtual void registerButtonCallback(Button btn,
-                                        std::function<void(u08i)> onPress,
-                                        std::function<void(u08i)> onRelease) = 0;
+                                        on_press_t onPress,
+                                        on_release_t onRelease) = 0;
 };
 
 #endif
