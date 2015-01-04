@@ -84,9 +84,7 @@ protected:
     virtual bool onEmulationTick(bool paused) = 0;
 public:
     KEmulation(const std::string & filename);
-    virtual ~KEmulation() {
-        std::printf("~KEmulation\n");
-    }
+    virtual ~KEmulation() { }
     
     void start();
     

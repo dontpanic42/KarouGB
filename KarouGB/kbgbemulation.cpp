@@ -58,12 +58,12 @@ void KBGBEmulation::initEmulation()
 
 void KBGBEmulation::onPause()
 {
-    lg::info(TAG, "Pausing emulation.");
+    lg::info(TAG, "Pausing emulation.\n");
 }
 
 void KBGBEmulation::onResume()
 {
-    lg::info(TAG, "Resuming emulation.");
+    lg::info(TAG, "Resuming emulation.\n");
 }
 
 void KBGBEmulation::onLoadGame(const std::string & filename)

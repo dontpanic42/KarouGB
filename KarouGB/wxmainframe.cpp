@@ -13,12 +13,16 @@ const std::string APP_NAME      ("KarouGB");
 const std::string APP_VERSION   ("v0.0.1");
 const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
 
+#define LOAD_PNGICON(x) (wxBitmap(wxString(std::string(resourcePath() + x).c_str()), wxBITMAP_TYPE_PNG))
+
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 EVT_CLOSE(MainFrame::OnQuit)
 EVT_TOOL(OPENCART,  MainFrame::OnOpenCartridge)
 EVT_TOOL(PLAY,      MainFrame::OnPressPlay)
 EVT_TOOL(PAUSE,     MainFrame::OnPressPause)
+EVT_TOOL(SAVEGAME,  MainFrame::OnSaveGame)
+EVT_TOOL(LOADGAME,  MainFrame::OnLoadGame)
 
 END_EVENT_TABLE()
 
@@ -42,25 +46,23 @@ void MainFrame::OnInit()
     
     wxImage::AddHandler( new wxPNGHandler );
     
-    std::string play_file(resourcePath() + "icn_play.png");
-    wxBitmap    play_img(wxString(play_file.c_str()), wxBITMAP_TYPE_PNG);
-    
-    std::string pause_file(resourcePath() + "icn_pause.png");
-    wxBitmap    pause_img(wxString(pause_file.c_str()), wxBITMAP_TYPE_PNG);
-    
-    std::string opencart_file(resourcePath() + "icn_opencart.png");
-    wxBitmap    opencart_img(wxString(opencart_file.c_str()), wxBITMAP_TYPE_PNG);
-    
-    
     toolBar = CreateToolBar();
-    toolBar->AddTool(OPENCART, wxT("Load Cartridge"), opencart_img);
-    toolBar->AddTool(PLAY, wxT("Resume Emulation"), play_img);
-    toolBar->AddTool(PAUSE, wxT("Pause Emulation"), pause_img);
+    toolBar->AddTool(OPENCART,  wxT("Load Cartridge"),      LOAD_PNGICON("icn_opencart.png"));
+    toolBar->AddTool(PLAY,      wxT("Resume Emulation"),    LOAD_PNGICON("icn_play.png"));
+    toolBar->AddTool(PAUSE,     wxT("Pause Emulation"),     LOAD_PNGICON("icn_pause.png"));
+    toolBar->AddTool(LOADGAME,  wxT("Load Game"),           LOAD_PNGICON("icn_loadgame.png"));
+    toolBar->AddTool(SAVEGAME,  wxT("Save Game"),           LOAD_PNGICON("icn_savegame.png"));
 
     toolBar->EnableTool(PLAY, false);
     toolBar->EnableTool(PAUSE, false);
-    toolBar->Realize();
+    toolBar->EnableTool(LOADGAME, false);
+    toolBar->EnableTool(SAVEGAME, false);
     
+    toolBar->Realize();
+ 
+    CreateStatusBar(3);
+    SetStatusText(wxT("[Paused]"), 0);
+    SetStatusText(wxT("no cartridge loaded"), 1);
 }
 
 void MainFrame::OnQuit(wxCloseEvent & event)
@@ -100,6 +102,16 @@ void MainFrame::OnQuitEmulation()
 
 void MainFrame::OnOpenCartridge(wxCommandEvent & event)
 {
+    if(emulation)
+    {
+        if ( wxMessageBox("Are you sure you want to load a new cartridge?\nUnsaved progress will be lost.",
+                          "Please confirm",
+                          wxICON_QUESTION | wxYES_NO) != wxYES )
+        {
+            return;
+        }
+    }
+    
     wxFileDialog
     openFileDialog(this, _("Open Cartridge"), "", "",
                    "gb files (*.gb)|*.gb", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
@@ -115,6 +127,11 @@ void MainFrame::OnOpenCartridge(wxCommandEvent & event)
     
     toolBar->EnableTool(PLAY, true);
     toolBar->EnableTool(PAUSE, false);
+    toolBar->EnableTool(SAVEGAME, false);
+    toolBar->EnableTool(LOADGAME, true);
+    
+    SetStatusText(openFileDialog.GetFilename(), 1);
+    SetStatusText(wxT("[Paused]"), 0);
 }
 
 void MainFrame::OnPressPlay(wxCommandEvent & event)
@@ -131,6 +148,10 @@ void MainFrame::OnPressPlay(wxCommandEvent & event)
     
     toolBar->EnableTool(PLAY, false);
     toolBar->EnableTool(PAUSE, true);
+    toolBar->EnableTool(SAVEGAME, true);
+    toolBar->EnableTool(LOADGAME, false);
+    
+    SetStatusText(wxT("[Running]"), 0);
 }
 
 void MainFrame::OnPressPause(wxCommandEvent & event)
@@ -147,4 +168,55 @@ void MainFrame::OnPressPause(wxCommandEvent & event)
     
     toolBar->EnableTool(PLAY, true);
     toolBar->EnableTool(PAUSE, false);
+    
+    SetStatusText(wxT("[Paused]"), 0);
+}
+
+void MainFrame::OnSaveGame(wxCommandEvent & event)
+{
+    if(!emulation)
+    {
+        return;
+    }
+    
+    bool wasRunning = emulation->isRunning();
+    emulation->setRunning(false);
+    
+    wxFileDialog
+    saveFileDialog(this, _("Save Game"), "", "",
+                   "KarouGB Save Files (*.ksv)|*.ksv", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+    
+    if (saveFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        emulation->setRunning(wasRunning);
+        return;
+    }
+    
+    std::string filename(saveFileDialog.GetPath().c_str());
+    emulation->saveGame(filename);
+    emulation->setRunning(wasRunning);
+    
+    SetStatusText(wxString(wxT("Saved: ") + saveFileDialog.GetFilename()), 2);
+}
+
+void MainFrame::OnLoadGame(wxCommandEvent & event)
+{
+    if(!emulation)
+    {
+        return;
+    }
+    
+    wxFileDialog
+    openFileDialog(this, _("Open Savegame"), "", "",
+                   "KarouGB Save Files (*.ksv)|*.ksv", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+    
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    
+    std::string filename(openFileDialog.GetPath().c_str());
+    emulation->loadGame(filename);
+    
+    SetStatusText(wxString(wxT("Loaded: ") + openFileDialog.GetFilename()), 2);
 }

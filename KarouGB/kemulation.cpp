@@ -22,11 +22,11 @@ KEmulation::KEmulation(const std::string & filename)
     });
     
     addEventListener(SAVE_GAME_EVENT, [this] (const event_t & ev) {
-        this->onLoadGame(ev.filename);
+        this->onSaveGame(ev.filename);
     });
     
     addEventListener(LOAD_GAME_EVENT, [this] (const event_t & ev) {
-        this->onSaveGame(ev.filename);
+        this->onLoadGame(ev.filename);
     });
 }
 

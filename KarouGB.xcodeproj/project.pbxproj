@@ -54,6 +54,8 @@
 		65D9DC3C1A4ECD500028D528 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
 		65D9F1BE1A59420B007905ED /* icn_opencart.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1BD1A59402E007905ED /* icn_opencart.png */; };
 		65D9F1C01A594416007905ED /* icn_pause.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1BF1A594406007905ED /* icn_pause.png */; };
+		65D9F1C31A594AE8007905ED /* icn_savegame.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1C21A594976007905ED /* icn_savegame.png */; };
+		65D9F1C41A594AE8007905ED /* icn_loadgame.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1C11A59495F007905ED /* icn_loadgame.png */; };
 		65DC608B1A2DB51900D7415F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC608A1A2DB51900D7415F /* main.cpp */; };
 		65DC60981A2DB56200D7415F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DC60971A2DB56200D7415F /* SDL2.framework */; };
 		65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
@@ -78,6 +80,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				65D9F1C31A594AE8007905ED /* icn_savegame.png in CopyFiles */,
+				65D9F1C41A594AE8007905ED /* icn_loadgame.png in CopyFiles */,
 				65D9F1C01A594416007905ED /* icn_pause.png in CopyFiles */,
 				65D9F1BE1A59420B007905ED /* icn_opencart.png in CopyFiles */,
 				65EECF641A581615005CC9D5 /* icn_play.png in CopyFiles */,
@@ -183,6 +187,8 @@
 		65D9DC2A1A4ECB000028D528 /* mbc1test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc1test.h; path = ../KarouGB/test/mbc1test.h; sourceTree = "<group>"; };
 		65D9F1BD1A59402E007905ED /* icn_opencart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_opencart.png; sourceTree = "<group>"; };
 		65D9F1BF1A594406007905ED /* icn_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_pause.png; sourceTree = "<group>"; };
+		65D9F1C11A59495F007905ED /* icn_loadgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_loadgame.png; sourceTree = "<group>"; };
+		65D9F1C21A594976007905ED /* icn_savegame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_savegame.png; sourceTree = "<group>"; };
 		65DC60871A2DB51900D7415F /* KarouGB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KarouGB; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC608A1A2DB51900D7415F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		65DC60971A2DB56200D7415F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -441,6 +447,8 @@
 		65EECF621A58146E005CC9D5 /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				65D9F1C21A594976007905ED /* icn_savegame.png */,
+				65D9F1C11A59495F007905ED /* icn_loadgame.png */,
 				65D9F1BF1A594406007905ED /* icn_pause.png */,
 				65D9F1BD1A59402E007905ED /* icn_opencart.png */,
 				65EECF631A58148B005CC9D5 /* icn_play.png */,

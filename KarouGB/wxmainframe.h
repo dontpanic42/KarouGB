@@ -23,9 +23,11 @@ private:
     
     enum tools
     {
-        OPENCART = wxID_HIGHEST + 1,
-        PLAY = wxID_HIGHEST + 2,
-        PAUSE = wxID_HIGHEST + 3
+        OPENCART =  wxID_HIGHEST + 1,
+        PLAY =      wxID_HIGHEST + 2,
+        PAUSE =     wxID_HIGHEST + 3,
+        SAVEGAME =  wxID_HIGHEST + 4,
+        LOADGAME =  wxID_HIGHEST + 5
     };
     
     wxToolBar * toolBar;
@@ -41,6 +43,9 @@ public:
     void OnOpenCartridge(wxCommandEvent & event);
     void OnPressPlay(wxCommandEvent & event);
     void OnPressPause(wxCommandEvent & event);
+    
+    void OnSaveGame(wxCommandEvent & event);
+    void OnLoadGame(wxCommandEvent & event);
     
     DECLARE_EVENT_TABLE();
 };
