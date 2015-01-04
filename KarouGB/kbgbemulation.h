@@ -42,7 +42,7 @@ private:
     std::unique_ptr<Debugger> dbg;
     std::unique_ptr<Timewarp> timewarp;
     
-    IOPane * iopane;
+    gui::IOPane * iopane;
     
 #ifndef DISABLE_SOUND
     std::unique_ptr<APU> apu;
@@ -60,7 +60,7 @@ protected:
     virtual void onInitialize();
     virtual void onTeardown();
 public:
-    KBGBEmulation(const std::string & filename, IOPane * iopane);
+    KBGBEmulation(const std::string & filename, gui::IOPane * iopane);
     ~KBGBEmulation();
 };
 

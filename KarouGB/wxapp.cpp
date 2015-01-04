@@ -8,18 +8,21 @@
 
 #include "wxapp.h"
 
-bool MainApp::OnInit()
+namespace gui
 {
-    mainFrame = new MainFrame();
-    mainFrame->OnInit();
-    mainFrame->Show();
+    bool MainApp::OnInit()
+    {
+        mainFrame = new MainFrame();
+        mainFrame->OnInit();
+        mainFrame->Show();
+        
+        return true;
+    }
     
-    return true;
-}
-
-
-
-int MainApp::OnExit()
-{
-    return 0;
+    
+    
+    int MainApp::OnExit()
+    {
+        return 0;
+    }
 }

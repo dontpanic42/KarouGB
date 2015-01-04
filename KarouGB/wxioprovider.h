@@ -18,14 +18,14 @@
 class WXIOProvider : public IOProvider
 {
 private:
-    IOPane * iopane;
+    gui::IOPane * iopane;
     
     std::unordered_map<char, on_press_t> pressCallbacks;
     std::unordered_map<char, on_release_t> releaseCallbacks;
     
     static std::unordered_map<int, char> keymap;
 public:
-    WXIOProvider(IOPane * pane);
+    WXIOProvider(gui::IOPane * pane);
     
     virtual void init(const std::string & wintitle);
     virtual void poll();

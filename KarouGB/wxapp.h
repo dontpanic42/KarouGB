@@ -15,13 +15,16 @@
 #include "wxmainframe.h"
 #include <memory>
 
-class MainApp : public wxApp
+namespace gui
 {
-private:
-    MainFrame * mainFrame;
-public:
-    virtual bool OnInit();
-    virtual int OnExit();
-};
+    class MainApp : public wxApp
+    {
+    private:
+        MainFrame * mainFrame;
+    public:
+        virtual bool OnInit();
+        virtual int OnExit();
+    };
+}
 
 #endif /* defined(__KarouGB__wxapp__) */

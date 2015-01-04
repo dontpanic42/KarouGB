@@ -15,7 +15,7 @@ const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
 
 const std::string TAG("kbgb");
 
-KBGBEmulation::KBGBEmulation(const std::string & filename, IOPane * iopane)
+KBGBEmulation::KBGBEmulation(const std::string & filename, gui::IOPane * iopane)
 : initialized(false)
 , KEmulation(filename)
 , iopane(iopane)
@@ -97,9 +97,9 @@ bool KBGBEmulation::onEmulationTick(bool paused)
 //#ifndef DISABLE_SOUND
 //        apu->tick(*c);
 //#endif
-//#ifndef ENABLE_FULL_SPEED
-//        timewarp->tick(*c);
-//#endif
+#ifndef ENABLE_FULL_SPEED
+        timewarp->tick(*c);
+#endif
     }
     
     return false;

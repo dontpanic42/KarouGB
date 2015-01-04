@@ -29,7 +29,7 @@ std::unordered_map<int, char> WXIOProvider::keymap = {
     {wxKeyCode('J'), static_cast<char>(BTN_SELECT)}
 };
 
-WXIOProvider::WXIOProvider(IOPane * pane)
+WXIOProvider::WXIOProvider(gui::IOPane * pane)
 : iopane(pane)
 {
     
@@ -45,7 +45,7 @@ void WXIOProvider::poll()
     std::lock_guard<std::mutex> lk(iopane->keyQueue.mutex);
     while(!iopane->keyQueue.queue.empty())
     {
-        const IOPane::key_event_t & ev = iopane->keyQueue.queue.front();
+        const gui::IOPane::key_event_t & ev = iopane->keyQueue.queue.front();
         auto kit = keymap.find(ev.keycode);
         if(kit != keymap.end())
         {

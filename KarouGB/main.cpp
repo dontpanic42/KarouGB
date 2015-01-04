@@ -54,4 +54,4 @@
 //}
 
 #include "wxapp.h"
-IMPLEMENT_APP(MainApp);
+IMPLEMENT_APP(gui::MainApp);
