@@ -12,6 +12,14 @@ Lots of stuff. Only pure ROM and MBC-1/MBC-3 cartridges are supported at the tim
 
 No sound support at all, although i'm working on that :-)
 
+### Screenshots
+![Settings Window](https://raw.githubusercontent.com/dontpanic42/KarouGB/master/docs/screenshots/pokemon.png)
+
+![Settings Window](https://raw.githubusercontent.com/dontpanic42/KarouGB/master/docs/screenshots/zelda1.png)
+
+![Settings Window](https://raw.githubusercontent.com/dontpanic42/KarouGB/master/docs/screenshots/zelda2.png)
+
+![Settings Window](https://raw.githubusercontent.com/dontpanic42/KarouGB/master/docs/screenshots/donkeykong.png)
 ### Resources
 
 http://imrannazar.com/GameBoy-Emulation-in-JavaScript:-Memory-Banking

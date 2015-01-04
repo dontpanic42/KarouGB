@@ -1,9 +1,13 @@
 # Ignoriere Roms
 *.gb
 *.1
+# Ignoriere Savefiles
+*.ksv
 KarouGB/mm
 KarouGB/mm/*
 KarouGB/rom_bios.h
+vendor/
+vendor/*
 
 # Xcode
 .DS_Store
