@@ -22,10 +22,6 @@
 		6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6555147E1A30BCAF007CAAD4 /* apu.cpp */; };
 		6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
-		6557F5191A2DC44600F870DA /* DonkeyKongLand.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */; };
-		6557F51A1A2DC44600F870DA /* LegendOfZelda.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5111A2DC20600F870DA /* LegendOfZelda.gb */; };
-		6557F51B1A2DC44600F870DA /* SuperMarioLand.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5121A2DC20600F870DA /* SuperMarioLand.gb */; };
-		6557F51C1A2DC44600F870DA /* tetris11.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6557F5131A2DC20600F870DA /* tetris11.gb */; };
 		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
 		6591339D1A30C0010085193B /* sdl_io_provider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6591339B1A30C0010085193B /* sdl_io_provider.cpp */; };
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
@@ -33,7 +29,6 @@
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
 		65B135221A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
 		65B135231A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
-		65B135261A541C3F0004202E /* pokemon-red.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65B135251A541C0D0004202E /* pokemon-red.gb */; };
 		65D8DC3B1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
 		65D8DC3C1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
 		65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */; };
@@ -52,10 +47,18 @@
 		65D9DC3A1A4ECD500028D528 /* apu_noise_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */; };
 		65D9DC3B1A4ECD500028D528 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		65D9DC3C1A4ECD500028D528 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
-		65D9F1BE1A59420B007905ED /* icn_opencart.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1BD1A59402E007905ED /* icn_opencart.png */; };
-		65D9F1C01A594416007905ED /* icn_pause.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1BF1A594406007905ED /* icn_pause.png */; };
-		65D9F1C31A594AE8007905ED /* icn_savegame.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1C21A594976007905ED /* icn_savegame.png */; };
-		65D9F1C41A594AE8007905ED /* icn_loadgame.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9F1C11A59495F007905ED /* icn_loadgame.png */; };
+		65D9F1D41A595782007905ED /* icn_loadgame.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1CE1A595776007905ED /* icn_loadgame.png */; };
+		65D9F1D51A595782007905ED /* icn_opencart.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1CF1A595776007905ED /* icn_opencart.png */; };
+		65D9F1D61A595782007905ED /* icn_pause.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1D01A595776007905ED /* icn_pause.png */; };
+		65D9F1D71A595782007905ED /* icn_play.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1D11A595776007905ED /* icn_play.png */; };
+		65D9F1D81A595782007905ED /* icn_savegame.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1D21A595776007905ED /* icn_savegame.png */; };
+		65D9F1D91A595782007905ED /* license.txt in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1D31A595776007905ED /* license.txt */; };
+		65D9F1E11A5957D2007905ED /* cpu_instrs.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */; };
+		65D9F1E21A5957D2007905ED /* DonkeyKongLand.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1DC1A5957C0007905ED /* DonkeyKongLand.gb */; };
+		65D9F1E31A5957D2007905ED /* LegendOfZelda.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1DD1A5957C0007905ED /* LegendOfZelda.gb */; };
+		65D9F1E41A5957D2007905ED /* pokemon-red.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1DE1A5957C0007905ED /* pokemon-red.gb */; };
+		65D9F1E51A5957D2007905ED /* SuperMarioLand.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1DF1A5957C0007905ED /* SuperMarioLand.gb */; };
+		65D9F1E61A5957D2007905ED /* tetris11.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1E01A5957C0007905ED /* tetris11.gb */; };
 		65DC608B1A2DB51900D7415F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC608A1A2DB51900D7415F /* main.cpp */; };
 		65DC60981A2DB56200D7415F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DC60971A2DB56200D7415F /* SDL2.framework */; };
 		65DC60B91A2DB64D00D7415F /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
@@ -67,30 +70,25 @@
 		65EECF5B1A57EBAD005CC9D5 /* wxiopane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */; };
 		65EECF5E1A57EBEC005CC9D5 /* wxapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5C1A57EBEC005CC9D5 /* wxapp.cpp */; };
 		65EECF611A580D35005CC9D5 /* wxmainframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */; };
-		65EECF641A581615005CC9D5 /* icn_play.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65EECF631A58148B005CC9D5 /* icn_play.png */; };
 		65F10D8F1A4F005600D78DD8 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC251A4EC7B20028D528 /* libgtest_main.a */; };
 		65F10D901A4F005600D78DD8 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC261A4EC7B20028D528 /* libgtest.a */; };
-		65F10D931A4F07A900D78DD8 /* cpu_instrs.gb in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		6557F5181A2DC43400F870DA /* CopyFiles */ = {
+		6557F5181A2DC43400F870DA /* Copy Cartridges */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "";
+			dstPath = roms;
 			dstSubfolderSpec = 16;
 			files = (
-				65D9F1C31A594AE8007905ED /* icn_savegame.png in CopyFiles */,
-				65D9F1C41A594AE8007905ED /* icn_loadgame.png in CopyFiles */,
-				65D9F1C01A594416007905ED /* icn_pause.png in CopyFiles */,
-				65D9F1BE1A59420B007905ED /* icn_opencart.png in CopyFiles */,
-				65EECF641A581615005CC9D5 /* icn_play.png in CopyFiles */,
-				65B135261A541C3F0004202E /* pokemon-red.gb in CopyFiles */,
-				6557F5191A2DC44600F870DA /* DonkeyKongLand.gb in CopyFiles */,
-				6557F51A1A2DC44600F870DA /* LegendOfZelda.gb in CopyFiles */,
-				6557F51B1A2DC44600F870DA /* SuperMarioLand.gb in CopyFiles */,
-				6557F51C1A2DC44600F870DA /* tetris11.gb in CopyFiles */,
+				65D9F1E11A5957D2007905ED /* cpu_instrs.gb in Copy Cartridges */,
+				65D9F1E21A5957D2007905ED /* DonkeyKongLand.gb in Copy Cartridges */,
+				65D9F1E31A5957D2007905ED /* LegendOfZelda.gb in Copy Cartridges */,
+				65D9F1E41A5957D2007905ED /* pokemon-red.gb in Copy Cartridges */,
+				65D9F1E51A5957D2007905ED /* SuperMarioLand.gb in Copy Cartridges */,
+				65D9F1E61A5957D2007905ED /* tetris11.gb in Copy Cartridges */,
 			);
+			name = "Copy Cartridges";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		65D9DC151A4EC2770028D528 /* CopyFiles */ = {
@@ -102,6 +100,22 @@
 				65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		65D9F1C61A5956D7007905ED /* Copy Icons */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = icons;
+			dstSubfolderSpec = 16;
+			files = (
+				65D9F1D41A595782007905ED /* icn_loadgame.png in Copy Icons */,
+				65D9F1D51A595782007905ED /* icn_opencart.png in Copy Icons */,
+				65D9F1D61A595782007905ED /* icn_pause.png in Copy Icons */,
+				65D9F1D71A595782007905ED /* icn_play.png in Copy Icons */,
+				65D9F1D81A595782007905ED /* icn_savegame.png in Copy Icons */,
+				65D9F1D91A595782007905ED /* license.txt in Copy Icons */,
+			);
+			name = "Copy Icons";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		65DC60851A2DB51900D7415F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -118,7 +132,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
-				65F10D931A4F07A900D78DD8 /* cpu_instrs.gb in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,10 +163,6 @@
 		655514871A30BCAF007CAAD4 /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sound.cpp; sourceTree = "<group>"; };
 		655514881A30BCAF007CAAD4 /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sound.h; sourceTree = "<group>"; };
 		655514891A30BCAF007CAAD4 /* squarewave_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = squarewave_generator.h; sourceTree = "<group>"; };
-		6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = DonkeyKongLand.gb; sourceTree = "<group>"; };
-		6557F5111A2DC20600F870DA /* LegendOfZelda.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = LegendOfZelda.gb; sourceTree = "<group>"; };
-		6557F5121A2DC20600F870DA /* SuperMarioLand.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = SuperMarioLand.gb; sourceTree = "<group>"; };
-		6557F5131A2DC20600F870DA /* tetris11.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = tetris11.gb; sourceTree = "<group>"; };
 		6557F51D1A2DC77400F870DA /* timewarp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timewarp.cpp; sourceTree = "<group>"; };
 		6557F51E1A2DC77400F870DA /* timewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timewarp.h; sourceTree = "<group>"; };
 		6557F5221A2DCFC000F870DA /* rom_bios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rom_bios.h; sourceTree = "<group>"; };
@@ -174,7 +183,6 @@
 		65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc3_rtc.cpp; sourceTree = "<group>"; };
 		65B135211A5413B70004202E /* cart_mbc3_rtc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc3_rtc.h; sourceTree = "<group>"; };
 		65B135241A5414830004202E /* mbc3rtctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mbc3rtctest.h; sourceTree = "<group>"; };
-		65B135251A541C0D0004202E /* pokemon-red.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pokemon-red.gb"; sourceTree = "<group>"; };
 		65BDB53C1A4DA167000678B8 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
 		65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc3.cpp; sourceTree = "<group>"; };
 		65D8DC3A1A52A7DB00A06FBD /* cart_mbc3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc3.h; sourceTree = "<group>"; };
@@ -183,12 +191,19 @@
 		65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = KarouGB_Unit_Tests.1; sourceTree = "<group>"; };
 		65D9DC251A4EC7B20028D528 /* libgtest_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest_main.a; path = ../../../../../usr/local/lib/libgtest_main.a; sourceTree = "<group>"; };
 		65D9DC261A4EC7B20028D528 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = ../../../../../usr/local/lib/libgtest.a; sourceTree = "<group>"; };
-		65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = cpu_instrs.gb; sourceTree = "<group>"; };
 		65D9DC2A1A4ECB000028D528 /* mbc1test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc1test.h; path = ../KarouGB/test/mbc1test.h; sourceTree = "<group>"; };
-		65D9F1BD1A59402E007905ED /* icn_opencart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_opencart.png; sourceTree = "<group>"; };
-		65D9F1BF1A594406007905ED /* icn_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_pause.png; sourceTree = "<group>"; };
-		65D9F1C11A59495F007905ED /* icn_loadgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_loadgame.png; sourceTree = "<group>"; };
-		65D9F1C21A594976007905ED /* icn_savegame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_savegame.png; sourceTree = "<group>"; };
+		65D9F1CE1A595776007905ED /* icn_loadgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_loadgame.png; sourceTree = "<group>"; };
+		65D9F1CF1A595776007905ED /* icn_opencart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_opencart.png; sourceTree = "<group>"; };
+		65D9F1D01A595776007905ED /* icn_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_pause.png; sourceTree = "<group>"; };
+		65D9F1D11A595776007905ED /* icn_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_play.png; sourceTree = "<group>"; };
+		65D9F1D21A595776007905ED /* icn_savegame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_savegame.png; sourceTree = "<group>"; };
+		65D9F1D31A595776007905ED /* license.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = license.txt; sourceTree = "<group>"; };
+		65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = cpu_instrs.gb; sourceTree = "<group>"; };
+		65D9F1DC1A5957C0007905ED /* DonkeyKongLand.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = DonkeyKongLand.gb; sourceTree = "<group>"; };
+		65D9F1DD1A5957C0007905ED /* LegendOfZelda.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = LegendOfZelda.gb; sourceTree = "<group>"; };
+		65D9F1DE1A5957C0007905ED /* pokemon-red.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pokemon-red.gb"; sourceTree = "<group>"; };
+		65D9F1DF1A5957C0007905ED /* SuperMarioLand.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = SuperMarioLand.gb; sourceTree = "<group>"; };
+		65D9F1E01A5957C0007905ED /* tetris11.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = tetris11.gb; sourceTree = "<group>"; };
 		65DC60871A2DB51900D7415F /* KarouGB */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = KarouGB; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC608A1A2DB51900D7415F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		65DC60971A2DB56200D7415F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
@@ -213,7 +228,6 @@
 		65EECF5D1A57EBEC005CC9D5 /* wxapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxapp.h; sourceTree = "<group>"; };
 		65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxmainframe.cpp; sourceTree = "<group>"; };
 		65EECF601A580D35005CC9D5 /* wxmainframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxmainframe.h; sourceTree = "<group>"; };
-		65EECF631A58148B005CC9D5 /* icn_play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_play.png; sourceTree = "<group>"; };
 		65F7C38D1A308D6000F495CC /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apu.cpp; path = sound/apu.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -326,13 +340,8 @@
 		6557F50F1A2DC1F800F870DA /* resources */ = {
 			isa = PBXGroup;
 			children = (
-				65EECF621A58146E005CC9D5 /* icons */,
-				65B135251A541C0D0004202E /* pokemon-red.gb */,
-				65D9DC291A4ECABA0028D528 /* cpu_instrs.gb */,
-				6557F5101A2DC20600F870DA /* DonkeyKongLand.gb */,
-				6557F5111A2DC20600F870DA /* LegendOfZelda.gb */,
-				6557F5121A2DC20600F870DA /* SuperMarioLand.gb */,
-				6557F5131A2DC20600F870DA /* tetris11.gb */,
+				65D9F1DA1A5957C0007905ED /* cartridges */,
+				65D9F1CD1A595776007905ED /* icons */,
 			);
 			path = resources;
 			sourceTree = "<group>";
@@ -392,6 +401,32 @@
 			path = "KarouGB Unit Tests";
 			sourceTree = "<group>";
 		};
+		65D9F1CD1A595776007905ED /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				65D9F1CE1A595776007905ED /* icn_loadgame.png */,
+				65D9F1CF1A595776007905ED /* icn_opencart.png */,
+				65D9F1D01A595776007905ED /* icn_pause.png */,
+				65D9F1D11A595776007905ED /* icn_play.png */,
+				65D9F1D21A595776007905ED /* icn_savegame.png */,
+				65D9F1D31A595776007905ED /* license.txt */,
+			);
+			path = icons;
+			sourceTree = "<group>";
+		};
+		65D9F1DA1A5957C0007905ED /* cartridges */ = {
+			isa = PBXGroup;
+			children = (
+				65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */,
+				65D9F1DC1A5957C0007905ED /* DonkeyKongLand.gb */,
+				65D9F1DD1A5957C0007905ED /* LegendOfZelda.gb */,
+				65D9F1DE1A5957C0007905ED /* pokemon-red.gb */,
+				65D9F1DF1A5957C0007905ED /* SuperMarioLand.gb */,
+				65D9F1E01A5957C0007905ED /* tetris11.gb */,
+			);
+			path = cartridges;
+			sourceTree = "<group>";
+		};
 		65DC607E1A2DB51900D7415F = {
 			isa = PBXGroup;
 			children = (
@@ -444,18 +479,6 @@
 			name = wxgui;
 			sourceTree = "<group>";
 		};
-		65EECF621A58146E005CC9D5 /* icons */ = {
-			isa = PBXGroup;
-			children = (
-				65D9F1C21A594976007905ED /* icn_savegame.png */,
-				65D9F1C11A59495F007905ED /* icn_loadgame.png */,
-				65D9F1BF1A594406007905ED /* icn_pause.png */,
-				65D9F1BD1A59402E007905ED /* icn_opencart.png */,
-				65EECF631A58148B005CC9D5 /* icn_play.png */,
-			);
-			name = icons;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -484,7 +507,8 @@
 				65DC60831A2DB51900D7415F /* Sources */,
 				65DC60841A2DB51900D7415F /* Frameworks */,
 				65DC60851A2DB51900D7415F /* CopyFiles */,
-				6557F5181A2DC43400F870DA /* CopyFiles */,
+				6557F5181A2DC43400F870DA /* Copy Cartridges */,
+				65D9F1C61A5956D7007905ED /* Copy Icons */,
 			);
 			buildRules = (
 			);

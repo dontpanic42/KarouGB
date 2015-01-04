@@ -9,7 +9,7 @@
 #include "wxmainframe.h"
 #include "os.h"
 
-#define LOAD_PNGICON(x) (wxBitmap(wxString(std::string(resourcePath() + x).c_str()), wxBITMAP_TYPE_PNG))
+#define LOAD_PNGICON(x) (wxBitmap(wxString(std::string(resourcePath() + "icons/" + x).c_str()), wxBITMAP_TYPE_PNG))
 
 namespace gui
 {
