@@ -16,11 +16,15 @@ const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
 BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 EVT_CLOSE(MainFrame::OnQuit)
+EVT_TOOL(OPENCART,  MainFrame::OnOpenCartridge)
+EVT_TOOL(PLAY,      MainFrame::OnPressPlay)
+EVT_TOOL(PAUSE,     MainFrame::OnPressPause)
 
 END_EVENT_TABLE()
 
 MainFrame::MainFrame()
 : wxFrame(NULL, -1, wxString(APP_TITLE.c_str()), wxDefaultPosition, wxSize(4.0 * 160, 4.0 * 144))
+, emulation(nullptr)
 {
     
 }
@@ -37,22 +41,31 @@ void MainFrame::OnInit()
     SetAutoLayout(true);
     
     wxImage::AddHandler( new wxPNGHandler );
-    std::string sFilename(resourcePath() + "icn_play.png");
-    std::printf("Filename: %s\n", sFilename.c_str());
-    wxString wxFilename(sFilename.c_str());
-    wxBitmap playpause_img(wxFilename, wxBITMAP_TYPE_PNG);
+    
+    std::string play_file(resourcePath() + "icn_play.png");
+    wxBitmap    play_img(wxString(play_file.c_str()), wxBITMAP_TYPE_PNG);
+    
+    std::string pause_file(resourcePath() + "icn_pause.png");
+    wxBitmap    pause_img(wxString(pause_file.c_str()), wxBITMAP_TYPE_PNG);
+    
+    std::string opencart_file(resourcePath() + "icn_opencart.png");
+    wxBitmap    opencart_img(wxString(opencart_file.c_str()), wxBITMAP_TYPE_PNG);
     
     
-    wxToolBar * tb = CreateToolBar();
-    tb->AddTool(wxID_ANY, playpause_img, wxT("playpause"));
-    tb->Realize();
+    toolBar = CreateToolBar();
+    toolBar->AddTool(OPENCART, wxT("Load Cartridge"), opencart_img);
+    toolBar->AddTool(PLAY, wxT("Resume Emulation"), play_img);
+    toolBar->AddTool(PAUSE, wxT("Pause Emulation"), pause_img);
+
+    toolBar->EnableTool(PLAY, false);
+    toolBar->EnableTool(PAUSE, false);
+    toolBar->Realize();
     
-    OnInitEmulation();
 }
 
 void MainFrame::OnQuit(wxCloseEvent & event)
 {
-    if ( event.CanVeto() )
+    if ( event.CanVeto() && emulation )
     {
         if ( wxMessageBox("Are you sure you want to quit?\nUnsaved progress will be lost.",
                           "Please confirm",
@@ -68,12 +81,12 @@ void MainFrame::OnQuit(wxCloseEvent & event)
     Destroy();
 }
 
-void MainFrame::OnInitEmulation()
+void MainFrame::OnInitEmulation(const std::string & filename)
 {
-    emulation = std::make_shared<KBGBEmulation>("pokemon-red.gb", iopane);
+    emulation = std::make_shared<KBGBEmulation>(filename, iopane);
     
     emulation->start();
-    emulation->setRunning(true);
+    emulation->setRunning(false);
 }
 
 void MainFrame::OnQuitEmulation()
@@ -83,4 +96,55 @@ void MainFrame::OnQuitEmulation()
         emulation->quitEmulation();
         emulation = nullptr;
     }
+}
+
+void MainFrame::OnOpenCartridge(wxCommandEvent & event)
+{
+    wxFileDialog
+    openFileDialog(this, _("Open Cartridge"), "", "",
+                   "gb files (*.gb)|*.gb", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+    
+    if (openFileDialog.ShowModal() == wxID_CANCEL)
+    {
+        return;
+    }
+    
+    std::string filename(openFileDialog.GetPath().c_str());
+    OnQuitEmulation();
+    OnInitEmulation(filename);
+    
+    toolBar->EnableTool(PLAY, true);
+    toolBar->EnableTool(PAUSE, false);
+}
+
+void MainFrame::OnPressPlay(wxCommandEvent & event)
+{
+    if(!emulation)
+    {
+        return;
+    }
+    
+    if(!emulation->isRunning())
+    {
+        emulation->setRunning(true);
+    }
+    
+    toolBar->EnableTool(PLAY, false);
+    toolBar->EnableTool(PAUSE, true);
+}
+
+void MainFrame::OnPressPause(wxCommandEvent & event)
+{
+    if(!emulation)
+    {
+        return;
+    }
+    
+    if(emulation->isRunning())
+    {
+        emulation->setRunning(false);
+    }
+    
+    toolBar->EnableTool(PLAY, true);
+    toolBar->EnableTool(PAUSE, false);
 }

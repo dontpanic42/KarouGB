@@ -20,14 +20,27 @@ class MainFrame : public wxFrame
 private:
     IOPane * iopane;
     std::shared_ptr<KBGBEmulation> emulation;
+    
+    enum tools
+    {
+        OPENCART = wxID_HIGHEST + 1,
+        PLAY = wxID_HIGHEST + 2,
+        PAUSE = wxID_HIGHEST + 3
+    };
+    
+    wxToolBar * toolBar;
 public:
     MainFrame();
     
     void OnInit();
     void OnQuit(wxCloseEvent & event);
     
-    void OnInitEmulation();
+    void OnInitEmulation(const std::string & filename);
     void OnQuitEmulation();
+    
+    void OnOpenCartridge(wxCommandEvent & event);
+    void OnPressPlay(wxCommandEvent & event);
+    void OnPressPause(wxCommandEvent & event);
     
     DECLARE_EVENT_TABLE();
 };

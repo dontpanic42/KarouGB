@@ -70,7 +70,7 @@ void KCartridge::checkChecksum()
    der Datei hinein. */
 void KCartridge::loadFile(const std::string & filename)
 {
-    std::string fname = resourcePath() + filename;
+    std::string fname = filename;
     
     std::ifstream ifs(fname, std::ios::binary | std::ios::ate);
     if(!ifs.is_open())
