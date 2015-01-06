@@ -15,6 +15,8 @@
 #include <unordered_map>
 #include "io_provider.h"
 
+#error Deprecated
+
 class SDLIOProvider : public IOProvider
 {
 public:

@@ -14,20 +14,23 @@
 #include "cpu.h"
 #include "types.h"
 
-class Timewarp
+namespace emu
 {
-private:
-    typedef std::chrono::time_point<std::chrono::steady_clock,std::chrono::nanoseconds> time_point_t;
-    
-    time_point_t lastDelay;
-    u64i lastCycleCount;
-    
-    /* Anzahl an zyklen, nach denen verzögert werden soll */
-    const u64i delayAfterCycles;
-    const u64i cyclesPerMicrosecond;
-public:
-    Timewarp();
-    void tick(const cpu::Context & c);
-};
+    class Timewarp
+    {
+    private:
+        typedef std::chrono::time_point<std::chrono::steady_clock,std::chrono::nanoseconds> time_point_t;
+        
+        time_point_t lastDelay;
+        u64i lastCycleCount;
+        
+        /* Anzahl an zyklen, nach denen verzögert werden soll */
+        const u64i delayAfterCycles;
+        const u64i cyclesPerMicrosecond;
+    public:
+        Timewarp();
+        void tick(const cpu::Context & c);
+    };
+}
 
 #endif /* defined(__KarouGB__realtime__) */

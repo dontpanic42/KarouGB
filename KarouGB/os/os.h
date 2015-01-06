@@ -13,5 +13,4 @@
     #include "osx.h"
 #endif
 
-
 #endif

@@ -18,32 +18,34 @@
 #define TIM_REG_ADDR_MODULO     0xFF06  //tma
 #define TIM_REG_ADDR_CONTROL    0xFF07  //tac
 
-class Timer
+namespace emu
 {
-private:
-    u32i clock_speed;
-    bool clock_enabled;
-    
-    u32i tima_counter;
-    u32i div_counter;
-    
-    void updateTima(const u08i delta);
-    void updateDiv(const u08i delta);
-    
-    void wfunc_onTimerControl(u16i addr, u08i value, u08i * ptr);
-    void wfunc_onResetDivider(u16i addr, u08i value, u08i * ptr);
-    
-    std::shared_ptr<KMemory> mmu;
-    std::shared_ptr<cpu::Z80> cpu;
-
-    u08i & reg_divider;
-    u08i & reg_counter;
-    u08i & reg_modulo;
-public:
-    Timer(std::shared_ptr<KMemory> mmu,
-          std::shared_ptr<cpu::Z80> cpu);
-    
-    void tick(const cpu::Context & c);
-};
-
+    class Timer
+    {
+    private:
+        u32i clock_speed;
+        bool clock_enabled;
+        
+        u32i tima_counter;
+        u32i div_counter;
+        
+        void updateTima(const u08i delta);
+        void updateDiv(const u08i delta);
+        
+        void wfunc_onTimerControl(u16i addr, u08i value, u08i * ptr);
+        void wfunc_onResetDivider(u16i addr, u08i value, u08i * ptr);
+        
+        std::shared_ptr<KMemory> mmu;
+        std::shared_ptr<cpu::Z80> cpu;
+        
+        u08i & reg_divider;
+        u08i & reg_counter;
+        u08i & reg_modulo;
+    public:
+        Timer(std::shared_ptr<KMemory> mmu,
+              std::shared_ptr<cpu::Z80> cpu);
+        
+        void tick(const cpu::Context & c);
+    };
+}
 #endif /* defined(__mygb__timer__) */

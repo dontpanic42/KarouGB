@@ -23,7 +23,6 @@
 		6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
 		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
-		6591339D1A30C0010085193B /* sdl_io_provider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6591339B1A30C0010085193B /* sdl_io_provider.cpp */; };
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
@@ -605,7 +604,6 @@
 				6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */,
 				651958E61A50089E00A18E8A /* mem.cpp in Sources */,
 				65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */,
-				6591339D1A30C0010085193B /* sdl_io_provider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

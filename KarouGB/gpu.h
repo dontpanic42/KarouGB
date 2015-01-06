@@ -47,93 +47,96 @@
 
 #define GPU_SPRITECOUNT     40
 
-//#define RENDER_ON_SCANLINE
-class GPU
-{
-private:    
-    enum Color
-    {
-        COLOR_WHITE = 0,
-        COLOR_LIGHT = 1,
-        COLOR_GRAY  = 2,
-        COLOR_BLACK = 3
-    };
-    
-    struct OAMData
-    {
-        u08i y;
-        u08i x;
-        u08i tile;
-        u08i attr;
-    } __attribute__((packed));
-    
-    std::shared_ptr<IOProvider> ioprovider;
-    std::shared_ptr<KMemory>    mmu;
-    std::shared_ptr<cpu::Z80> cpu;
-    
-    /* True, wenn der Pixel _NICHT_ transparent ist,
-       false, wenn der Pixel Transparent ist. */
-    bool alphabuffer[GPU_SCREENWIDTH * GPU_SCREENHEIGHT];
-    
-    /* Neu */
-    enum GPUMode
-    {
-        MODE_HBLANK = 0x00,
-        MODE_VBLANK = 0x01,
-        MODE_OAM    = 0x02,
-        MODE_VRAM   = 0x03,
-        
-        MODE_INVALID = 0x10
-    };
-    
-    u08i gpu_mode;
-    u08i gpu_last_mode;
-    u16i gpu_modeclock;
-    u08i gpu_line;
-    u16i gpu_vblank_line_counter;
-    
-    void compareLYC();
-    /* Neu Ende */
-    
-    u08i & reg_lcdc;
-    u08i & reg_stat;    //LCDC Status
-    u08i & reg_scy;     //Scroll Y
-    u08i & reg_scx;     //Scroll X
-    u08i & reg_bgp;     //Background palette
-    u08i & reg_ly;      //current scanline
-    u08i & reg_lyc;     //Y-Compare
-    u08i & reg_obp0;    //Sprite palette #1
-    u08i & reg_obp1;    //Sprite palette #2
-    u08i & reg_wx;      //Window x + 7
-    u08i & reg_wy;      //Window y
-    
-    u08i colors[4];
-    
-    void clearAlphaBuffer();
-    void onDMATransfer(u16i addr, u08i value, u08i * memptr);
-    void onResetLy(u16i addr, u08i value, u08i * memptr);
-    //Render one scanline to buffer    //Display the buffer
-    void render();
-    
-    void renderSprites();
-    void renderBackground();
-    void renderWindow();
-    
-    //Read color data for a tile
-    Color getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y);
-//    u08i getSPTilePixel(const OAMData & sprite, u08i x, u08i y);
-    Color getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16);
-    //Returns the actual color for color data read by readTileAt
-    u08i decodeColor(Color value, u08i palette);
-public:
-    GPU(std::shared_ptr<KMemory> mmu,
-        std::shared_ptr<IOProvider> ioprovider,
-        std::shared_ptr<cpu::Z80> cpu);
-    
-    u08i line;
-    void renderScanline();
 
-    void step(cpu::Context & c);
-};
+namespace emu
+{
+    class GPU
+    {
+    private:
+        enum Color
+        {
+            COLOR_WHITE = 0,
+            COLOR_LIGHT = 1,
+            COLOR_GRAY  = 2,
+            COLOR_BLACK = 3
+        };
+        
+        struct OAMData
+        {
+            u08i y;
+            u08i x;
+            u08i tile;
+            u08i attr;
+        } __attribute__((packed));
+        
+        std::shared_ptr<IOProvider> ioprovider;
+        std::shared_ptr<KMemory>    mmu;
+        std::shared_ptr<cpu::Z80> cpu;
+        
+        /* True, wenn der Pixel _NICHT_ transparent ist,
+         false, wenn der Pixel Transparent ist. */
+        bool alphabuffer[GPU_SCREENWIDTH * GPU_SCREENHEIGHT];
+        
+        /* Neu */
+        enum GPUMode
+        {
+            MODE_HBLANK = 0x00,
+            MODE_VBLANK = 0x01,
+            MODE_OAM    = 0x02,
+            MODE_VRAM   = 0x03,
+            
+            MODE_INVALID = 0x10
+        };
+        
+        u08i gpu_mode;
+        u08i gpu_last_mode;
+        u16i gpu_modeclock;
+        u08i gpu_line;
+        u16i gpu_vblank_line_counter;
+        
+        void compareLYC();
+        /* Neu Ende */
+        
+        u08i & reg_lcdc;
+        u08i & reg_stat;    //LCDC Status
+        u08i & reg_scy;     //Scroll Y
+        u08i & reg_scx;     //Scroll X
+        u08i & reg_bgp;     //Background palette
+        u08i & reg_ly;      //current scanline
+        u08i & reg_lyc;     //Y-Compare
+        u08i & reg_obp0;    //Sprite palette #1
+        u08i & reg_obp1;    //Sprite palette #2
+        u08i & reg_wx;      //Window x + 7
+        u08i & reg_wy;      //Window y
+        
+        u08i colors[4];
+        
+        void clearAlphaBuffer();
+        void onDMATransfer(u16i addr, u08i value, u08i * memptr);
+        void onResetLy(u16i addr, u08i value, u08i * memptr);
+        //Render one scanline to buffer    //Display the buffer
+        void render();
+        
+        void renderSprites();
+        void renderBackground();
+        void renderWindow();
+        
+        //Read color data for a tile
+        Color getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y);
+        //    u08i getSPTilePixel(const OAMData & sprite, u08i x, u08i y);
+        Color getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16);
+        //Returns the actual color for color data read by readTileAt
+        u08i decodeColor(Color value, u08i palette);
+    public:
+        GPU(std::shared_ptr<KMemory> mmu,
+            std::shared_ptr<IOProvider> ioprovider,
+            std::shared_ptr<cpu::Z80> cpu);
+        
+        u08i line;
+        void renderScanline();
+        
+        void step(cpu::Context & c);
+    };
+}
 
 #endif /* defined(__mygb__gpu__) */

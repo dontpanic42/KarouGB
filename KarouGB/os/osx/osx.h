@@ -12,11 +12,4 @@
 #include "ResourcePath.hpp"
 #include "types.h"
 
-/* Sleep() in milliseconds */
-void sleep_ms(u32i length);
-
-/* Sleep() in microseconds, wenn im os nicht verfügbar,
-   rufe sleep_ms(length / 1000) auf */
-void sleep_us(u32i length);
-
 #endif

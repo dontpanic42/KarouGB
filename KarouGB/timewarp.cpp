@@ -7,8 +7,7 @@
 //
 
 #include "timewarp.h"
-#include "os.h"
-
+#include <thread>
 /*
  1 second	(s)             =	1 Hz or 1000ms
  100 milliseconds	(ms)	=	10 Hz
@@ -21,39 +20,42 @@
  10 nanoseconds	(ns)        =	100Mhz
  */
 
-Timewarp::Timewarp()
-: lastDelay(std::chrono::high_resolution_clock::now())
-, lastCycleCount(0)
-, delayAfterCycles(16776)
-, cyclesPerMicrosecond(4194)
+namespace emu
 {
-}
-
-void Timewarp::tick(const cpu::Context & c)
-{
-    u64i delta = c.clock.t - lastCycleCount;
-    if(delta > delayAfterCycles)
+    Timewarp::Timewarp()
+    : lastDelay(std::chrono::high_resolution_clock::now())
+    , lastCycleCount(0)
+    , delayAfterCycles(16776)
+    , cyclesPerMicrosecond(4194)
     {
-        while(delta > delayAfterCycles)
+    }
+    
+    void Timewarp::tick(const cpu::Context & c)
+    {
+        u64i delta = c.clock.t - lastCycleCount;
+        if(delta > delayAfterCycles)
         {
-            time_point_t now = std::chrono::high_resolution_clock::now();
-            
-            /* Die Zeit, die es tatsächlich gedauert hat */
-            u64i duration_have = static_cast<u64i>(std::chrono::duration_cast<std::chrono::milliseconds>(now - lastDelay).count());
-            
-            /* Die zeit, die es tatsächlich hätte dauern müssen in ms */
-            u64i duration_should = static_cast<u64i>(delayAfterCycles / cyclesPerMicrosecond);
-            
-            s32i delay_in_ms = static_cast<s32i>(duration_should - duration_have);
-            if(delay_in_ms > 0)
+            while(delta > delayAfterCycles)
             {
-                sleep_ms(delay_in_ms);
+                time_point_t now = std::chrono::high_resolution_clock::now();
+                
+                /* Die Zeit, die es tatsächlich gedauert hat */
+                u64i duration_have = static_cast<u64i>(std::chrono::duration_cast<std::chrono::milliseconds>(now - lastDelay).count());
+                
+                /* Die zeit, die es tatsächlich hätte dauern müssen in ms */
+                u64i duration_should = static_cast<u64i>(delayAfterCycles / cyclesPerMicrosecond);
+                
+                s32i delay_in_ms = static_cast<s32i>(duration_should - duration_have);
+                if(delay_in_ms > 0)
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(delay_in_ms));
+                }
+                
+                lastCycleCount += delayAfterCycles;
+                delta = c.clock.t - lastCycleCount;
             }
             
-            lastCycleCount += delayAfterCycles;
-            delta = c.clock.t - lastCycleCount;
+            lastDelay = std::chrono::high_resolution_clock::now();
         }
-        
-        lastDelay = std::chrono::high_resolution_clock::now();
     }
 }

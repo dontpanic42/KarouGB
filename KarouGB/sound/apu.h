@@ -17,25 +17,27 @@
 #include "apu_squarewave_channel.h"
 #include "apu_noise_channel.h"
 
-class APU
+namespace emu
 {
-private:
-    std::shared_ptr<KMemory> mmu;
-    
-    Sound sound;
-    
-    APUSquareWaveChannel    channel1;
-    APUSquareWaveChannel    channel2;
-    
-    APUNoiseChannel         channel4;
-    
-    
-    void wfunc_nr51(u16i addr, u08i value, u08i * ptr);
-    void wfunc_nr50(u16i addr, u08i value, u08i * ptr);
-public:
-    APU(std::shared_ptr<KMemory> mmu);
-    
-    void tick(const cpu::Context & c);
-};
-
+    class APU
+    {
+    private:
+        std::shared_ptr<KMemory> mmu;
+        
+        Sound sound;
+        
+        APUSquareWaveChannel    channel1;
+        APUSquareWaveChannel    channel2;
+        
+        APUNoiseChannel         channel4;
+        
+        
+        void wfunc_nr51(u16i addr, u08i value, u08i * ptr);
+        void wfunc_nr50(u16i addr, u08i value, u08i * ptr);
+    public:
+        APU(std::shared_ptr<KMemory> mmu);
+        
+        void tick(const cpu::Context & c);
+    };
+}
 #endif /* defined(__KarouGB__apu__) */

@@ -3,17 +3,19 @@
 
 #include "cart_mbc.h"
 
-namespace kmbc_impl
+namespace emu
 {
-    /* Stub-Implementierung für Rom-Only carts */
-    class KMBC0 : public KMBC
+    namespace kmbc_impl
     {
-    public:
-        KMBC0(const std::shared_ptr<memory_t> & memory,
-              const std::shared_ptr<cart_t> & cartridge);
-        
-        virtual void setup();
-    };
+        /* Stub-Implementierung für Rom-Only carts */
+        class KMBC0 : public KMBC
+        {
+        public:
+            KMBC0(const std::shared_ptr<memory_t> & memory,
+                  const std::shared_ptr<cart_t> & cartridge);
+            
+            virtual void setup();
+        };
+    }
 }
-
 #endif

@@ -21,7 +21,7 @@ namespace gui
     {
     private:
         IOPane * iopane;
-        std::shared_ptr<KBGBEmulation> emulation;
+        std::shared_ptr<emu::KBGBEmulation> emulation;
         
         enum tools
         {

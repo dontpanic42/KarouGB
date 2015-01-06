@@ -9,108 +9,108 @@
 #include "kbgbemulation.h"
 #include <cassert>
 
-const std::string APP_NAME      ("KarouGB");
-const std::string APP_VERSION   ("v0.0.1");
-const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
-
-const std::string TAG("kbgb");
-
-KBGBEmulation::KBGBEmulation(const std::string & filename, gui::IOPane * iopane)
-: initialized(false)
-, KEmulation(filename)
-, iopane(iopane)
+namespace emu
 {
-}
-
-KBGBEmulation::~KBGBEmulation()
-{
-    //std::printf("QuitEmulation\n");
-    //quitEmulation();
-    //std::printf("QuitEmulation called\n");
-}
-
-void KBGBEmulation::initEmulation()
-{
-    loader = KCartridgeLoader::load(getCartridgeFile());
-    assert(loader);
-    mmu = loader->getMemory();
-    assert(mmu);
+    const std::string APP_NAME      ("KarouGB");
+    const std::string APP_VERSION   ("v0.0.1");
+    const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
     
-    ioprovider = std::shared_ptr<IOProvider>((IOProvider *) new WXIOProvider(iopane));
-    //ioprovider =std::make_shared<SDLIOProvider>();
-    cpu =       std::make_shared<cpu::Z80>(mmu);
+    const std::string TAG("kbgb");
     
-    c =         std::move(std::unique_ptr<cpu::Context>(new cpu::Context));
-    gpu =       std::move(std::unique_ptr<GPU>(new GPU(mmu, ioprovider, cpu)));
-    buttons =   std::move(std::unique_ptr<Buttons>(new Buttons(mmu, ioprovider, cpu)));
-    timer =     std::move(std::unique_ptr<Timer>(new Timer(mmu, cpu)));
-    dbg =       std::move(std::unique_ptr<Debugger>(new Debugger(cpu, mmu, *c)));
-    timewarp =  std::move(std::unique_ptr<Timewarp>(new Timewarp));
-    
-#ifndef DISABLE_SOUND
-    apu =       std::move(std::unique_ptr<APU>(new APU(mmu)));
-#else
-    lg::warn(TAG, "No sound support: Sound disabled.\n");
-#endif
-    
-    ioprovider->init(APP_TITLE);
-}
-
-void KBGBEmulation::onPause()
-{
-    lg::info(TAG, "Pausing emulation.\n");
-}
-
-void KBGBEmulation::onResume()
-{
-    lg::info(TAG, "Resuming emulation.\n");
-}
-
-void KBGBEmulation::onLoadGame(const std::string & filename)
-{
-    loader->loadState(filename);
-}
-
-void KBGBEmulation::onSaveGame(const std::string & filename)
-{
-    loader->saveState(filename);
-}
-
-bool KBGBEmulation::onEmulationTick(bool paused)
-{   
-    if(ioprovider->isClosed())
+    KBGBEmulation::KBGBEmulation(const std::string & filename, std::shared_ptr<IOProvider> & ioprovider)
+    : initialized(false)
+    , KEmulation(filename)
+    , ioprovider(ioprovider)
     {
-        std::printf("closed\n");
-        return true;
     }
     
-    if(!paused)
+    KBGBEmulation::~KBGBEmulation()
     {
-        if(!dbg->poll())
+    }
+    
+    void KBGBEmulation::initEmulation()
+    {
+        loader = KCartridgeLoader::load(getCartridgeFile());
+        assert(loader);
+        mmu = loader->getMemory();
+        assert(mmu);
+        
+        //ioprovider = std::shared_ptr<IOProvider>((IOProvider *) new WXIOProvider(iopane));
+        //ioprovider =std::make_shared<SDLIOProvider>();
+        cpu =       std::make_shared<cpu::Z80>(mmu);
+        
+        c =         std::move(std::unique_ptr<cpu::Context>(new cpu::Context));
+        gpu =       std::move(std::unique_ptr<GPU>(new GPU(mmu, ioprovider, cpu)));
+        buttons =   std::move(std::unique_ptr<Buttons>(new Buttons(mmu, ioprovider, cpu)));
+        timer =     std::move(std::unique_ptr<Timer>(new Timer(mmu, cpu)));
+        dbg =       std::move(std::unique_ptr<Debugger>(new Debugger(cpu, mmu, *c)));
+        timewarp =  std::move(std::unique_ptr<Timewarp>(new Timewarp));
+        
+#ifndef DISABLE_SOUND
+        apu =       std::move(std::unique_ptr<APU>(new APU(mmu)));
+#else
+        lg::warn(TAG, "No sound support: Sound disabled.\n");
+#endif
+        
+        ioprovider->init(APP_TITLE);
+    }
+    
+    void KBGBEmulation::onPause()
+    {
+        lg::info(TAG, "Pausing emulation.\n");
+    }
+    
+    void KBGBEmulation::onResume()
+    {
+        lg::info(TAG, "Resuming emulation.\n");
+    }
+    
+    void KBGBEmulation::onLoadGame(const std::string & filename)
+    {
+        loader->loadState(filename);
+    }
+    
+    void KBGBEmulation::onSaveGame(const std::string & filename)
+    {
+        loader->saveState(filename);
+    }
+    
+    bool KBGBEmulation::onEmulationTick(bool paused)
+    {
+        if(ioprovider->isClosed())
         {
+            std::printf("closed\n");
             return true;
         }
         
-        timer->tick(*c);
-        cpu->execute(*c);
-        gpu->step(*c);
-//#ifndef DISABLE_SOUND
-//        apu->tick(*c);
-//#endif
+        if(!paused)
+        {
+            if(!dbg->poll())
+            {
+                return true;
+            }
+            
+            timer->tick(*c);
+            cpu->execute(*c);
+            gpu->step(*c);
+            //#ifndef DISABLE_SOUND
+            //        apu->tick(*c);
+            //#endif
 #ifndef ENABLE_FULL_SPEED
-        timewarp->tick(*c);
+            timewarp->tick(*c);
 #endif
+        }
+        
+        return false;
     }
     
-    return false;
-}
-
-void KBGBEmulation::onInitialize()
-{
-    initEmulation();
-}
-
-void KBGBEmulation::onTeardown()
-{
+    void KBGBEmulation::onInitialize()
+    {
+        initEmulation();
+    }
     
+    void KBGBEmulation::onTeardown()
+    {
+        
+    }
 }

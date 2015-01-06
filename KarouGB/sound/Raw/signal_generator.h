@@ -13,28 +13,31 @@
 
 #define SIGNAL_SAMPLE_RATE 44100
 
-enum Channel
+namespace emu
 {
-    CHANNEL_LEFT = 0,
-    CHANNEL_RIGHT = 1,
-    
-    CHANNEL_LAST = 2
-};
-
-template<typename T, std::size_t NUM_CHANNELS>
-class SignalGenerator
-{
-public:
-    
-    virtual ~SignalGenerator()
+    enum Channel
     {
-    }
+        CHANNEL_LEFT = 0,
+        CHANNEL_RIGHT = 1,
+        
+        CHANNEL_LAST = 2
+    };
     
-    /* Erzeuge die Samples */
-    virtual void generateSamples(T * stream, std::size_t length) = 0;
-    
-    /* Setzte die Lautstärke im Interval 0..1 */
-    virtual void setAmplitude(Channel channel, double amplitude) = 0;
-};
+    template<typename T, std::size_t NUM_CHANNELS>
+    class SignalGenerator
+    {
+    public:
+        
+        virtual ~SignalGenerator()
+        {
+        }
+        
+        /* Erzeuge die Samples */
+        virtual void generateSamples(T * stream, std::size_t length) = 0;
+        
+        /* Setzte die Lautstärke im Interval 0..1 */
+        virtual void setAmplitude(Channel channel, double amplitude) = 0;
+    };
+}
 
 #endif

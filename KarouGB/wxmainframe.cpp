@@ -8,8 +8,9 @@
 
 #include "wxmainframe.h"
 #include "os.h"
+#include "wxioprovider.h"
 
-#define LOAD_PNGICON(x) (wxBitmap(wxString(std::string(resourcePath() + "icons/" + x).c_str()), wxBITMAP_TYPE_PNG))
+#define LOAD_PNGICON(x) (wxBitmap(wxString(std::string(os::resourcePath() + "icons/" + x).c_str()), wxBITMAP_TYPE_PNG))
 
 namespace gui
 {
@@ -92,7 +93,8 @@ namespace gui
     
     void MainFrame::OnInitEmulation(const std::string & filename)
     {
-        emulation = std::make_shared<KBGBEmulation>(filename, iopane);
+        std::shared_ptr<emu::IOProvider> iop(new emu::WXIOProvider(iopane));
+        emulation = std::make_shared<emu::KBGBEmulation>(filename, iop);
         
         emulation->start();
         emulation->setRunning(false);

@@ -12,7 +12,7 @@
 #include <iostream>
 #include "kemulation.h"
 
-#include "sdl_io_provider.h"
+#include "io_provider.h"
 #include "cpu.h"
 #include "timer.h"
 #include "gpu.h"
@@ -23,45 +23,44 @@
 #include "cart_loader.h"
 #include "os.h"
 
-#include "wxiopane.h"
-#include "wxioprovider.h"
 #include "log.h"
 
-class KBGBEmulation : public KEmulation
+namespace emu
 {
-private:
-    std::shared_ptr<KCartridgeLoader> loader;
-    std::shared_ptr<KMemory> mmu;
-    std::shared_ptr<IOProvider> ioprovider;
-    std::shared_ptr<cpu::Z80> cpu;
-    
-    std::unique_ptr<cpu::Context> c;
-    std::unique_ptr<GPU> gpu;
-    std::unique_ptr<Buttons> buttons;
-    std::unique_ptr<Timer> timer;
-    std::unique_ptr<Debugger> dbg;
-    std::unique_ptr<Timewarp> timewarp;
-    
-    gui::IOPane * iopane;
-    
+    class KBGBEmulation : public KEmulation
+    {
+    private:
+        std::shared_ptr<KCartridgeLoader> loader;
+        std::shared_ptr<KMemory> mmu;
+        std::shared_ptr<IOProvider> ioprovider;
+        std::shared_ptr<cpu::Z80> cpu;
+        
+        std::unique_ptr<cpu::Context> c;
+        std::unique_ptr<GPU> gpu;
+        std::unique_ptr<Buttons> buttons;
+        std::unique_ptr<Timer> timer;
+        std::unique_ptr<Debugger> dbg;
+        std::unique_ptr<Timewarp> timewarp;
+        
 #ifndef DISABLE_SOUND
-    std::unique_ptr<APU> apu;
+        std::unique_ptr<APU> apu;
 #endif
-    
-    std::atomic_bool initialized;
-    void initEmulation();
-protected:
-    virtual void onPause();
-    virtual void onResume();
-    virtual void onLoadGame(const std::string & filename);
-    virtual void onSaveGame(const std::string & filename);
-    virtual bool onEmulationTick(bool paused);
-    
-    virtual void onInitialize();
-    virtual void onTeardown();
-public:
-    KBGBEmulation(const std::string & filename, gui::IOPane * iopane);
-    ~KBGBEmulation();
-};
+        
+        std::atomic_bool initialized;
+        void initEmulation();
+    protected:
+        virtual void onPause();
+        virtual void onResume();
+        virtual void onLoadGame(const std::string & filename);
+        virtual void onSaveGame(const std::string & filename);
+        virtual bool onEmulationTick(bool paused);
+        
+        virtual void onInitialize();
+        virtual void onTeardown();
+    public:
+        KBGBEmulation(const std::string & filename, std::shared_ptr<IOProvider> & ioprovider);
+        ~KBGBEmulation();
+    };
+}
 
 #endif /* defined(__KarouGB__kbgbemulation__) */

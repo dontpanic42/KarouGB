@@ -7,34 +7,36 @@
 #include "cartridge.h"
 #include "cart_mbc.h"
 
-class KCartridgeLoader
+namespace emu
 {
-public:
-    typedef KMemory memory_t;
-    typedef KCartridge cart_t;
-private:
-    const std::string cartname;
-    const std::shared_ptr<memory_t> memory;
-    const std::shared_ptr<cart_t> cart;
-    
-    std::shared_ptr<KMBC> mbc;
-    
-    void setupMBC();
-    
-    KCartridgeLoader(const std::string & cartname);
-public:
-    static std::shared_ptr<KCartridgeLoader> load(const std::string & cartname);
-    
-    const std::string & getCartridgeName() const;
-    const std::shared_ptr<memory_t> & getMemory() const;
-    const std::shared_ptr<cart_t> & getCartridge() const;
-    const std::shared_ptr<KMBC> & getMBC() const;
-    
-    std::string createAutosaveFilename();
-    bool canSaveState();
-    void loadState(const std::string & filename);
-    void saveState(const std::string & filename);
-};
-
+    class KCartridgeLoader
+    {
+    public:
+        typedef KMemory memory_t;
+        typedef KCartridge cart_t;
+    private:
+        const std::string cartname;
+        const std::shared_ptr<memory_t> memory;
+        const std::shared_ptr<cart_t> cart;
+        
+        std::shared_ptr<KMBC> mbc;
+        
+        void setupMBC();
+        
+        KCartridgeLoader(const std::string & cartname);
+    public:
+        static std::shared_ptr<KCartridgeLoader> load(const std::string & cartname);
+        
+        const std::string & getCartridgeName() const;
+        const std::shared_ptr<memory_t> & getMemory() const;
+        const std::shared_ptr<cart_t> & getCartridge() const;
+        const std::shared_ptr<KMBC> & getMBC() const;
+        
+        std::string createAutosaveFilename();
+        bool canSaveState();
+        void loadState(const std::string & filename);
+        void saveState(const std::string & filename);
+    };
+}
 
 #endif

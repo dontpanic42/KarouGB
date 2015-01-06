@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////
 //
 // SFML - Simple and Fast Multimedia Library
-// Copyright (C) 2007-2013 Marco Antognini (antognini.marco@gmail.com), 
-//                         Laurent Gomila (laurent.gom@gmail.com), 
+// Copyright (C) 2007-2013 Marco Antognini (antognini.marco@gmail.com),
+//                         Laurent Gomila (laurent.gom@gmail.com),
 //
 // This software is provided 'as-is', without any express or implied warranty.
 // In no event will the authors be held liable for any damages arising from the use of this software.
@@ -30,27 +30,30 @@
 #import <Foundation/Foundation.h>
 
 ////////////////////////////////////////////////////////////
-std::string resourcePath(void)
+namespace os
 {
-    //NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
-    std::string rpath;
-    
-    @autoreleasepool {
+    std::string resourcePath(void)
+    {
+        //NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-    NSBundle* bundle = [NSBundle mainBundle];
-    
-    if (bundle == nil) {
+        std::string rpath;
+        
+        @autoreleasepool {
+            
+            NSBundle* bundle = [NSBundle mainBundle];
+            
+            if (bundle == nil) {
 #ifdef DEBUG
-        NSLog(@"bundle is nil... thus no resources path can be found.");
+                NSLog(@"bundle is nil... thus no resources path can be found.");
 #endif
-    } else {
-        NSString* path = [bundle resourcePath];
-        rpath = [path UTF8String] + std::string("/");
+            } else {
+                NSString* path = [bundle resourcePath];
+                rpath = [path UTF8String] + std::string("/");
+            }
+            
+            //[pool drain];
+        }
+        
+        return rpath;
     }
-    
-    //[pool drain];
-    }
-    
-    return rpath;
 }
