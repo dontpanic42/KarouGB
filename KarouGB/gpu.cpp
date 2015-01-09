@@ -19,6 +19,10 @@
 #define SPRITE_ATTRIBUTE_TABLE 0xFE00
 #define SPRITE_MAX_PER_SCANLINE 10
 
+#define CGB_BCPS_REG 0xFF68
+#define CGB_BCPD_REG 0xFF69
+#define CGB_VBK_REG 0xFF4F
+
 namespace emu
 {
     GPU::GPU(std::shared_ptr<KMemory> mmu,
@@ -49,6 +53,13 @@ namespace emu
     , gpu_line(0)
     , gpu_vblank_line_counter(0)
     /* Neu Ende */
+    
+    /* CGB */
+    , cgb(true)
+    , cgb_mode(true)
+    , reg_cgb_bcpd(mmu->getDMARef(CGB_BCPD_REG))
+    , reg_cgb_bcps(mmu->getDMARef(CGB_BCPS_REG))
+    , reg_cgb_vbk(mmu->getDMARef(CGB_VBK_REG))
     {
         colors[0] = 255;
         colors[1] = 192;
@@ -69,6 +80,21 @@ namespace emu
         mmu->intercept(GPU_REG_ADDR_LY, [this](u16i addr, u08i value, u08i * ptr) {
             this->onResetLy(addr, value, ptr);
         });
+        
+        if(isCGB())
+        {
+            mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteBCPD(addr, value, ptr);
+            });
+            
+            mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteVRAM(addr, value, ptr);
+            });
+            
+            mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadVRAM(addr, ptr);
+            });
+        }
         
         clearAlphaBuffer();
     }
@@ -618,4 +644,65 @@ namespace emu
             reg_stat &= ~BIT_2;
         }
     }
+    
+    bool GPU::isCGB()
+    {
+        return cgb;
+    }
+    
+    bool GPU::inCGBMode()
+    {
+        return cgb_mode;
+    }
+    
+    void GPU::cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            /* Wenn autoinkrement aktiviert ist */
+            if(reg_cgb_bcps & BIT_7)
+            {
+                /* inkrementiere den Index im bcps register */
+                u08i index = (reg_cgb_bcps & 0x3F) + 1;
+                /* Der index sind die Bits 0..5 */
+                reg_cgb_bcps &= ~0x3F;
+                /* Auf register-überlauf checken */
+                reg_cgb_bcps |= (index > 0x3F)? 0 : index;
+            }
+        }
+        
+        (*ptr) = value;
+    }
+    
+    
+    void GPU::cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr)
+    {
+        /* Wenn das erste Bit der VBK-Registers 0 ist... */
+        if(!(reg_cgb_vbk & 0x01))
+        {
+            /* schreibe in VRAM-Bank 0 */
+            cgbVRAM0[addr - 0x8000] = value;
+        }
+        else
+        {
+            /* sonst schreibe in VRAM-Bank 1 */
+            cgbVRAM1[addr - 0x8000] = value;
+        }
+    }
+
+    u08i GPU::cgbOnReadVRAM(u16i addr, u08i * ptr)
+    {
+        /* Wenn das erste Bit des VBK registers 0 ist... */
+        if(!(reg_cgb_vbk & 0x01))
+        {
+            /* gib den Wert aus der VRAM-Bank 0 zurück */
+            return cgbVRAM0[addr - 0x8000];
+        }
+        else
+        {
+            /* sonst gib den Wert aus der VRAM-Bank 1 zurück */
+            return cgbVRAM1[addr - 0x8000];
+        }
+    }
+
 }

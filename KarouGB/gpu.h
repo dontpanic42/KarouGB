@@ -109,6 +109,10 @@ namespace emu
         u08i & reg_wx;      //Window x + 7
         u08i & reg_wy;      //Window y
         
+        u08i & reg_cgb_bcps;    //Background Palette Index (cgbmode)
+        u08i & reg_cgb_bcpd;    //Background Palette Data
+        u08i & reg_cgb_vbk;     //Select Video Memory (VRAM) Bank, 1 Bit
+        
         u08i colors[4];
         
         void clearAlphaBuffer();
@@ -127,6 +131,17 @@ namespace emu
         Color getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16);
         //Returns the actual color for color data read by readTileAt
         u08i decodeColor(Color value, u08i palette);
+        
+        bool cgb;
+        bool cgb_mode;
+        void cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr);
+        /* Der VRAM des CGB hat zwei Bänke. Diese werden hier intern gemanaged. */
+        void cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr);
+        u08i cgbOnReadVRAM(u16i addr, u08i * ptr);
+        /* VRAM Bank 0 */
+        u08i cgbVRAM0[0x2000];
+        /* VRAM Bank 1 */
+        u08i cgbVRAM1[0x2000];
     public:
         GPU(std::shared_ptr<KMemory> mmu,
             std::shared_ptr<IOProvider> ioprovider,
@@ -136,6 +151,9 @@ namespace emu
         void renderScanline();
         
         void step(cpu::Context & c);
+        
+        bool isCGB();
+        bool inCGBMode();
     };
 }
 

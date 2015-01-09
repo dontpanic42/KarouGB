@@ -97,6 +97,27 @@ namespace emu
         {
             MEMPTR(k) = MEMPTR(i);
         }
+        
+        if(isCGB())
+        {
+            /* Aktiviere Banking in Addr. 0xD000 - 0xDFFF, Schreiben */
+            intercept(0xD000, 0x1000, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteWRAM(addr, value, ptr);
+            });
+            /* Aktiviere Banking in Addr. 0xD000 - 0xDFFF, Lesen */
+            intercept(0xD000, 0x1000, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadWRAM(addr, ptr);
+            });
+            
+            /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Schreiben */
+            intercept(0xF000, 0x0E00, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteShadowWRAM(addr, value, ptr);
+            });
+            /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Lesen */
+            intercept(0xD000, 0x0E00, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadShadowWRAM(addr, ptr);
+            });
+        }
     }
     
     /* Blendet eine externe Speicherbank ein */
@@ -203,5 +224,87 @@ namespace emu
          aufgerufen. Ein einfaches assert reicht hier... */
         assert(MEMPTR(addr));
         return (*MEMPTR(addr));
+    }
+    
+    bool KMemory::isCGB() const
+    {
+        return true;
+    }
+    
+    bool KMemory::inCGBMode() const
+    {
+        return true;
+    }
+    
+    /* Setter für CGB-WRAM-Banks */
+    void KMemory::cgbOnWriteWRAM(u16i addr, u08i value, u08i * ptr)
+    {
+        addr -= 0xD000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            cgbWRAM[(bank == 0)? 1 : bank][addr] = value;
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            cgbWRAM[1][addr] = value;
+        }
+    }
+    
+    /* Setter für CGB-WRAM-Banks im Shadow-Memory */
+    void KMemory::cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr)
+    {
+        addr -= 0xF000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            cgbWRAM[(bank == 0)? 1 : bank][addr] = value;
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            cgbWRAM[1][addr] = value;
+        }
+    }
+    
+    /* Getter für CGB-WRAM-Banks */
+    u08i KMemory::cgbOnReadWRAM(u16i addr, u08i * ptr)
+    {
+        addr -= 0xD000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            return cgbWRAM[(bank == 0)? 1 : bank][addr];
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            return cgbWRAM[1][addr];
+        }
+    }
+    
+    /* Getter für CGB-WRAM-Banks im Shadow-Memory */
+    u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr)
+    {
+        addr -= 0xF000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            return cgbWRAM[(bank == 0)? 1 : bank][addr];
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            return cgbWRAM[1][addr];
+        }
     }
 }

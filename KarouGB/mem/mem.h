@@ -54,6 +54,15 @@ namespace emu
          der jeweils aktivierten Bank (ein bankswitch mit aktiviertem Bootrom
          ist z.B. möglich) */
         bool bootromEnabled;
+        
+        /* WRAM-Banks des CGB */
+        u08i cgbWRAM[0x8][0x1000];
+        /* Setter für CGB-WRAM-Banks */
+        void cgbOnWriteWRAM(u16i addr, u08i value, u08i * ptr);
+        void cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr);
+        /* Getter für CGB-WRAM-Banks */
+        u08i cgbOnReadWRAM(u16i addr, u08i * ptr);
+        u08i cgbOnReadShadowWRAM(u16i addr, u08i * ptr);
     public:
         /* Eine Writermethode, die alle Schreibversuche unterbindet. */
         const static writer_t WRITER_READ_ONLY;
@@ -115,6 +124,9 @@ namespace emu
                 wb(addr + i, buffer[i]);
             }
         }
+        
+        bool isCGB() const;
+        bool inCGBMode() const;
     };
 }
 

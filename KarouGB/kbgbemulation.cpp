@@ -11,10 +11,6 @@
 
 namespace emu
 {
-    const std::string APP_NAME      ("KarouGB");
-    const std::string APP_VERSION   ("v0.0.1");
-    const std::string APP_TITLE     (APP_NAME + " " + APP_VERSION);
-    
     const std::string TAG("kbgb");
     
     KBGBEmulation::KBGBEmulation(const std::string & filename, std::shared_ptr<IOProvider> & ioprovider)
@@ -52,7 +48,7 @@ namespace emu
         lg::warn(TAG, "No sound support: Sound disabled.\n");
 #endif
         
-        ioprovider->init(APP_TITLE);
+        ioprovider->init(std::string());
     }
     
     void KBGBEmulation::onPause()
