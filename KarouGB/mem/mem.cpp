@@ -273,7 +273,7 @@ namespace emu
     }
     
     /* Getter für CGB-WRAM-Banks */
-    u08i KMemory::cgbOnReadWRAM(u16i addr, u08i * ptr)
+    u08i KMemory::cgbOnReadWRAM(u16i addr, u08i * ptr) const
     {
         addr -= 0xD000;
         if(inCGBMode())
@@ -291,7 +291,7 @@ namespace emu
     }
     
     /* Getter für CGB-WRAM-Banks im Shadow-Memory */
-    u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr)
+    u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const
     {
         addr -= 0xF000;
         if(inCGBMode())

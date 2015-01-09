@@ -109,8 +109,10 @@ namespace emu
         u08i & reg_wx;      //Window x + 7
         u08i & reg_wy;      //Window y
         
-        u08i & reg_cgb_bcps;    //Background Palette Index (cgbmode)
+        u08i & reg_cgb_bcps;    //Background Palette Selector (cgbmode)
         u08i & reg_cgb_bcpd;    //Background Palette Data
+        u08i & reg_cgb_ocps;    //Sprite Palette Selector (cgbmode)
+        u08i & reg_cgb_ocpd;    //Sprite Palette Data
         u08i & reg_cgb_vbk;     //Select Video Memory (VRAM) Bank, 1 Bit
         
         u08i colors[4];
@@ -134,14 +136,28 @@ namespace emu
         
         bool cgb;
         bool cgb_mode;
+        /* Schreibe BGP-Data */
         void cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr);
+        /* Lese BGP-Data */
+        u08i cgbOnReadBCPD(u16i addr, u08i * ptr);
+        /* Schreibe SPP-Data */
+        void cgbOnWriteOCPD(u16i addr, u08i value, u08i * ptr);
+        /* Lese SPP-Data */
+        u08i cgbOnReadOCPD(u16i addr, u08i * ptr);
         /* Der VRAM des CGB hat zwei Bänke. Diese werden hier intern gemanaged. */
         void cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr);
-        u08i cgbOnReadVRAM(u16i addr, u08i * ptr);
+        u08i cgbOnReadVRAM(u16i addr, u08i * ptr) const;
         /* VRAM Bank 0 */
         u08i cgbVRAM0[0x2000];
         /* VRAM Bank 1 */
         u08i cgbVRAM1[0x2000];
+        /* Die 8 Hinergrund-Paletten des CGB,
+           jede Palette besteht aus 4 Farben á 2 Bytes */
+        u08i cgbBGPData[0x08][0x04][0x02];
+        /* Die 8 Sprite-Paletten des CGB,
+           jede Palette besteht aus 4 Farben á 2 Bytes */
+        u08i cgbSPPData[0x08][0x04][0x02];
+
     public:
         GPU(std::shared_ptr<KMemory> mmu,
             std::shared_ptr<IOProvider> ioprovider,

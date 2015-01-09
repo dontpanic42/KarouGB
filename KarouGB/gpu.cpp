@@ -21,6 +21,9 @@
 
 #define CGB_BCPS_REG 0xFF68
 #define CGB_BCPD_REG 0xFF69
+#define CGB_OCPS_REG 0xFF6A
+#define CGB_OCPD_REG 0xFF6B
+
 #define CGB_VBK_REG 0xFF4F
 
 namespace emu
@@ -59,6 +62,8 @@ namespace emu
     , cgb_mode(true)
     , reg_cgb_bcpd(mmu->getDMARef(CGB_BCPD_REG))
     , reg_cgb_bcps(mmu->getDMARef(CGB_BCPS_REG))
+    , reg_cgb_ocpd(mmu->getDMARef(CGB_OCPD_REG))
+    , reg_cgb_ocps(mmu->getDMARef(CGB_OCPS_REG))
     , reg_cgb_vbk(mmu->getDMARef(CGB_VBK_REG))
     {
         colors[0] = 255;
@@ -83,17 +88,42 @@ namespace emu
         
         if(isCGB())
         {
+            /* Schreibe ein Byte in eine Background-Color-Palette */
             mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
                 this->cgbOnWriteBCPD(addr, value, ptr);
             });
+            /* Lese ein Byte aus einer Background-Color-Palette */
+            mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadBCPD(addr, ptr);
+            });
             
+            /* Schreibe ein Byte in eine Sprite-Color-Palette */
+            mmu->intercept(CGB_OCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteOCPD(addr, value, ptr);
+            });
+            /* Lese ein Byte aus einer Sprite-Color-Palette */
+            mmu->intercept(CGB_OCPD_REG, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadOCPD(addr, ptr);
+            });
+            
+            /* Schreiben in das VRAM */
             mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i value, u08i * ptr) {
                 this->cgbOnWriteVRAM(addr, value, ptr);
             });
-            
+            /* Lesen aus dem VRAM */
             mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i * ptr) {
                 return this->cgbOnReadVRAM(addr, ptr);
             });
+            
+            /* Initialisiere die Hintergrund-Paletten mit der Farbe weiß (0xFFFF) */
+            for(std::size_t i = 0; i < 8; i++)
+            {
+                for(std::size_t k = 0; k < 4; k++)
+                {
+                    cgbBGPData[i][k][0] = 0xFF;
+                    cgbBGPData[i][k][1] = 0xFF;
+                }
+            }
         }
         
         clearAlphaBuffer();
@@ -655,26 +685,117 @@ namespace emu
         return cgb_mode;
     }
     
+    /* Wenn sich die Emulation im CGB-Modus befindet, schreibt diese
+       methode ein byte in das BGP-Feld. Der index 0x00..0x3F wird durch
+       reg_cgb_bcps festgelegt.
+       Das BGP-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte 
+       (8 * 4 * 2 = 64 = 0x3F). */
     void GPU::cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr)
     {
         if(inCGBMode())
         {
-            /* Wenn autoinkrement aktiviert ist */
+            const u08i index = reg_cgb_bcps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            cgbBGPData[palette][color][index & 0x01] = value;
+            
+            /* Inkrementiere das Index-Register, falls notwendig. */
             if(reg_cgb_bcps & BIT_7)
             {
                 /* inkrementiere den Index im bcps register */
-                u08i index = (reg_cgb_bcps & 0x3F) + 1;
+                u08i inc_index = index + 1;
                 /* Der index sind die Bits 0..5 */
                 reg_cgb_bcps &= ~0x3F;
                 /* Auf register-überlauf checken */
-                reg_cgb_bcps |= (index > 0x3F)? 0 : index;
+                reg_cgb_bcps |= (inc_index > 0x3F)? 0 : inc_index;
             }
         }
         
         (*ptr) = value;
     }
     
+    /* Wenn sich die Emulation im CGB-Modus befindet, ließt diese
+     methode ein byte in das BGP-Feld. Der index 0x00..0x3F wird durch
+     reg_cgb_bcps festgelegt.
+     Das BGP-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte
+     (8 * 4 * 2 = 64 = 0x3F). */
+    u08i GPU::cgbOnReadBCPD(u16i addr, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_bcps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            return cgbBGPData[palette][color][index & 0x01];
+        }
+        
+        return (*ptr);
+    }
     
+    /* Wenn sich die Emulation im CGB-Modus befindet, schreibt diese
+     methode ein byte in das Sprte-Palette-Feld. Der index 0x00..0x3F wird durch
+     reg_cgb_ocps (Sprite Palette Selector) festgelegt.
+     Das Sprte-Palette-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte
+     (8 * 4 * 2 = 64 = 0x3F). */
+    void GPU::cgbOnWriteOCPD(u16i addr, u08i value, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_ocps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            cgbSPPData[palette][color][index & 0x01] = value;
+            
+            /* Inkrementiere das Index-Register, falls notwendig. */
+            if(reg_cgb_ocps & BIT_7)
+            {
+                /* inkrementiere den Index im bcps register */
+                u08i inc_index = index + 1;
+                /* Der index sind die Bits 0..5 */
+                reg_cgb_ocps &= ~0x3F;
+                /* Auf register-überlauf checken */
+                reg_cgb_ocps |= (inc_index > 0x3F)? 0 : inc_index;
+            }
+        }
+        
+        (*ptr) = value;
+    }
+    
+    /* Wenn sich die Emulation im CGB-Modus befindet, ließt diese
+       methode ein byte aus dem Sprte-Palette-Feld. Der index 0x00..0x3F wird durch
+       reg_cgb_ocps (Sprite Palette Selector) festgelegt.
+       Das Sprte-Palette-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte
+       (8 * 4 * 2 = 64 = 0x3F). */
+    u08i GPU::cgbOnReadOCPD(u16i addr, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_ocps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            return cgbSPPData[palette][color][index & 0x01];
+        }
+        
+        return (*ptr);
+    }
+    
+    /* Setter für das CGB-VRAM */
     void GPU::cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr)
     {
         /* Wenn das erste Bit der VBK-Registers 0 ist... */
@@ -690,7 +811,8 @@ namespace emu
         }
     }
 
-    u08i GPU::cgbOnReadVRAM(u16i addr, u08i * ptr)
+    /* Getter für das CGB-VRAM */
+    u08i GPU::cgbOnReadVRAM(u16i addr, u08i * ptr) const
     {
         /* Wenn das erste Bit des VBK registers 0 ist... */
         if(!(reg_cgb_vbk & 0x01))

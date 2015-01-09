@@ -61,8 +61,8 @@ namespace emu
         void cgbOnWriteWRAM(u16i addr, u08i value, u08i * ptr);
         void cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr);
         /* Getter für CGB-WRAM-Banks */
-        u08i cgbOnReadWRAM(u16i addr, u08i * ptr);
-        u08i cgbOnReadShadowWRAM(u16i addr, u08i * ptr);
+        u08i cgbOnReadWRAM(u16i addr, u08i * ptr) const;
+        u08i cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const;
     public:
         /* Eine Writermethode, die alle Schreibversuche unterbindet. */
         const static writer_t WRITER_READ_ONLY;
