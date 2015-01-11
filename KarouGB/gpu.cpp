@@ -183,7 +183,7 @@ namespace emu
     {
         renderBackground();
         
-        renderWindow();
+        //renderWindow();
         
         renderSprites();
         
@@ -641,8 +641,9 @@ namespace emu
     {
         RGBColor result;
         
-        /* Wenn die Farbe 0 ist, übersetze dies nach 'transparent' */
-        if(color == 0)
+        /* Wenn die Palette OBP und die Farbe 0 ist, 
+           übersetze dies nach 'transparent' */
+        if(paletteName == OBP & color == 0)
         {
             result.r = 255;
             result.g = 255;
