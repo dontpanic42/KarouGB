@@ -134,6 +134,20 @@ namespace emu
         //Returns the actual color for color data read by readTileAt
         u08i decodeColor(Color value, u08i palette);
         
+        struct cgb_dma_transfer_t
+        {
+            /* Flag, das angibt, ob ein Transfer aktiv ist */
+            bool isActive;
+            /* Tatsächliche, absolute Quelladdresse */
+            u16i src;
+            /* Tatsächliche, absolute Zieladdresse */
+            u16i dst;
+            /* Gesamtlänge des Transfers in Bytes */
+            u16i length;
+            /* Anzahl der Bytes, die schon übertragen wurden */
+            u16i currentOffset;
+        };
+        
         bool cgb;
         bool cgb_mode;
         /* Schreibe BGP-Data */
@@ -147,16 +161,26 @@ namespace emu
         /* Der VRAM des CGB hat zwei Bänke. Diese werden hier intern gemanaged. */
         void cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr);
         u08i cgbOnReadVRAM(u16i addr, u08i * ptr) const;
-        /* VRAM Bank 0 */
-        u08i cgbVRAM0[0x2000];
-        /* VRAM Bank 1 */
-        u08i cgbVRAM1[0x2000];
+        /* VRAM Bank 0 - 1 */
+        u08i cgbVRAM[0x02][0x2000];
         /* Die 8 Hinergrund-Paletten des CGB,
            jede Palette besteht aus 4 Farben á 2 Bytes */
         u08i cgbBGPData[0x08][0x04][0x02];
         /* Die 8 Sprite-Paletten des CGB,
            jede Palette besteht aus 4 Farben á 2 Bytes */
         u08i cgbSPPData[0x08][0x04][0x02];
+        
+        /* Informationen über den aktuellen H-Blank DMA Transfer,
+           falls einer aktiv ist (cgbCurrentTransfer.isActive = true) */
+        cgb_dma_transfer_t cgbCurrentTransfer;
+        /* Setter für das DMA-Transfer Kontrollregister */
+        void cgbOnWriteDMACTRL(u16i addr, u08i value, u08i * ptr);
+        /* Getter für das DMA-Transfer Kontrollregister */
+        u08i cgbOnReadDMACTRL(u16i addr, u08i * ptr);
+        /* Wird in der H-Blank Periode mit LY = 0..143 ausgeführt
+           und führt einen Teil des H-Blank DMA Transfers durch,
+           falls einer aktiv ist. */
+        void cgbDoTransfer();
 
     public:
         GPU(std::shared_ptr<KMemory> mmu,
@@ -168,8 +192,8 @@ namespace emu
         
         void step(cpu::Context & c);
         
-        bool isCGB();
-        bool inCGBMode();
+        bool isCGB() const;
+        bool inCGBMode() const;
     };
 }
 

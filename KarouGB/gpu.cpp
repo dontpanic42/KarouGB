@@ -8,6 +8,7 @@
 
 #include "gpu.h"
 #include <sstream>
+#include <algorithm>
 
 #define GPU_TILE_SIZE 8
 #define GPU_NUM_TILES 384
@@ -23,6 +24,12 @@
 #define CGB_BCPD_REG 0xFF69
 #define CGB_OCPS_REG 0xFF6A
 #define CGB_OCPD_REG 0xFF6B
+
+#define CGB_DMA_SRCH 0xFF51
+#define CGB_DMA_SRCL 0xFF52
+#define CGB_DMA_DSTH 0xFF53
+#define CGB_DMA_DSTL 0xFF54
+#define CGB_DMA_CTRL 0xFF55
 
 #define CGB_VBK_REG 0xFF4F
 
@@ -113,6 +120,16 @@ namespace emu
             /* Lesen aus dem VRAM */
             mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i * ptr) {
                 return this->cgbOnReadVRAM(addr, ptr);
+            });
+            
+            /* Schreiben in das CGB-DMA Kontrollregister */
+            mmu->intercept(CGB_DMA_CTRL, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteDMACTRL(addr, value, ptr);
+            });
+            
+            /* Lesen aus dem CGB-DMA Kontrollregister */
+            mmu->intercept(CGB_DMA_CTRL, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadDMACTRL(addr, ptr);
             });
             
             /* Initialisiere die Hintergrund-Paletten mit der Farbe weiß (0xFFFF) */
@@ -604,6 +621,18 @@ namespace emu
                     gpu_vblank_line_counter = gpu_modeclock;
                     gpu_last_mode = gpu_mode;
                     
+                    /* CGB H-Blank DMA-Transfers aktualisieren, wenn
+                       CGB und in CGB-Mode */
+                    if(isCGB() && inCGBMode())
+                    {
+                        /* Transfers finden nur Statt, wenn LY <= 143 ist */
+                        if(gpu_line <= 143)
+                        {
+                            /* Aktualisiere laufende Transfers */
+                            cgbDoTransfer();
+                        }
+                    }
+                    
                     /* Erzeuge den VBLANK-Interrupt */
                     cpu->requestInterrupt(IR_VBLANK);
                     
@@ -675,12 +704,12 @@ namespace emu
         }
     }
     
-    bool GPU::isCGB()
+    bool GPU::isCGB() const
     {
         return cgb;
     }
     
-    bool GPU::inCGBMode()
+    bool GPU::inCGBMode() const
     {
         return cgb_mode;
     }
@@ -798,33 +827,126 @@ namespace emu
     /* Setter für das CGB-VRAM */
     void GPU::cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr)
     {
-        /* Wenn das erste Bit der VBK-Registers 0 ist... */
-        if(!(reg_cgb_vbk & 0x01))
+        if(inCGBMode())
         {
             /* schreibe in VRAM-Bank 0 */
-            cgbVRAM0[addr - 0x8000] = value;
+            cgbVRAM[reg_cgb_vbk & 0x01][addr - 0x8000] = value;
         }
         else
         {
-            /* sonst schreibe in VRAM-Bank 1 */
-            cgbVRAM1[addr - 0x8000] = value;
+            cgbVRAM[0][addr - 0x8000] = value;
         }
     }
 
     /* Getter für das CGB-VRAM */
     u08i GPU::cgbOnReadVRAM(u16i addr, u08i * ptr) const
     {
-        /* Wenn das erste Bit des VBK registers 0 ist... */
-        if(!(reg_cgb_vbk & 0x01))
+        if(inCGBMode())
         {
-            /* gib den Wert aus der VRAM-Bank 0 zurück */
-            return cgbVRAM0[addr - 0x8000];
+            /* gib den Wert aus der VRAM-Bank 0 oder 1 zurück */
+            return cgbVRAM[reg_cgb_vbk & 0x01][addr - 0x8000];
         }
         else
         {
-            /* sonst gib den Wert aus der VRAM-Bank 1 zurück */
-            return cgbVRAM1[addr - 0x8000];
+            return cgbVRAM[0][addr - 0x8000];
         }
     }
+    
+    void GPU::cgbOnWriteDMACTRL(u16i addr, u08i value, u08i * ptr)
+    {
 
+        if(cgbCurrentTransfer.isActive)
+        {
+            /* Wenn ein H-Blank Transfer aktiv ist, und BIT_7 = 0
+               geschrieben wird, breche den H-Blank Transfer ab. */
+            if(!(value & BIT_7))
+            {
+                cgbCurrentTransfer.isActive = false;
+            }
+            
+            /* Wenn der H-Blank Transfer aktiv ist, und BIT_7 = 1
+               geschrieben wird, ignoriere den Schreibvorgang */
+        }
+        else
+        {
+            /* Die unteren 4 Bit der SRC-Arddesse werden irgnoriert... */
+            u16i src =  static_cast<u16i>(mmu->rb(CGB_DMA_SRCH)) << 8;
+            src |=      static_cast<u16i>(mmu->rb(CGB_DMA_SRCL) & ~0x0F);
+            
+            /* Die unteren 4 Bit der Adresse werden ignoriert und die
+             Die oberen 3 Bit der Adresse werden ignoriert.
+             Größte darzustellende Zahl: 0x1FF0, erffektiver Ziel-
+             Addressbereich: 0x8000 - 0x9FF0 */
+            u16i dst =  static_cast<u16i>(mmu->rb(CGB_DMA_DSTH) & ~0xE0) << 8;
+            dst |=      static_cast<u16i>(mmu->rb(CGB_DMA_DSTL) & ~0x0F);
+            dst +=      0x8000;
+            
+            /* Die Transfer-Größe sind die ersten 7 Bit des Kontroll-
+             registers (x). Die tatsächliche Größe ergibt sich als
+             len = (x + 0x01) * 0x10
+             D.h. die Größen 0x01...0x800 sind möglich. */
+            u16i len =  (static_cast<u16i>(value & 0x7F) + 0x01) * 0x10;
+            
+            /* Wenn Bit 7 0 ist und kein H-Blank DMA-Transfer statt
+             findet, starte den synchronen General Purpose DMA-
+             Transfer. */
+            if((value & BIT_7))
+            {
+                /* Kopiere src...(src+len) nach  dst...(dst+len) */
+                for(std::size_t i = 0; i < len; i++)
+                {
+                    mmu->wb(dst + i, mmu->rb(src + i));
+                }
+            }
+            /* Wenn Bit 7 1 ist und kein H-Blank DMA-Transfer statt
+               findet, starte den H-Blank DMA-Transfer */
+            else
+            {
+                cgbCurrentTransfer.isActive = true;
+                cgbCurrentTransfer.src = src;
+                cgbCurrentTransfer.dst = dst;
+                cgbCurrentTransfer.length = len;
+                cgbCurrentTransfer.currentOffset = 0;
+                
+                /* Der Rest des Transfers wird von cgbDoTransfer() abgewickelt */
+            }
+        }
+    }
+    
+    u08i GPU::cgbOnReadDMACTRL(u16i addr, u08i * ptr)
+    {
+        /* Ich hab keine Ahnung, was hier die Default-Werte sind... */
+        u08i shrtlen = (cgbCurrentTransfer.length == 0)? 0 : (cgbCurrentTransfer.length / 0x10) - 1;
+        return shrtlen | BIT_7;
+    }
+    
+    /* Wird in der H-Blank Periode mit LY = 0..143 ausgeführt und führt einen Teil 
+       des H-Blank DMA Transfers durch, falls einer aktiv ist. 
+       -> Wird von der GPU.tick() Methode ausgeführt! */
+    void GPU::cgbDoTransfer()
+    {
+        if(cgbCurrentTransfer.isActive)
+        {
+            cgb_dma_transfer_t & t(cgbCurrentTransfer);
+            
+            /* Kopiere maximal 0x10 bytes, oder bis zum ende des Transfers */
+            const u16i max = (t.length < t.currentOffset + 0x10)? t.length : t.currentOffset + 0x10;
+            
+            /* Kopiere Daten von src nach dst */
+            for(u16i i = t.currentOffset; i < max; i++)
+            {
+                mmu->wb(t.dst + i, mmu->rb(t.src + i));
+            }
+            
+            /* Das Offset zeigt jetzt auf das nächste zu kopierende Byte */
+            t.currentOffset = max;
+            
+            /* Wenn das offset >= der der maximalen Länge ist, ist der 
+               Transfer abgeschlossen. */
+            if(t.currentOffset >= t.length)
+            {
+                t.isActive = false;
+            }
+        }
+    }
 }
