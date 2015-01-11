@@ -37,7 +37,9 @@ namespace emu
 {
     GPU::GPU(std::shared_ptr<KMemory> mmu,
              std::shared_ptr<IOProvider> ioprovider,
-             std::shared_ptr<cpu::Z80> cpu)
+             std::shared_ptr<cpu::Z80> cpu,
+             bool cgb,
+             bool cgb_mode)
     //: modeclock(0)
     //, mode(2)
     : line(0)
@@ -65,8 +67,8 @@ namespace emu
     /* Neu Ende */
     
     /* CGB */
-    , cgb(true)
-    , cgb_mode(true)
+    , cgb(cgb)
+    , cgb_mode(cgb_mode)
     , reg_cgb_bcpd(mmu->getDMARef(CGB_BCPD_REG))
     , reg_cgb_bcps(mmu->getDMARef(CGB_BCPS_REG))
     , reg_cgb_ocpd(mmu->getDMARef(CGB_OCPD_REG))
@@ -77,6 +79,8 @@ namespace emu
         colors[1] = 192;
         colors[2] =  96;
         colors[3] =   0;
+        
+        
         
         //Default palette: 0=White, 3=black
         reg_bgp = 0xE4;
@@ -141,6 +145,17 @@ namespace emu
                     cgbBGPData[i][k][1] = 0xFF;
                 }
             }
+            
+            /* Initialisiere die Farbtabellen (Mappen einer CGB-Farbe auf den RGB-Raum)
+               TODO: Irgend eine Interpolationsmethode, die originalgetreuer ist verwenden */
+            for(std::size_t i = 0; i < 0x20; i++)
+            {
+                float f = (i == 0)? 0.f : static_cast<float>(i) / 32.f;
+                u08i c = static_cast<u08i>(f * 255.f);
+                cgbColorTable.r[i] = c;
+                cgbColorTable.g[i] = c;
+                cgbColorTable.b[i] = c;
+            }
         }
         
         clearAlphaBuffer();
@@ -198,8 +213,9 @@ namespace emu
         u08i y = line;
         u08i mapX, mapY;
         u16i mapLinear;
-        u08i tileX, tileY, tileIndex, rgbvalue;
+        u08i tileX, tileY, tileIndex, rgbvalue, cgbTileAttrb = 0;
         Color pixel;
+        RGBColor cgb_rgb_color;
         
         /* Finde den BG-Map Index für die aktuelle y-position. */
         /* Das offset ergibt sich aus der y-Position + dem y-Scroll-offset. */
@@ -222,26 +238,46 @@ namespace emu
             /* Die BG-Map sind "Zeilen" von 32 Bytes hintereinander, d.h. das Lineare
              Speicher-Offset ergibt sich als (y-index * 32) + x-index. */
             mapLinear = (mapY * 32) + mapX;
-            /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
-            tileIndex = mmu->rb(bgmap + mapLinear);
+            
+            if(isCGB() && inCGBMode())
+            {
+                /* Im CGB-Modus liegt die BG-Map immer in VRAM Bank 0 (?) */
+                tileIndex =     cgbVRAM[0][bgmap + mapLinear - 0x8000];
+                /* An der selben Adresse in Bank 1 befindet sich jeweils 
+                   ein Attributsbyte */
+                cgbTileAttrb =  cgbVRAM[1][bgmap + mapLinear - 0x8000];
+            }
+            else
+            {
+                /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
+                tileIndex = mmu->rb(bgmap + mapLinear);
+            }
             
             /* x-Position inherhalb der 8-Pixel-Tile sind die letzten 3 bit */
             tileX = reg_scx + x;
             tileX &= 0x07;
             
             /* Hole die Pixel-Daten aus der entsprechenden Tile */
-            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY);
+            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY, cgbTileAttrb);
             
             /* Schreibe in den alphabuffer, damit nachher die Sprite-Prioritäten
              bestimmt werden können
              (pixel = 1..3=true; 0=false) */
             alphabuffer[(line * GPU_SCREENWIDTH) + x] = pixel;
             
-            /* Übersetze die Codierte Farbe in RGB */
-            rgbvalue = decodeColor(pixel, reg_bgp);
-            /* Zeichne den Pixel. */
-            //std::printf("Trying to draw %u, %u\n", x, line);
-            ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            if(isCGB() && inCGBMode())
+            {
+                /* Die Palette is in Bit 0..2 des Tile-Attributs codiert */
+                cgb_rgb_color = cgbDecodeColor(BGP, pixel, cgbTileAttrb & 0x07);
+                ioprovider->draw(x, line, cgb_rgb_color.r, cgb_rgb_color.g, cgb_rgb_color.b);
+            }
+            else
+            {
+                /* Übersetze die Codierte Farbe in RGB */
+                rgbvalue = decodeColor(pixel, reg_bgp);
+                /* Zeichne den Pixel. */
+                ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            }
         }
         
     }
@@ -249,12 +285,32 @@ namespace emu
     void GPU::renderWindow()
     {
         /* Wenn das Window-Rendering NICHT aktiviert ist */
-        if(!(reg_lcdc & BIT_5))
+        if(isCGB())
         {
-            /* ... mache garnichts. */
-            return;
+            if(inCGBMode())
+            {
+                /* TODO: Implementieren */
+            }
+            else
+            {
+                /* CGB im nicht-CGB-modus: Das Window wird nur angezeigt,
+                   wenn SOWOHL Bit 0 als auch Bit 5 gesetzt sind! */
+                if(!(reg_lcdc & BIT_0) || !(reg_lcdc & BIT_5))
+                {
+                    return;
+                }
+            }
         }
-        
+        else
+        {
+            /* Bei klassischen Gameboy ist Bit 5 ausschlaggebend dafür,
+               ob das Window angezeigt wird. */
+            if(!(reg_lcdc & BIT_5))
+            {
+                /* ... mache garnichts. */
+                return;
+            }
+        }
         
         /* Die Window-Map sind 32*32 Bytes. Jedes Byte zeigt auf eine Tile
          in der Tile-Data-Sektion, das ergibt einen virtuellen Bildschirm von
@@ -281,9 +337,9 @@ namespace emu
         u08i wx, wy;
         u08i mapX, mapY;
         u16i mapLinear;
-        u08i tileX, tileY, tileIndex, rgbvalue;
+        u08i tileX, tileY, tileIndex, rgbvalue, cgbTileAttrb = 0;
         Color pixel;
-        
+        RGBColor cgb_rgb_color;
         
         /* Die y-Position des gesuchten Fenster Pixels */
         wy = y - y0;
@@ -322,23 +378,44 @@ namespace emu
             /* Die Window-Map sind "Zeilen" von 32 Bytes hintereinander, d.h. das Lineare
              Speicher-Offset ergibt sich als (y-index * 32) + x-index. */
             mapLinear = (mapY * 32) + mapX;
-            /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
-            tileIndex = mmu->rb(bgmap + mapLinear);
+            
+            if(isCGB() && inCGBMode())
+            {
+                /* Im CGB-Modus liegt die BG-Map immer in VRAM Bank 0 (?) */
+                tileIndex =     cgbVRAM[0][bgmap + mapLinear - 0x8000];
+                /* An der selben Adresse in Bank 1 befindet sich jeweils
+                 ein Attributsbyte */
+                cgbTileAttrb =  cgbVRAM[1][bgmap + mapLinear - 0x8000];
+            }
+            else
+            {
+                /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
+                tileIndex = mmu->rb(bgmap + mapLinear);
+            }
             
             /* x-Position inherhalb der 8-Pixel-Tile sind die letzten 3 bit */
             tileX = wx;
             tileX &= 0x07;
             
             /* Hole die Pixel-Daten aus der entsprechenden Tile */
-            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY);
+            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY, cgbTileAttrb);
             
             /* Das Fenster ist _nie_ transparent */
             alphabuffer[(line * GPU_SCREENWIDTH) + x] = true;
             
-            /* Übersetze die Codierte Farbe in RGB */
-            rgbvalue = decodeColor(pixel, reg_bgp);
-            /* Zeichne den Pixel. */
-            ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            if(isCGB() && inCGBMode())
+            {
+                /* Die Palette is in Bit 0..2 des Tile-Attributs codiert */
+                cgb_rgb_color = cgbDecodeColor(BGP, pixel, cgbTileAttrb & 0x07);
+                ioprovider->draw(x, line, cgb_rgb_color.r, cgb_rgb_color.g, cgb_rgb_color.b);
+            }
+            else
+            {
+                /* Übersetze die Codierte Farbe in RGB */
+                rgbvalue = decodeColor(pixel, reg_bgp);
+                /* Zeichne den Pixel. */
+                ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            }
         }
     }
     
@@ -387,6 +464,7 @@ namespace emu
         u08i tile_y;
         Color color;
         u08i rgbvalue;
+        RGBColor cgb_rgb_color;
         
         while(queue.size())
         {
@@ -407,14 +485,36 @@ namespace emu
                     continue;
                 }
                 
-                /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
-                 Wenn die pixelposition nicht transparenten bg oder transparentes
-                 Window enthält*/
-                if((current_sprite.attr & BIT_7) &&
-                   (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+                /* Wenn der CGBMode aktiviert ist, beachte das Master-Priority-Bit im
+                   LCDC-Register (Bit 0) */
+                if(isCGB() && inCGBMode())
                 {
-                    /* Zeichne nichts */
-                    continue;
+                    /* Wenn Bit 0 nicht gesetzt ist, haben sprites _immer_ priorität.
+                       Wenn es gestetzt ist, nutze die üblichen Mechanismen. */
+                    if(reg_lcdc & BIT_0)
+                    {
+                        /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
+                         Wenn die pixelposition nicht transparenten bg oder transparentes
+                         Window enthält*/
+                        if((current_sprite.attr & BIT_7) &&
+                           (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+                        {
+                            /* Zeichne nichts */
+                            continue;
+                        }
+                    }
+                }
+                else
+                {
+                    /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
+                     Wenn die pixelposition nicht transparenten bg oder transparentes
+                     Window enthält*/
+                    if((current_sprite.attr & BIT_7) &&
+                       (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+                    {
+                        /* Zeichne nichts */
+                        continue;
+                    }
                 }
                 
                 color = getSPTilePixel(current_sprite, tile_x, tile_y, mode8x16);
@@ -426,8 +526,18 @@ namespace emu
                     continue;
                 }
                 
-                rgbvalue = decodeColor(color, (current_sprite.attr & BIT_4)? reg_obp1 : reg_obp0);
-                ioprovider->draw(sx + tile_x, line, rgbvalue, rgbvalue, rgbvalue);
+                if(isCGB() && inCGBMode())
+                {
+                    /* Schaue die Farbe in der OBP-Tabelle (u08i cgbSPPData[0x08][0x04][0x02])
+                       nach (Bit 0..2 im Sprite Attribut) */
+                    cgb_rgb_color = cgbDecodeColor(OBP, color, current_sprite.attr & 0x07);
+                    ioprovider->draw(sx + tile_x, line, cgb_rgb_color.r, cgb_rgb_color.g, cgb_rgb_color.b);
+                }
+                else
+                {
+                    rgbvalue = decodeColor(color, (current_sprite.attr & BIT_4)? reg_obp1 : reg_obp0);
+                    ioprovider->draw(sx + tile_x, line, rgbvalue, rgbvalue, rgbvalue);
+                }
             } // for
             queue.pop();
         } // while
@@ -445,16 +555,31 @@ namespace emu
         /* Wenn der 8x16-Sprite-mode aktiviert ist, ignoriere
          das erste bit... */
         u08i tile = (mode8x16)? sprite.tile & ~BIT_0 : sprite.tile;
-        u16i addr = 0x8000 + (tile * 16) + (y * 2);
+        u16i addr = (tile * 16) + (y * 2);
+        
+        u08i byte0, byte1;
+        if(isCGB() && inCGBMode())
+        {
+            /* Wenn der CGB-Mode aktiv ist, berücksichtige die Bank-
+               Spezifikation im Sprite-Attribut (Bit 3) */
+            byte0 = cgbVRAM[(sprite.attr & BIT_3) >> 3][addr];
+            byte1 = cgbVRAM[(sprite.attr & BIT_3) >> 3][addr + 1];
+        }
+        else
+        {
+            /* Wenn nicht im CGB-Mode, nehme was im Speicher steht. */
+            byte0 = mmu->rb(0x8000 + addr);
+            byte1 = mmu->rb(0x8000 + addr + 1);
+        }
         
         u08i value;
-        value = (mmu->rb(addr)     & (BIT_0 << (7-x)))? 1 : 0;
-        value+= (mmu->rb(addr + 1) & (BIT_0 << (7-x)))? 2 : 0;
+        value = (byte0 & (BIT_0 << (7-x)))? 1 : 0;
+        value+= (byte1 & (BIT_0 << (7-x)))? 2 : 0;
         
         return static_cast<Color>(value);
     }
     
-    GPU::Color GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y)
+    GPU::Color GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y, u08i cgbTileAttribute)
     {
         //Wenn das tileset 0x8800 gewählt ist, muss der index als
         //signed char interpretiert werden. index = 0 entspricht dann
@@ -473,9 +598,26 @@ namespace emu
         
         addr += y * 2;
         
+        u08i byte0, byte1;
+        if(isCGB() && inCGBMode())
+        {
+            /* TODO: x/y flip */
+            /* TODO: BG-Priority */
+            /* Wenn der CGB-Mode aktiv ist, berücksichtige die Bank-
+               Spezifikation im Tile-Attribut (Bit 3) */
+            byte0 = cgbVRAM[(cgbTileAttribute & 0x03) >> 3][addr - 0x8000];
+            byte1 = cgbVRAM[(cgbTileAttribute & 0x03) >> 3][addr + 1 - 0x8000];
+        }
+        else
+        {
+            /* Wenn nicht im CGB-Mode, nehme was im Speicher steht. */
+            byte0 = mmu->rb(addr);
+            byte1 = mmu->rb(addr + 1);
+        }
+        
         u08i value;
-        value = (mmu->rb(addr)     & (BIT_0 << (7-x)))? 1 : 0;
-        value+= (mmu->rb(addr + 1) & (BIT_0 << (7-x)))? 2 : 0;
+        value = (byte0 & (BIT_0 << (7-x)))? 1 : 0;
+        value+= (byte1 & (BIT_0 << (7-x)))? 2 : 0;
         
         return static_cast<Color>(value);
     }
@@ -493,6 +635,44 @@ namespace emu
         }
         
         return colors[shade];
+    }
+    
+    GPU::RGBColor GPU::cgbDecodeColor(cgb_palette paletteName, Color color, u08i palette)
+    {
+        RGBColor result;
+        
+        /* Wenn die Farbe 0 ist, übersetze dies nach 'transparent' */
+        if(color == 0)
+        {
+            result.r = 255;
+            result.g = 255;
+            result.b = 255;
+            
+            return result;
+        }
+        else
+        {
+            u16i pavalue;
+            palette &= 0x07;
+            
+            if(paletteName == OBP)
+            {
+                pavalue  = cgbSPPData[palette][color][1] << 8;
+                pavalue |= cgbSPPData[palette][color][0];
+            }
+            else
+            {
+                pavalue  = cgbBGPData[palette][color][1] << 8;
+                pavalue |= cgbBGPData[palette][color][0];
+            }
+            
+            /* Die Farben sind jeweils mit 5 bit als r-g-b in pavalue codiert. */
+            result.r = cgbColorTable.r[(pavalue)       & 0x1F];
+            result.g = cgbColorTable.g[(pavalue >> 5)  & 0x1F];
+            result.b = cgbColorTable.b[(pavalue >> 10) & 0x1F];
+            
+            return result;
+        }
     }
     
     void GPU::render()

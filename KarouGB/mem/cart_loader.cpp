@@ -3,6 +3,7 @@
 #include "cart_mbc1.h"
 #include "cart_mbc3.h"
 #include <fstream>
+#include <cassert>
 
 namespace emu
 {
@@ -16,11 +17,21 @@ namespace emu
     
     KCartridgeLoader::KCartridgeLoader(const std::string & cartname)
     : cartname(cartname)
-    , memory(new memory_t())
+//    , memory(new memory_t())
     , cart(new cart_t())
     , mbc(nullptr)
     {
+        
         cart->load(cartname);
+        assert(cart != nullptr);
+        
+        bool cgb = (cart->header().cgb_flag == 0x80) ||
+                   (cart->header().cgb_flag == 0xC0);
+        
+        lg::info(TAG, "CGB/CGBMODE Enabled: %s\n", (cgb)? "Yes." : "No.");
+        
+        memory = std::make_shared<memory_t>(cgb, cgb);
+        
         setupMBC();
     }
     

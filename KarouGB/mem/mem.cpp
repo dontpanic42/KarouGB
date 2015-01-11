@@ -68,8 +68,10 @@ namespace emu
     /* Anzahl sichtbarer Bänke */
     const std::size_t KMemory::BANK_COUNT = MEM_NUM_BANKS;
     
-    KMemory::KMemory()
+    KMemory::KMemory(bool cgb, bool cgb_mode)
     : bootromEnabled(true)
+    , cgb(cgb)
+    , cgb_mode(cgb_mode)
     {
         /* Deaktiviere die Schreib-Intercepts */
         std::fill_n(std::begin(writer), KMemory::MEMORY_SIZE, WRITER_NONE);
@@ -110,11 +112,11 @@ namespace emu
             });
             
             /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Schreiben */
-            intercept(0xF000, 0x0E00, [this](u16i addr, u08i value, u08i * ptr) {
+            intercept(0xE000, 0x0E00, [this](u16i addr, u08i value, u08i * ptr) {
                 this->cgbOnWriteShadowWRAM(addr, value, ptr);
             });
             /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Lesen */
-            intercept(0xD000, 0x0E00, [this](u16i addr, u08i * ptr) {
+            intercept(0xE000, 0x0E00, [this](u16i addr, u08i * ptr) {
                 return this->cgbOnReadShadowWRAM(addr, ptr);
             });
         }
@@ -228,12 +230,12 @@ namespace emu
     
     bool KMemory::isCGB() const
     {
-        return true;
+        return cgb;
     }
     
     bool KMemory::inCGBMode() const
     {
-        return true;
+        return cgb_mode;
     }
     
     /* Setter für CGB-WRAM-Banks */
@@ -257,7 +259,7 @@ namespace emu
     /* Setter für CGB-WRAM-Banks im Shadow-Memory */
     void KMemory::cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr)
     {
-        addr -= 0xF000;
+        addr -= 0xE000;
         if(inCGBMode())
         {
             /* Bankno = Bits 0..2 des Registes 0xFF70 */
@@ -293,7 +295,7 @@ namespace emu
     /* Getter für CGB-WRAM-Banks im Shadow-Memory */
     u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const
     {
-        addr -= 0xF000;
+        addr -= 0xE000;
         if(inCGBMode())
         {
             /* Bankno = Bits 0..2 des Registes 0xFF70 */

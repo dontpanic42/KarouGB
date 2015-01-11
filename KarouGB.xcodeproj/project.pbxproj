@@ -15,6 +15,7 @@
 		65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
 		6528F5B41A569A4000423B54 /* kemulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6528F5B21A569A4000423B54 /* kemulation.cpp */; };
 		6528F5BD1A56AC9F00423B54 /* kbgbemulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */; };
+		6534338F1A6284B900C49CA8 /* pokemon-crystal.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */; };
 		65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
@@ -80,6 +81,7 @@
 			dstPath = roms;
 			dstSubfolderSpec = 16;
 			files = (
+				6534338F1A6284B900C49CA8 /* pokemon-crystal.gb in Copy Cartridges */,
 				65D9F1E11A5957D2007905ED /* cpu_instrs.gb in Copy Cartridges */,
 				65D9F1E21A5957D2007905ED /* DonkeyKongLand.gb in Copy Cartridges */,
 				65D9F1E31A5957D2007905ED /* LegendOfZelda.gb in Copy Cartridges */,
@@ -147,6 +149,7 @@
 		6528F5B31A569A4000423B54 /* kemulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kemulation.h; sourceTree = "<group>"; };
 		6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kbgbemulation.cpp; sourceTree = "<group>"; };
 		6528F5BC1A56AC9F00423B54 /* kbgbemulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kbgbemulation.h; sourceTree = "<group>"; };
+		6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pokemon-crystal.gb"; sourceTree = "<group>"; };
 		65381CAC1A5154D0004433EA /* cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cartridge.cpp; sourceTree = "<group>"; };
 		65381CAD1A5154D0004433EA /* cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cartridge.h; sourceTree = "<group>"; };
 		65381CB01A515734004433EA /* cart_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_loader.h; sourceTree = "<group>"; };
@@ -416,6 +419,7 @@
 		65D9F1DA1A5957C0007905ED /* cartridges */ = {
 			isa = PBXGroup;
 			children = (
+				6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */,
 				65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */,
 				65D9F1DC1A5957C0007905ED /* DonkeyKongLand.gb */,
 				65D9F1DD1A5957C0007905ED /* LegendOfZelda.gb */,

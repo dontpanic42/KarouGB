@@ -36,7 +36,7 @@ namespace emu
         cpu =       std::make_shared<cpu::Z80>(mmu);
         
         c =         std::move(std::unique_ptr<cpu::Context>(new cpu::Context));
-        gpu =       std::move(std::unique_ptr<GPU>(new GPU(mmu, ioprovider, cpu)));
+        gpu =       std::move(std::unique_ptr<GPU>(new GPU(mmu, ioprovider, cpu, mmu->isCGB(), mmu->inCGBMode())));
         buttons =   std::move(std::unique_ptr<Buttons>(new Buttons(mmu, ioprovider, cpu)));
         timer =     std::move(std::unique_ptr<Timer>(new Timer(mmu, cpu)));
         dbg =       std::move(std::unique_ptr<Debugger>(new Debugger(cpu, mmu, *c)));

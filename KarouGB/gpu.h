@@ -69,6 +69,13 @@ namespace emu
             u08i attr;
         } __attribute__((packed));
         
+        struct RGBColor
+        {
+            u08i r;
+            u08i g;
+            u08i b;
+        };
+        
         std::shared_ptr<IOProvider> ioprovider;
         std::shared_ptr<KMemory>    mmu;
         std::shared_ptr<cpu::Z80> cpu;
@@ -128,11 +135,18 @@ namespace emu
         void renderWindow();
         
         //Read color data for a tile
-        Color getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y);
+        Color getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y, u08i cgbTileAttrb);
         //    u08i getSPTilePixel(const OAMData & sprite, u08i x, u08i y);
         Color getSPTilePixel(const OAMData & sprite, u08i x, u08i y, bool mode8x16);
         //Returns the actual color for color data read by readTileAt
         u08i decodeColor(Color value, u08i palette);
+        
+        /* CGB Sachen */
+        enum cgb_palette
+        {
+            OBP,
+            BGP
+        };
         
         struct cgb_dma_transfer_t
         {
@@ -148,8 +162,15 @@ namespace emu
             u16i currentOffset;
         };
         
-        bool cgb;
-        bool cgb_mode;
+        struct cgb_color_table_t
+        {
+            u08i r[0x20];
+            u08i g[0x20];
+            u08i b[0x20];
+        };
+        
+        const bool cgb;
+        const bool cgb_mode;
         /* Schreibe BGP-Data */
         void cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr);
         /* Lese BGP-Data */
@@ -181,11 +202,18 @@ namespace emu
            und führt einen Teil des H-Blank DMA Transfers durch,
            falls einer aktiv ist. */
         void cgbDoTransfer();
-
+        
+        RGBColor cgbDecodeColor(cgb_palette paletteName, Color color, u08i palette);
+        
+        cgb_color_table_t cgbColorTable;
+        
+        /* CGB-Sachen ende */
     public:
         GPU(std::shared_ptr<KMemory> mmu,
             std::shared_ptr<IOProvider> ioprovider,
-            std::shared_ptr<cpu::Z80> cpu);
+            std::shared_ptr<cpu::Z80> cpu,
+            bool cgb,
+            bool cgb_mode);
         
         u08i line;
         void renderScanline();
