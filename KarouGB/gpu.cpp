@@ -97,7 +97,7 @@ namespace emu
             this->onResetLy(addr, value, ptr);
         });
         
-        if(isCGB())
+        if(isCGB() && inCGBMode())
         {
             /* Schreibe ein Byte in eine Background-Color-Palette */
             mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
@@ -183,7 +183,7 @@ namespace emu
     {
         renderBackground();
         
-        //renderWindow();
+        renderWindow();
         
         renderSprites();
         
@@ -643,7 +643,8 @@ namespace emu
         
         /* Wenn die Palette OBP und die Farbe 0 ist, 
            übersetze dies nach 'transparent' */
-        if(paletteName == OBP & color == 0)
+        if(paletteName == OBP &&
+           color == 0)
         {
             result.r = 255;
             result.g = 255;
@@ -771,6 +772,18 @@ namespace emu
                 /* Wenn HBLANK beendet ist... */
                 if(gpu_modeclock >= GPU_TIMING_HBLANK)
                 {
+                    /* CGB H-Blank DMA-Transfers aktualisieren, wenn
+                     CGB und in CGB-Mode */
+                    if(isCGB() && inCGBMode())
+                    {
+                        /* Transfers finden nur Statt, wenn LY <= 143 ist */
+                        if(gpu_line <= 143)
+                        {
+                            /* Aktualisiere laufende Transfers */
+                            cgbDoTransfer();
+                        }
+                    }
+                    
                     /* Inkrementiere die Zeile */
                     gpu_line++;
                     gpu_modeclock -= GPU_TIMING_HBLANK;
@@ -801,18 +814,6 @@ namespace emu
                     
                     gpu_vblank_line_counter = gpu_modeclock;
                     gpu_last_mode = gpu_mode;
-                    
-                    /* CGB H-Blank DMA-Transfers aktualisieren, wenn
-                       CGB und in CGB-Mode */
-                    if(isCGB() && inCGBMode())
-                    {
-                        /* Transfers finden nur Statt, wenn LY <= 143 ist */
-                        if(gpu_line <= 143)
-                        {
-                            /* Aktualisiere laufende Transfers */
-                            cgbDoTransfer();
-                        }
-                    }
                     
                     /* Erzeuge den VBLANK-Interrupt */
                     cpu->requestInterrupt(IR_VBLANK);
@@ -1033,6 +1034,7 @@ namespace emu
         }
     }
     
+    /* Schreibefunktion für das CGB DMA-Kontrollregister */
     void GPU::cgbOnWriteDMACTRL(u16i addr, u08i value, u08i * ptr)
     {
 
@@ -1094,11 +1096,27 @@ namespace emu
         }
     }
     
+    /* Lesefunktion für das CGB DMA-Kontrollregister */
     u08i GPU::cgbOnReadDMACTRL(u16i addr, u08i * ptr)
     {
-        /* Ich hab keine Ahnung, was hier die Default-Werte sind... */
-        u08i shrtlen = (cgbCurrentTransfer.length == 0)? 0 : (cgbCurrentTransfer.length / 0x10) - 1;
-        return shrtlen | BIT_7;
+        if(cgbCurrentTransfer.isActive)
+        {
+            /* Wenn ein Transfer aktiv ist, enthält dieses Register die anzahl noch zu schreibender bytes
+               in kurzform. Das Bit 7 ist _nicht_ gesetzt (false = Flag, das ein DMA-Transfer stattfindet). */
+            u16i remaining = cgbCurrentTransfer.length - cgbCurrentTransfer.currentOffset;
+            if(remaining != 0)
+            {
+                remaining = (remaining / 0x10) - 1;
+            }
+            
+            return static_cast<u08i>(remaining) & ~BIT_7;
+        }
+        else
+        {
+            /* Wenn kein Transfer aktiv ist, ist Bit 7 gesetzt und der Rest des bytes (Bit 0..6)
+               ist = 0x7F */
+            return 0xFF;
+        }
     }
     
     /* Wird in der H-Blank Periode mit LY = 0..143 ausgeführt und führt einen Teil 
