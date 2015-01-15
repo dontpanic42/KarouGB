@@ -107,6 +107,6 @@ namespace emu
     
     void KBGBEmulation::onTeardown()
     {
-        
+        lg::debug(TAG, "Tearing down emulation.\n");
     }
 }

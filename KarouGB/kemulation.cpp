@@ -37,6 +37,8 @@ namespace emu
     {
         if(!emuthread)
         {
+            onInitialize();
+            
             auto callLoop = [this](){ this->mainloop(); };
             emuthread = std::move(std::unique_ptr<std::thread>(new std::thread(callLoop)));
         }
@@ -44,7 +46,7 @@ namespace emu
     
     void KEmulation::mainloop()
     {
-        onInitialize();
+        //onInitialize();
         
         while(!quit && !onEmulationTick(paused))
         {
@@ -66,6 +68,7 @@ namespace emu
         if(emuthread)
         {
             emuthread->join();
+            emuthread = nullptr;
         }
     }
     

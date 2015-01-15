@@ -31,12 +31,23 @@ namespace emu
                     u08i l;
                     u08i h;
                 };
+                
+                z80r()
+                : r16(0)
+                {
+                }
             };
             
             struct z80t
             {
                 u64i m;
                 u64i t;
+                
+                z80t()
+                : m(0)
+                , t(0)
+                {
+                }
             };
             
             // Register structs
