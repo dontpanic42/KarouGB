@@ -80,7 +80,7 @@ namespace emu
         virtual void onResume() = 0;
         virtual void onLoadGame(const std::string & filename) = 0;
         virtual void onSaveGame(const std::string & filename) = 0;
-        virtual void onInitialize() = 0;
+        virtual bool onInitialize() = 0;
         virtual void onTeardown() = 0;
         /* Wenn onEmulationTick() true zurück gibt, beende die emulation. */
         virtual bool onEmulationTick(bool paused) = 0;

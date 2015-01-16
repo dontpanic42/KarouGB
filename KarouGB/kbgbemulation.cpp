@@ -24,31 +24,39 @@ namespace emu
     {
     }
     
-    void KBGBEmulation::initEmulation()
+    bool KBGBEmulation::initEmulation()
     {
-        loader = KCartridgeLoader::load(getCartridgeFile());
-        assert(loader);
-        mmu = loader->getMemory();
-        assert(mmu);
-        
-        //ioprovider = std::shared_ptr<IOProvider>((IOProvider *) new WXIOProvider(iopane));
-        //ioprovider =std::make_shared<SDLIOProvider>();
-        cpu =       std::make_shared<cpu::Z80>(mmu);
-        
-        c =         std::move(std::unique_ptr<cpu::Context>(new cpu::Context));
-        gpu =       std::move(std::unique_ptr<GPU>(new GPU(mmu, ioprovider, cpu, mmu->isCGB(), mmu->inCGBMode())));
-        buttons =   std::move(std::unique_ptr<Buttons>(new Buttons(mmu, ioprovider, cpu)));
-        timer =     std::move(std::unique_ptr<Timer>(new Timer(mmu, cpu)));
-        dbg =       std::move(std::unique_ptr<Debugger>(new Debugger(cpu, mmu, *c)));
-        timewarp =  std::move(std::unique_ptr<Timewarp>(new Timewarp));
-        
+        try {
+            loader = KCartridgeLoader::load(getCartridgeFile());
+            assert(loader);
+            mmu = loader->getMemory();
+            assert(mmu);
+            
+            //ioprovider = std::shared_ptr<IOProvider>((IOProvider *) new WXIOProvider(iopane));
+            //ioprovider =std::make_shared<SDLIOProvider>();
+            cpu =       std::make_shared<cpu::Z80>(mmu);
+            
+            c =         std::move(std::unique_ptr<cpu::Context>(new cpu::Context));
+            gpu =       std::move(std::unique_ptr<GPU>(new GPU(mmu, ioprovider, cpu, mmu->isCGB(), mmu->inCGBMode())));
+            buttons =   std::move(std::unique_ptr<Buttons>(new Buttons(mmu, ioprovider, cpu)));
+            timer =     std::move(std::unique_ptr<Timer>(new Timer(mmu, cpu)));
+            dbg =       std::move(std::unique_ptr<Debugger>(new Debugger(cpu, mmu, *c)));
+            timewarp =  std::move(std::unique_ptr<Timewarp>(new Timewarp));
+            
 #ifndef DISABLE_SOUND
-        apu =       std::move(std::unique_ptr<APU>(new APU(mmu)));
+            apu =       std::move(std::unique_ptr<APU>(new APU(mmu)));
 #else
-        lg::warn(TAG, "No sound support: Sound disabled.\n");
+            lg::warn(TAG, "No sound support: Sound disabled.\n");
 #endif
+        }
+        catch(std::exception & exception)
+        {
+            ioprovider->handleError(exception);
+            return false;
+        }
         
         ioprovider->init(std::string());
+        return true;
     }
     
     void KBGBEmulation::onPause()
@@ -100,9 +108,9 @@ namespace emu
         return false;
     }
     
-    void KBGBEmulation::onInitialize()
+    bool KBGBEmulation::onInitialize()
     {
-        initEmulation();
+        return initEmulation();
     }
     
     void KBGBEmulation::onTeardown()

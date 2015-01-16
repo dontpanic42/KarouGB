@@ -24,6 +24,7 @@
 		6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
 		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
+		6559891C1A68483400BD0FB1 /* runtime-testrom-gbc.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */; };
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
@@ -72,6 +73,7 @@
 		65EECF611A580D35005CC9D5 /* wxmainframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */; };
 		65F10D8F1A4F005600D78DD8 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC251A4EC7B20028D528 /* libgtest_main.a */; };
 		65F10D901A4F005600D78DD8 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC261A4EC7B20028D528 /* libgtest.a */; };
+		65F34EF01A68492E004F9198 /* Test Drive 6 (USA).gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -81,6 +83,8 @@
 			dstPath = roms;
 			dstSubfolderSpec = 16;
 			files = (
+				65F34EF01A68492E004F9198 /* Test Drive 6 (USA).gb in Copy Cartridges */,
+				6559891C1A68483400BD0FB1 /* runtime-testrom-gbc.gb in Copy Cartridges */,
 				6534338F1A6284B900C49CA8 /* pokemon-crystal.gb in Copy Cartridges */,
 				65D9F1E11A5957D2007905ED /* cpu_instrs.gb in Copy Cartridges */,
 				65D9F1E21A5957D2007905ED /* DonkeyKongLand.gb in Copy Cartridges */,
@@ -168,6 +172,7 @@
 		6557F51D1A2DC77400F870DA /* timewarp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timewarp.cpp; sourceTree = "<group>"; };
 		6557F51E1A2DC77400F870DA /* timewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timewarp.h; sourceTree = "<group>"; };
 		6557F5221A2DCFC000F870DA /* rom_bios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rom_bios.h; sourceTree = "<group>"; };
+		6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "runtime-testrom-gbc.gb"; sourceTree = "<group>"; };
 		6591339A1A30C0010085193B /* io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_provider.h; sourceTree = "<group>"; };
 		6591339B1A30C0010085193B /* sdl_io_provider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdl_io_provider.cpp; sourceTree = "<group>"; };
 		6591339C1A30C0010085193B /* sdl_io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_io_provider.h; sourceTree = "<group>"; };
@@ -222,6 +227,7 @@
 		65E763691A31B4890015EECF /* noise_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise_generator.h; sourceTree = "<group>"; };
 		65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_noise_channel.cpp; sourceTree = "<group>"; };
 		65E7636B1A31BC610015EECF /* apu_noise_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_noise_channel.h; sourceTree = "<group>"; };
+		65EBDE981A69185400CEBD13 /* wxevents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wxevents.h; sourceTree = "<group>"; };
 		65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxioprovider.cpp; sourceTree = "<group>"; };
 		65EECF571A57EB59005CC9D5 /* wxioprovider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxioprovider.h; sourceTree = "<group>"; };
 		65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxiopane.cpp; sourceTree = "<group>"; };
@@ -230,6 +236,7 @@
 		65EECF5D1A57EBEC005CC9D5 /* wxapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxapp.h; sourceTree = "<group>"; };
 		65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxmainframe.cpp; sourceTree = "<group>"; };
 		65EECF601A580D35005CC9D5 /* wxmainframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxmainframe.h; sourceTree = "<group>"; };
+		65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Test Drive 6 (USA).gb"; sourceTree = "<group>"; };
 		65F7C38D1A308D6000F495CC /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apu.cpp; path = sound/apu.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -419,6 +426,8 @@
 		65D9F1DA1A5957C0007905ED /* cartridges */ = {
 			isa = PBXGroup;
 			children = (
+				65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */,
+				6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */,
 				6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */,
 				65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */,
 				65D9F1DC1A5957C0007905ED /* DonkeyKongLand.gb */,
@@ -478,6 +487,7 @@
 				65EECF5D1A57EBEC005CC9D5 /* wxapp.h */,
 				65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */,
 				65EECF601A580D35005CC9D5 /* wxmainframe.h */,
+				65EBDE981A69185400CEBD13 /* wxevents.h */,
 			);
 			name = wxgui;
 			sourceTree = "<group>";
