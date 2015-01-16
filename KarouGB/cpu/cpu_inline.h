@@ -11,49 +11,50 @@
 namespace opfuncs
 {
     template<typename T>
-    void push(Context & c, KMemory & mmu, T value)
+    inline void push(Context & c, KMemory & mmu, T value)
     {
         throw std::runtime_error("Not implemented");
     }
     
+    /* Schreibt einen 8-Bit Wert in den Stack und dekrementiert den SP */
     template<>
-    void push<u08i>(Context & c, KMemory & mmu, u08i value)
+    inline void push<u08i>(Context & c, KMemory & mmu, u08i value)
     {
-        c.SP -= 1;
-        mmu.wb(c.SP, value);
+        mmu.wb(--c.SP, value);
     }
     
+    /* Schreibt einen 16-Bit Wert in den Stack und dekrementiert den SP */
     template<>
-    void push<u16i>(Context & c, KMemory & mmu, u16i value)
+    inline void push<u16i>(Context & c, KMemory & mmu, u16i value)
     {
-        c.SP -= 1;
-        mmu.wb(c.SP, (value >> 8) & 0xFF);
-        c.SP -= 1;
-        mmu.wb(c.SP, (value & 0xFF));
+        /* High byte */
+        mmu.wb(--c.SP, (value >> 8) & 0xFF);
+        /* Low byte */
+        mmu.wb(--c.SP, (value & 0xFF));
     }
     
     template<typename T>
-    T pop(Context & c, KMemory & mmu)
+    inline T pop(Context & c, KMemory & mmu)
     {
         throw std::runtime_error("Not implemented");
     }
     
+    /* Ließt einen 8-Bit Wert vom Stack und inkrementiert den SP */
     template<>
-    u08i pop<u08i>(Context & c, KMemory & mmu)
+    inline u08i pop<u08i>(Context & c, KMemory & mmu)
     {
-        u08i value = mmu.rb(c.SP);
-        c.SP += 1;
-        return value;
+        return mmu.rb(c.SP++);
     }
     
+    /* Ließt einen 16-Bit Wert vom Stack und inkrementiert den SP */
     template<>
-    u16i pop<u16i>(Context & c, KMemory & mmu)
+    inline u16i pop<u16i>(Context & c, KMemory & mmu)
     {
-        u16i lo = mmu.rb(c.SP);
-        c.SP += 1;
-        u16i hi = mmu.rb(c.SP);
-        c.SP += 1;
-        return (lo + (hi << 8));
+        /* Low byte */
+        u16i lo = static_cast<u16i>(mmu.rb(c.SP++));
+        /* High byte */
+        u16i hi = static_cast<u16i>(mmu.rb(c.SP++)) << 8;
+        return lo | hi;
     }
     
     inline u08i add(Context & c, u08i a, u08i b)
