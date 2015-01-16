@@ -1,4 +1,5 @@
 # Ignoriere Roms
+*.gbc
 *.gb
 *.1
 # Ignoriere Savefiles

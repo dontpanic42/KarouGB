@@ -67,6 +67,7 @@
 		65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
 		65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
 		65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */; };
+		65EBDE9C1A693B3300CEBD13 /* Pokemon - Goldene Edition (D).gbc in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65EBDE9B1A693B2400CEBD13 /* Pokemon - Goldene Edition (D).gbc */; };
 		65EECF581A57EB59005CC9D5 /* wxioprovider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */; };
 		65EECF5B1A57EBAD005CC9D5 /* wxiopane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */; };
 		65EECF5E1A57EBEC005CC9D5 /* wxapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5C1A57EBEC005CC9D5 /* wxapp.cpp */; };
@@ -83,6 +84,7 @@
 			dstPath = roms;
 			dstSubfolderSpec = 16;
 			files = (
+				65EBDE9C1A693B3300CEBD13 /* Pokemon - Goldene Edition (D).gbc in Copy Cartridges */,
 				65F34EF01A68492E004F9198 /* Test Drive 6 (USA).gb in Copy Cartridges */,
 				6559891C1A68483400BD0FB1 /* runtime-testrom-gbc.gb in Copy Cartridges */,
 				6534338F1A6284B900C49CA8 /* pokemon-crystal.gb in Copy Cartridges */,
@@ -228,6 +230,7 @@
 		65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_noise_channel.cpp; sourceTree = "<group>"; };
 		65E7636B1A31BC610015EECF /* apu_noise_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_noise_channel.h; sourceTree = "<group>"; };
 		65EBDE981A69185400CEBD13 /* wxevents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wxevents.h; sourceTree = "<group>"; };
+		65EBDE9B1A693B2400CEBD13 /* Pokemon - Goldene Edition (D).gbc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pokemon - Goldene Edition (D).gbc"; sourceTree = "<group>"; };
 		65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxioprovider.cpp; sourceTree = "<group>"; };
 		65EECF571A57EB59005CC9D5 /* wxioprovider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxioprovider.h; sourceTree = "<group>"; };
 		65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxiopane.cpp; sourceTree = "<group>"; };
@@ -426,6 +429,7 @@
 		65D9F1DA1A5957C0007905ED /* cartridges */ = {
 			isa = PBXGroup;
 			children = (
+				65EBDE9B1A693B2400CEBD13 /* Pokemon - Goldene Edition (D).gbc */,
 				65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */,
 				6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */,
 				6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */,

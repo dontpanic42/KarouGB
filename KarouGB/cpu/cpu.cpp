@@ -10,11 +10,6 @@
 #include <limits.h>
 #include "debug.h"
 
-//Only supports 8-bit chars
-#if CHAR_BIT != 8
-#error "unsupported char size"
-#endif
-
 namespace emu
 {
     namespace cpu
@@ -22,8 +17,10 @@ namespace emu
         u08i ir_mask[IR_LAST] { BIT_0, BIT_1, BIT_2, BIT_3, BIT_4 };
         u08i ir_vec [IR_LAST] {  0x40,  0x48,  0x50,  0x58,  0x60 };
         
+        /* Hilfsfunktionen zum Handling der CPU-Flags */
         namespace flag
         {
+            /* Flag masks */
             enum FlagEnum
             {
                 CARRY = BIT_4,
@@ -32,21 +29,27 @@ namespace emu
                 ZERO = BIT_7,
             };
             
-            //Die ersten 4 bit des F-Registers sind immer 0, auch wenn mit
-            //popaf etwas anderes hinein geschrieben wurde
+            /* Die ersten 4 bit des F-Registers sind immer 0, auch wenn mit
+               popaf etwas anderes hinein geschrieben wurde */
             u08i FLAG_ALWAYS_ZERO_MASK = 0xF0;
             
+            /* Setzt ein Prozessor-Flag */
             inline void set(Context & c, FlagEnum flag) { c.FLAG |= flag; }
             
+            /* Löscht ein Prozessor-Flag */
             inline void clear(Context & c, FlagEnum flag) { c.FLAG &= ~flag; }
             
+            /* Löscht alle Prozessor-Flags */
             inline void clear_all(Context & c)
             {
                 c.FLAG = 0x00;
             }
             
+            /* Gibt zurück, ob ein Prozessor-Flag gesetzt ist */
             inline bool is_set(Context & c, FlagEnum flag) { return (c.FLAG & flag); }
             
+            /* Setzt ein Prozessor-Flag, wenn dieses nicht gestzt ist
+               und umgekehrt */
             inline void flip(Context & c, FlagEnum flag)
             {
                 if(is_set(c, flag))
@@ -59,13 +62,14 @@ namespace emu
                 }
             }
             
-            template<typename T>
-            inline void set_if(Context & c, FlagEnum flag, T condition)
+            /* Setzt ein Prozessor-Flag, wenn die Bedingung "condition" wahr ist
+               und löscht es, wenn dies nicht der fall ist */
+            inline void set_if(Context & c, FlagEnum flag, bool condition)
             {
                 if(condition) { set(c, flag); }
                 else { clear(c, flag); }
             }
-        }
+        } /* Ende namespace flag */
         
 #include "cpu_timing.h"
 #include "cpu_inline.h"
@@ -130,15 +134,22 @@ namespace emu
         , reg_ie(mmu->getDMARef(CPU_REG_ADDR_IE))
         , reg_if(mmu->getDMARef(CPU_REG_ADDR_IF))
         {
+            /* Deaktiviere alle Interrupts */
             reg_ie = 0;
+            /* Es liegen initial keine Interrupts vor */
             reg_if = 0;
         }
         
+        /* Fordert einen interrupt an, in dem das entsprechende
+           Bit im Interruptregister "reg_if" gesetzt wird. */
         void Z80::requestInterrupt(Interrupt ir)
         {
             reg_if |= ir_mask[ir];
         }
         
+        /* Arbeitet einen Interrupt ab. Setzt den PC auf den Interruptvektor
+           (falls ein Interrupt vorliegt & interrupts aktiviert sind, speichert
+           die Rücksprungaddresse auf dem Stack und inkrementiert die Clock (c.T) */
         void Z80::checkInterrupts(cpu::Context & c)
         {
             /* Shortcut: Wenn das Interrupt-Request-Register (reg_if) gleich
@@ -187,6 +198,12 @@ namespace emu
             }
         }
         
+        /* Führt die CPU-Instruktion aus, auf die c.PC grade zeigt.
+           Wenn die entsprechende OP-Func ausgeführt wird, zeigt der PC
+           auf die erste Addresse nach der Instruktion, d.h. z.B.
+           00 01 02
+           op m1 m2
+           Die funktion "op" wird ausgeführt, PC zeigt auf m1. */
         void Z80::execute(cpu::Context &c)
         {
             c.branch_taken = false;
@@ -202,10 +219,17 @@ namespace emu
                 return;
             }
             
+            /* Der Opcode ist der Wert, auf den der PC grade zeigt */
             u16i opcode = mmu->rb(c.PC++);
+            /* Die OP-Func ist ertmal null */
             OpFptr op = nullptr;
             
+            /* Speichert, ob der aktuelle Opcode ein CB-Opcode ist
+               (damit später das richtige Timing eruiert werden kann) */
             bool cbmode;
+            /* Wenn es sich bei dem Opcode um das CB-Prefix handelt muss
+               der PC zwei mal inkrementiert werden und die CB-Optable
+               benutzt werden */
             if(opcode == 0xCB)
             {
                 opcode = mmu->rb(c.PC++);
@@ -218,7 +242,8 @@ namespace emu
                 cbmode = false;
             }
             
-            
+            /* Wenn keine zum Opcode passende OP-Func ermittelt werden kann,
+               rufe den Debugger auf */
             if(op == nullptr)
             {
                 std::cout << "Unknown opcode: " << ((cbmode)? "0xCB" : "0x") << std::hex << opcode << std::endl;
@@ -231,6 +256,7 @@ namespace emu
                 //throw std::runtime_error("Unknown opcode.");
             }
             
+            /* Rufe die OP-Func auf */
             (*op)(*this, c, *mmu);
             
             /* Finde das Timing des opcodes heraus. Es gibt 3 möglichkeiten:
@@ -245,25 +271,25 @@ namespace emu
             }
             else
             {
+                /* Das Timing von bedingten Sprunginstruktionen unterscheidet sich teilweise je nach dem,
+                   ob der Sprung ausgeführt wurde oder nicht */
                 if(c.branch_taken)
                 {
+                    /* Tabelle für bedingte Sprunginstruktionen, wenn der Sprung durgeführt wurde */
                     timing = optiming_00_branch_taken[opcode];
                 }
                 else
                 {
+                    /* Tabelle für bedingte Sprunginstruktionen, wenn der Sprung nicht durchgeführt wurde */
                     timing = optiming_00[opcode];
                 }
             }
-            
-            //c.M += M;   //Add saved interrupt timing
-            //c.T += T;   //Add saved interrupt timing
             
             /* Die Gesamtlaufzeit ist das timing * 4 plus das Interrupt-delay */
             c.T = ((timing * 4) + T);
             
             /* Master Clock - Zählt die gesamtzahl aller CPU-Zyklen über die gesamte Laufzeit */
-            //c.clock.m += c.M;
             c.clock.t += c.T;
         }
-    }
-}
+    } /* Ende z80 */
+} /* Ende namespace emu */

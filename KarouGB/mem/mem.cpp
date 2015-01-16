@@ -136,6 +136,8 @@ namespace emu
     /* Setzt ein Schreib-Intercept für eine Addresse */
     void KMemory::intercept(u16i addr, writer_t writer)
     {
+        /* Nur um sicher zu gehen, das nicht ausversehen was überschrieben wird */
+        assert(!this->writer[addr] && "Attempting to add write intercept: Already set.");
         this->writer[addr] = writer;
     }
     
@@ -149,6 +151,8 @@ namespace emu
     /* Setzt ein Lese-Intercept für eine Addresse */
     void KMemory::intercept(u16i addr, reader_t reader)
     {
+        /* Nur um sicher zu gehen, das nicht ausversehen was überschrieben wird */
+        assert(!this->reader[addr] && "Attempting to add read intercept: Already set.");
         this->reader[addr] = reader;
     }
     

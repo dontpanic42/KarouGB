@@ -72,7 +72,7 @@ namespace emu
             }
             else
             {
-                lg::warn(TAG, "Having no bank 1! Why is this MBC1?\n");
+                lg::warn(TAG, "Having no bank 1! Why is this MBC31?\n");
             }
         }
         
@@ -254,7 +254,8 @@ namespace emu
         bool KMBC3::canSaveState()
         {
             /* Kann speichern, wenn dies die batteriegepufferte Variante des MBC1 ist. */
-            return (cart()->header().cart_type == KCartridge::ROM_MBC3_RAM_BAT);
+            return  (cart()->header().cart_type == KCartridge::ROM_MBC3_RAM_BAT) ||
+                    (cart()->header().cart_type == KCartridge::ROM_MBC3_TIM_BAT_RAM);
         }
         
         void KMBC3::onWriteRam(u16i addr, u08i value)
