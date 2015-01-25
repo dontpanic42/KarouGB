@@ -87,6 +87,7 @@ namespace emu
             u08i halt;
             
             bool branch_taken;
+            u08i dbg_ivector;
             
             Context();
             Context(const Context & other);

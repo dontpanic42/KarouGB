@@ -39,6 +39,8 @@ namespace emu
             u08i op_2;
             u08i op_3;
             
+            u08i ivector;
+            
             cpu::Context cpu_context;
             
             History(const cpu::Context & other);

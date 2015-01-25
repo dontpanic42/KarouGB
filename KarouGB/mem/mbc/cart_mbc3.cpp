@@ -48,9 +48,7 @@ namespace emu
             std::size_t numRomBanks = static_cast<std::size_t>(std::ceil(static_cast<double>(romSizeBytes) /
                                                                          static_cast<double>(KMemory::BANK_SIZE)));
             
-            /* TODO: Herausfinden, ob in den *.gb-files die rombanks 20, 40 und 60 als 0x00-bereiche
-             vorhanden sind (dann ist das hier verwendete lineare kopieren richtig) oder ob diese
-             übersprungen werden (dann muss nicht-linear kopiert werden)... */
+            /* Der MBC3-Chip unterstützt das Anwählen der Rom-Bänke 0x20, 0x40, 0x60 */
             romBanks.reserve(numRomBanks);
             for(std::size_t i = 0; i < numRomBanks; i++)
             {
@@ -72,7 +70,7 @@ namespace emu
             }
             else
             {
-                lg::warn(TAG, "Having no bank 1! Why is this MBC31?\n");
+                lg::warn(TAG, "Having no bank 1! Why is this MBC3?\n");
             }
         }
         
@@ -97,6 +95,19 @@ namespace emu
                                                                          static_cast<double>(KMemory::BANK_SIZE)));
             
             ramBanks.resize(numRamBanks);
+            lg::debug(TAG, "Reserved %u RAM-Banks\n", ramBanks.size());
+            
+            /* Initialisiere RAM-Inhalt mit 0x00 (vereinfacht debugging) */
+            for(std::size_t i = 0; i < numRamBanks; i++)
+            {
+                for(std::size_t x = 0; x < KMemory::BANK_SIZE; x++)
+                {
+                    ramBanks[i].mem[x] = 0x00;
+                }
+            }
+            
+            /* Am Anfang ist die Ram-Bank 0 ausgewählt */
+            activateRamBank(0);
         }
         
         void KMBC3::setupCallbacks()
@@ -166,6 +177,8 @@ namespace emu
         
         void KMBC3::regWriteSwitchRam(u08i value)
         {
+            bool oldRtcVisible = rtcVisible;
+            
             /* Wird eine zahl [0x00...0x03] geschrieben, wird die RAM-Bank
              gewechselt. */
             if(value <= 0x03)
@@ -182,6 +195,12 @@ namespace emu
             else
             {
                 rtcVisible = false;
+                lg::debug(TAG, "regSwitchRam in unknown state, 0x%x\n", value);
+            }
+            
+            if(rtcVisible != oldRtcVisible)
+            {
+                lg::debug(TAG, "RTC %s, Supported: %s\n", (rtcVisible)? "enabled" : "disabled", (supportsRTC())? "yes" : "no");
             }
         }
         
@@ -207,7 +226,7 @@ namespace emu
             
             /* Bank 0 kann nicht im oberen Rom-Bereich eingeblendet werden,
              nim statt dessen Bank 1. (Im gegensatz zum MBC1 können die Banks
-             20, 40 und 60 problemlos verwendet werden. */
+             20, 40 und 60 problemlos verwendet werden.) */
             if(bank == 0)
             {
                 bank++;
@@ -240,8 +259,9 @@ namespace emu
                 return rtc.getRegister(activeRTCRegister);
             }
             
-            if(!ramEnabled || activeRamBank >= ramBanks.size())
+            if(!ramEnabled || activeRamBank > ramBanks.size())
             {
+                lg::debug(TAG, "Invalid cram read: 0x%x\n", addr);
                 return 0x00;
             }
             
@@ -267,8 +287,9 @@ namespace emu
                 rtc.setRegister(activeRTCRegister, value);
             }
             
-            if(!ramEnabled || activeRamBank >= ramBanks.size())
+            if(!ramEnabled || activeRamBank > ramBanks.size())
             {
+                lg::debug(TAG, "Invalid cram write: 0x%x\n", addr);
                 return;
             }
             

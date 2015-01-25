@@ -9,6 +9,7 @@
 #include "wxioprovider.h"
 #include "wxevents.h"
 #include "log.h"
+#include "debug.h"
 
 namespace emu
 {
@@ -69,6 +70,11 @@ namespace emu
                     }
                 }
             }
+            else
+            {
+                Debugger::getInstance()->interrupt();
+            }
+            
             iopane->keyQueue.queue.pop();
         }
     }

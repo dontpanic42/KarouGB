@@ -186,13 +186,7 @@ namespace emu
         renderWindow();
         
         renderSprites();
-        
-#ifdef RENDER_ON_SCANLINE
-        ioprovider->poll();
-        ioprovider->display();
-#endif
     }
-    
     
     /* Rendert die bgmaps, wenn aktiviert */
     void GPU::renderBackground()
@@ -679,10 +673,15 @@ namespace emu
     
     void GPU::render()
     {
-#ifndef RENDER_ON_SCANLINE
         ioprovider->poll();
-        ioprovider->display();
-#endif
+        /* Wenn der Bildschirm aktiviert ist */
+        if(reg_lcdc & BIT_7)
+        {
+            ioprovider->display();
+        }
+        /* TODO: Zeige einen weißen Bildschrim
+           oä. */
+        
         clearAlphaBuffer();
     }
     

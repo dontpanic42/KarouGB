@@ -28,7 +28,7 @@ namespace emu
         "0D         DEC C			",
         "0E n		LD C,n			",
         "0F         RRCA			",
-        
+        //0x01
         "10 e		DJNZ (PC+e)",
         "11 n n		LD DE,nn		",
         "12         LD (DE),A		",
@@ -45,7 +45,7 @@ namespace emu
         "1D         DEC E			",
         "1E n		LD E,n			",
         "1F         RRA",
-        
+        //0x02
         "20 e	JR NZ,(PC+e)",
         "21 n n		LD HL,nn		",
         "22 n n		LD (HL+),A		",
@@ -62,7 +62,7 @@ namespace emu
         "2D         DEC L			",
         "2E n		LD L,n			",
         "2F         CPL",
-        
+        //0x03
         "30 e		JR NC,(PC+e)",
         "31 n n		LD SP,nn",
         "32 n n		LD (nn),A",
@@ -79,7 +79,7 @@ namespace emu
         "3D         DEC A",
         "3E n		LD A,n",
         "3F         CCF",
-        
+        //0x04
         "40         LD B,B		",
         "41         LD B,C		",
         "42         LD B,D		",
@@ -96,7 +96,7 @@ namespace emu
         "4D         LD C,L		",
         "4E         LD C,(HL)",
         "4F         LD C,A		",
-        
+        //0x05
         "50         LD D,B		",
         "51         LD D,C		",
         "52         LD D,D		",
@@ -113,7 +113,7 @@ namespace emu
         "5D         LD E,L		",
         "5E         LD E,(HL)",
         "5F         LD E,A		",
-        
+        //0x06
         "60         LD H,B		",
         "61         LD H,C		",
         "62         LD H,D		",
@@ -130,7 +130,7 @@ namespace emu
         "6D         LD L,L		",
         "6E         LD L,(HL)",
         "6F         LD L,A		",
-        
+        //0x07
         "70         LD (HL),B",
         "71         LD (HL),C",
         "72         LD (HL),D",
@@ -147,7 +147,7 @@ namespace emu
         "7D         LD A,L		",
         "7E         LD A,(HL)",
         "7F         LD A,A		",
-        
+        //0x08
         "80         ADD A,B		",
         "81         ADD A,C		",
         "82         ADD A,D		",
@@ -164,7 +164,7 @@ namespace emu
         "8D         ADC A,L		",
         "8E         ADC A,(HL)",
         "8F         ADC A,A		",
-        
+        //0x09
         "90         SUB B		",
         "91         SUB C		",
         "92         SUB D		",
@@ -181,7 +181,7 @@ namespace emu
         "9D         SBC A,L		",
         "9E         SBC A,(HL)",
         "9F         SBC A,A		",
-        
+        //0x0A
         "A0         AND B		",
         "A1         AND C		",
         "A2         AND D		",
@@ -198,7 +198,7 @@ namespace emu
         "AD         XOR L		",
         "AE         XOR (HL)	",
         "AF         XOR A		",
-        
+        //0x0B
         "B0         OR B		",
         "B1         OR C		",
         "B2         OR D		",
@@ -215,7 +215,7 @@ namespace emu
         "BD         CP L		",
         "BE         CP (HL)		",
         "BF         CP A		",
-        
+        //0x0C
         "C0         RET NZ",
         "C1         POP BC",
         "C2 n n		JP NZ,(nn)",
@@ -232,7 +232,7 @@ namespace emu
         "CD n n		CALL (nn)",
         "CE n		ADC A,n",
         "CF         RST 8H",
-        
+        //0x0D
         "D0         RET NC",
         "D1         POP DE",
         "D2 n n		JP NC,(nn)",
@@ -242,14 +242,14 @@ namespace emu
         "D6 n		SUB n",
         "D7         RST 10H",
         "D8         RET C",
-        "D9         EXX",
+        "D9         RETI",
+        "DA         JP C,a16",
         "(???)",
+        "DC         CALL C,a16",
         "(???)",
-        "(???)",
-        "(???)",
-        "(???)",
-        "(???)",
-        
+        "DE         SBC A,d8",
+        "DF         RST 18H",
+        //0x0E
         "E0 n       LDH (0xFF+n), A",
         "E1         POP HL",
         "E2 n n		JP PO,(nn)",
@@ -266,6 +266,7 @@ namespace emu
         "(???)",
         "EE n		XOR n",
         "EF         RST 28H",
+        //0x0F
         "F0 n        LDH A,(a8)",
         "F1         POP AF",
         "F2 n n		JP P,(nn)",
@@ -274,7 +275,7 @@ namespace emu
         "F5         PUSH AF",
         "F6 n		OR n",
         "F7         RST 30H",
-        "F8         RET M",
+        "F8         LD HL,SP+r8",
         "F9         LD SP,HL",
         "FA n n		LD A,(a16)",
         "FB         EI",

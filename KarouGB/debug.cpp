@@ -245,6 +245,7 @@ namespace emu
         
         std::cout << std::setfill(' ')
         << std::setw(4) << "#"
+        << std::setw(8) << "SP"
         << std::setw(8) << "PC"
         << std::setw(4) << "A"
         << std::setw(4) << "B"
@@ -263,6 +264,7 @@ namespace emu
         for(auto it = history.begin(); it != history.end(); it++, i++)
         {
             std::cout << std::setfill('0') << std::setw(4) << std::dec << i;
+            std::cout << "  "; fmt::print_hexval(it->cpu_context.SP);
             std::cout << "  0x"; fmt::print_hexval(it->pc);
             std::cout << "  "; fmt::print_hexval(it->cpu_context.A);
             std::cout << "  "; fmt::print_hexval(it->cpu_context.B);
@@ -306,6 +308,11 @@ namespace emu
                 {
                     std::cout << op_translation_00[it->op & 0xFF];
                 }
+            }
+            
+            if(it->ivector != IR_LAST)
+            {
+                std::cout << " IR: "; fmt::print_hexval(it->ivector);
             }
             
             std::cout << std::endl;
@@ -414,6 +421,7 @@ namespace emu
         h.op_1 = mmu->rb(c.PC + 1);
         h.op_2 = mmu->rb(c.PC + 2);
         h.op_3 = mmu->rb(c.PC + 3);
+        h.ivector = c.dbg_ivector;
         
         if(h.op == 0xCB)
         {

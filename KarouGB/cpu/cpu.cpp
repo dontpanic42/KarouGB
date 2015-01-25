@@ -175,6 +175,8 @@ namespace emu
                     /* Wenn interrupts im ime-Flag aktiviert wurden */
                     if(c.ime)
                     {
+                        c.dbg_ivector = i;
+                        
                         /* Interruptrequest im Request-Register löschen */
                         reg_if &= ~ir_mask[i];
                         /* Interrupts mittels IME-Flag deaktivieren */
@@ -206,6 +208,7 @@ namespace emu
            Die funktion "op" wird ausgeführt, PC zeigt auf m1. */
         void Z80::execute(cpu::Context &c)
         {
+            c.dbg_ivector = IR_LAST;
             c.branch_taken = false;
             c.T = 0;
             checkInterrupts(c);
