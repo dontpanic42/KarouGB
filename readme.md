@@ -30,7 +30,7 @@ https://github.com/sinamas/gambatte
 
 ### Building
 
-Depends on the SDL2.framework.
+Depends on the SDL2.framework (Sound, Disabled by default), WxWidgets for UI and GTEST for Testing.
 
 Requires you to create an "rom_bios.h" file, which contains the bootrom (readily available via google search) as an array (u08i rom_bios[]). The bios might be copyrighted (?).
 
