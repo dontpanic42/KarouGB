@@ -6,6 +6,8 @@ A simple project to help me understand hardware emulation and c++.
 
 Some games with an MBC-1/MBC-3 Chip or no MBC chip, like Super Mario Land, Legend of Zelda, Donkey Kong Land, Pokémon Red.
 
+Some Gameboy Color games might work. Gameboy Color support is considered experimental and unstable  at this time. The original Gameboy Color Bootrom is currently not supported. To still run Games, you have to patch the Classic Gameboy Rom (change Byte 254 (first Byte is counted as "1") from 0x01 to 0x11).
+
 ### What doesn't work
 
 Lots of stuff. Only pure ROM and MBC-1/MBC-3 cartridges are supported at the time.
