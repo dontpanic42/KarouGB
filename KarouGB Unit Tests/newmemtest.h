@@ -13,6 +13,8 @@
 #include "../KarouGB/mem/mbc/cart_mbc1.h"
 #include "cartridge.h"
 
+using namespace emu;
+
 TEST(NewMemTest, ObjectSetup)
 {
     std::shared_ptr<KCartridgeLoader> loader(KCartridgeLoader::load("cpu_instrs.gb"));
