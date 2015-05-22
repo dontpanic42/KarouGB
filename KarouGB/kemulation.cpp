@@ -7,9 +7,12 @@
 //
 
 #include "kemulation.h"
+#include "log.h"
 
 namespace emu
 {
+    const std::string TAG("kemu");
+    
     KEmulation::KEmulation(const std::string & filename)
     : paused(true)
     , cartName(filename)
@@ -37,6 +40,13 @@ namespace emu
     {
         if(!emuthread)
         {
+            if(!onInitialize())
+            {
+                /* Initialisierung ist fehlgeschlagen */
+                lg::error(TAG, "Emulation initialization failed.\n");
+                return;
+            }
+            
             auto callLoop = [this](){ this->mainloop(); };
             emuthread = std::move(std::unique_ptr<std::thread>(new std::thread(callLoop)));
         }
@@ -44,7 +54,7 @@ namespace emu
     
     void KEmulation::mainloop()
     {
-        onInitialize();
+        //onInitialize();
         
         while(!quit && !onEmulationTick(paused))
         {
@@ -66,6 +76,7 @@ namespace emu
         if(emuthread)
         {
             emuthread->join();
+            emuthread = nullptr;
         }
     }
     

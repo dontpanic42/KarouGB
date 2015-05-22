@@ -15,6 +15,8 @@
 #include <thread>
 #include <queue>
 
+#include "wxevents.h"
+
 namespace gui
 {
     class IOPane : public wxPanel
@@ -65,9 +67,9 @@ namespace gui
         void render(wxDC & dc);
         void onKeyDown(wxKeyEvent & event);
         void onKeyUp(wxKeyEvent & event);
-        
+        void onEmulationError(wxThreadEvent & evt);
         /* Thread-Safe! */
-        void flipBuffer();
+        void flipBuffer(wxThreadEvent & event);
         
         DECLARE_EVENT_TABLE();
     };

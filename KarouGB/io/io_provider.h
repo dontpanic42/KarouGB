@@ -34,6 +34,8 @@ namespace emu
         virtual void registerButtonCallback(Button btn,
                                             on_press_t onPress,
                                             on_release_t onRelease) = 0;
+        
+        virtual void handleError(const std::exception & exception) {}
     };
 }
 

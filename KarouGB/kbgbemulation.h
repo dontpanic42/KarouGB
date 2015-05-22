@@ -47,7 +47,7 @@ namespace emu
 #endif
         
         std::atomic_bool initialized;
-        void initEmulation();
+        bool initEmulation();
     protected:
         virtual void onPause();
         virtual void onResume();
@@ -55,7 +55,7 @@ namespace emu
         virtual void onSaveGame(const std::string & filename);
         virtual bool onEmulationTick(bool paused);
         
-        virtual void onInitialize();
+        virtual bool onInitialize();
         virtual void onTeardown();
     public:
         KBGBEmulation(const std::string & filename, std::shared_ptr<IOProvider> & ioprovider);

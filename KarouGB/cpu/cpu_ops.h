@@ -113,8 +113,8 @@ namespace opfuncs
     OP(LDHLnn)  { c.HL = mmu.rw(c.PC); c.PC += 2;}
     
     OP(LDSPnn)  { c.SP = mmu.rw(c.PC); c.PC += 2;}
-    OP(LDHLmm)  { u16i i = mmu.rw(c.PC); c.PC += 2; c.L = mmu.rb(i); c.H = mmu.rb(i+1);}
-    OP(LDmmHL)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.HL);}
+    //OP(LDHLmm)  { u16i i = mmu.rw(c.PC); c.PC += 2; c.L = mmu.rb(i); c.H = mmu.rb(i+1);}
+    //OP(LDmmHL)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.HL);}
     OP(LDmmSP)  { u16i i = mmu.rw(c.PC); c.PC += 2; mmu.ww(i, c.SP);}
     OP(LDHLIA)  { mmu.wb(c.HL, c.A); c.HL++; }
     OP(LDAHLI)  { c.A = mmu.rb(c.HL); c.HL++; }

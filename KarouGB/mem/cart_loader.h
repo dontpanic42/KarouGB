@@ -16,7 +16,7 @@ namespace emu
         typedef KCartridge cart_t;
     private:
         const std::string cartname;
-        const std::shared_ptr<memory_t> memory;
+        std::shared_ptr<memory_t> memory;
         const std::shared_ptr<cart_t> cart;
         
         std::shared_ptr<KMBC> mbc;

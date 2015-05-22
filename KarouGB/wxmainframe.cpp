@@ -124,7 +124,7 @@ namespace gui
         
         wxFileDialog
         openFileDialog(this, _("Open Cartridge"), "", "",
-                       "gb files (*.gb)|*.gb", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+                       "GB files (*.gb)|*.gb|GBC files (*.gbc)|*.gbc", wxFD_OPEN|wxFD_FILE_MUST_EXIST);
         
         if (openFileDialog.ShowModal() == wxID_CANCEL)
         {

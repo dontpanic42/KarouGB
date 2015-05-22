@@ -68,8 +68,10 @@ namespace emu
     /* Anzahl sichtbarer Bänke */
     const std::size_t KMemory::BANK_COUNT = MEM_NUM_BANKS;
     
-    KMemory::KMemory()
+    KMemory::KMemory(bool cgb, bool cgb_mode)
     : bootromEnabled(true)
+    , cgb(cgb)
+    , cgb_mode(cgb_mode)
     {
         /* Deaktiviere die Schreib-Intercepts */
         std::fill_n(std::begin(writer), KMemory::MEMORY_SIZE, WRITER_NONE);
@@ -97,6 +99,27 @@ namespace emu
         {
             MEMPTR(k) = MEMPTR(i);
         }
+        
+        if(isCGB())
+        {
+            /* Aktiviere Banking in Addr. 0xD000 - 0xDFFF, Schreiben */
+            intercept(0xD000, 0x1000, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteWRAM(addr, value, ptr);
+            });
+            /* Aktiviere Banking in Addr. 0xD000 - 0xDFFF, Lesen */
+            intercept(0xD000, 0x1000, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadWRAM(addr, ptr);
+            });
+            
+            /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Schreiben */
+            intercept(0xE000, 0x0E00, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteShadowWRAM(addr, value, ptr);
+            });
+            /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Lesen */
+            intercept(0xE000, 0x0E00, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadShadowWRAM(addr, ptr);
+            });
+        }
     }
     
     /* Blendet eine externe Speicherbank ein */
@@ -113,6 +136,8 @@ namespace emu
     /* Setzt ein Schreib-Intercept für eine Addresse */
     void KMemory::intercept(u16i addr, writer_t writer)
     {
+        /* Nur um sicher zu gehen, das nicht ausversehen was überschrieben wird */
+        assert(!this->writer[addr] && "Attempting to add write intercept: Already set.");
         this->writer[addr] = writer;
     }
     
@@ -126,6 +151,8 @@ namespace emu
     /* Setzt ein Lese-Intercept für eine Addresse */
     void KMemory::intercept(u16i addr, reader_t reader)
     {
+        /* Nur um sicher zu gehen, das nicht ausversehen was überschrieben wird */
+        assert(!this->reader[addr] && "Attempting to add read intercept: Already set.");
         this->reader[addr] = reader;
     }
     
@@ -203,5 +230,87 @@ namespace emu
          aufgerufen. Ein einfaches assert reicht hier... */
         assert(MEMPTR(addr));
         return (*MEMPTR(addr));
+    }
+    
+    bool KMemory::isCGB() const
+    {
+        return cgb;
+    }
+    
+    bool KMemory::inCGBMode() const
+    {
+        return cgb_mode;
+    }
+    
+    /* Setter für CGB-WRAM-Banks */
+    void KMemory::cgbOnWriteWRAM(u16i addr, u08i value, u08i * ptr)
+    {
+        addr -= 0xD000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            cgbWRAM[(bank == 0)? 1 : bank][addr] = value;
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            cgbWRAM[1][addr] = value;
+        }
+    }
+    
+    /* Setter für CGB-WRAM-Banks im Shadow-Memory */
+    void KMemory::cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr)
+    {
+        addr -= 0xE000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            cgbWRAM[(bank == 0)? 1 : bank][addr] = value;
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            cgbWRAM[1][addr] = value;
+        }
+    }
+    
+    /* Getter für CGB-WRAM-Banks */
+    u08i KMemory::cgbOnReadWRAM(u16i addr, u08i * ptr) const
+    {
+        addr -= 0xD000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            return cgbWRAM[(bank == 0)? 1 : bank][addr];
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            return cgbWRAM[1][addr];
+        }
+    }
+    
+    /* Getter für CGB-WRAM-Banks im Shadow-Memory */
+    u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const
+    {
+        addr -= 0xE000;
+        if(inCGBMode())
+        {
+            /* Bankno = Bits 0..2 des Registes 0xFF70 */
+            u08i bank = rb(0xFF70) & 0x07;
+            /* Wenn Bank 0 ausgewählt ist, gebe Bank 1 zurück */
+            return cgbWRAM[(bank == 0)? 1 : bank][addr];
+        }
+        else
+        {
+            /* Benutze Bank 1 im nicht-CGB-Mode */
+            return cgbWRAM[1][addr];
+        }
     }
 }

@@ -46,7 +46,12 @@ namespace emu
         
         for(u08i i = 0; i < BTN_LAST; i++)
         {
+            /* Registriere das Callback, das aufgerufen wird, wenn Tastatur-
+               Key gedrückt (l_on_kp) oder losgelassen (l_on_kr) wird. */
             ioprovider->registerButtonCallback( (Button) i, l_on_kp, l_on_kr);
+            
+            /* Initialisiere den Button-State als "nicht gedrückt" (false) */
+            btn_states[i] = false;
         }
         
         mmu->intercept(BTN_REG_ADDR, [this](u16i addr, u08i value, u08i * ptr) {
@@ -60,15 +65,20 @@ namespace emu
     
     void Buttons::onKeyPress(u08i btn)
     {
-        btn_states[btn] = true;
-        cpu->requestInterrupt(IR_JOYPAD);
-        
+        if(btn_states[btn] != true)
+        {
+            btn_states[btn] = true;
+            cpu->requestInterrupt(IR_JOYPAD);
+        }
     }
     
     void Buttons::onKeyRelease(u08i btn)
     {
-        btn_states[btn] = false;
-        cpu->requestInterrupt(IR_JOYPAD);
+        if(btn_states[btn] != false)
+        {
+            btn_states[btn] = false;
+            cpu->requestInterrupt(IR_JOYPAD);
+        }
     }
     
     u08i Buttons::onKeyRegRead(u16i addr, u08i * memptr)

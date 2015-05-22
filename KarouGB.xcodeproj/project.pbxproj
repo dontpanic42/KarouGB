@@ -7,45 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6517215C1AD5121F0064B733 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D9DC191A4EC2770028D528 /* main.cpp */; };
+		651721641AD5150A0064B733 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651721631AD5150A0064B733 /* main.cpp */; };
+		651721661AD5150A0064B733 /* KarouGB_GTEST.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 651721651AD5150A0064B733 /* KarouGB_GTEST.1 */; };
+		6517216A1AD515C50064B733 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC251A4EC7B20028D528 /* libgtest_main.a */; };
+		6517216B1AD515C70064B733 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC261A4EC7B20028D528 /* libgtest.a */; };
+		6517216C1AD516350064B733 /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
+		6517216D1AD516350064B733 /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
+		6517216E1AD516350064B733 /* cart_mbc0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BB71A518864003EC57D /* cart_mbc0.cpp */; };
+		6517216F1AD516350064B733 /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
+		651721701AD516350064B733 /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
+		651721711AD516350064B733 /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
+		651721721AD516350064B733 /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
+		651721741AD516E50064B733 /* cpu_instrs.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */; };
+		651721761AD51D850064B733 /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
+		651721771AD51D9D0064B733 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
 		651958E61A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
-		651958E71A50089E00A18E8A /* mem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 651958E41A50089E00A18E8A /* mem.cpp */; };
 		65255BB91A518864003EC57D /* cart_mbc0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BB71A518864003EC57D /* cart_mbc0.cpp */; };
-		65255BBA1A518864003EC57D /* cart_mbc0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BB71A518864003EC57D /* cart_mbc0.cpp */; };
 		65255BBC1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
-		65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65255BBB1A518B13003EC57D /* cart_loader.cpp */; };
 		6528F5B41A569A4000423B54 /* kemulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6528F5B21A569A4000423B54 /* kemulation.cpp */; };
 		6528F5BD1A56AC9F00423B54 /* kbgbemulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */; };
+		6534338F1A6284B900C49CA8 /* pokemon-crystal.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */; };
 		65381CAE1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
-		65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CAC1A5154D0004433EA /* cartridge.cpp */; };
 		65381CB51A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
-		65381CB61A515F8E004433EA /* cart_mbc1.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65381CB31A515F8E004433EA /* cart_mbc1.cpp */; };
 		6545E8AC1A30C13400925EE0 /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6555147E1A30BCAF007CAAD4 /* apu.cpp */; };
 		6555148B1A30BCAF007CAAD4 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
 		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
+		6559891C1A68483400BD0FB1 /* runtime-testrom-gbc.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */; };
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
 		65B135221A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
-		65B135231A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */; };
 		65D8DC3B1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
-		65D8DC3C1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */; };
-		65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */; };
-		65D9DC2B1A4ECB430028D528 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65D9DC191A4EC2770028D528 /* main.cpp */; };
-		65D9DC2C1A4ECB890028D528 /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
-		65D9DC301A4ECBAD0028D528 /* apu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65F7C38D1A308D6000F495CC /* apu.cpp */; };
-		65D9DC311A4ECBAD0028D528 /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
-		65D9DC321A4ECBAD0028D528 /* buttons.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AC1A2DB64D00D7415F /* buttons.cpp */; };
-		65D9DC331A4ECBAD0028D528 /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
-		65D9DC341A4ECBAD0028D528 /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
-		65D9DC351A4ECBAD0028D528 /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
-		65D9DC361A4ECBBF0028D528 /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
-		65D9DC371A4ECBBF0028D528 /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
-		65D9DC381A4ECBBF0028D528 /* sdl_io_provider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6591339B1A30C0010085193B /* sdl_io_provider.cpp */; };
-		65D9DC391A4ECD200028D528 /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65DC60971A2DB56200D7415F /* SDL2.framework */; };
-		65D9DC3A1A4ECD500028D528 /* apu_noise_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */; };
-		65D9DC3B1A4ECD500028D528 /* apu_squarewave_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514811A30BCAF007CAAD4 /* apu_squarewave_channel.cpp */; };
-		65D9DC3C1A4ECD500028D528 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
+		65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in Copy Files */ = {isa = PBXBuildFile; fileRef = 65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */; };
 		65D9F1D41A595782007905ED /* icn_loadgame.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1CE1A595776007905ED /* icn_loadgame.png */; };
 		65D9F1D51A595782007905ED /* icn_opencart.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1CF1A595776007905ED /* icn_opencart.png */; };
 		65D9F1D61A595782007905ED /* icn_pause.png in Copy Icons */ = {isa = PBXBuildFile; fileRef = 65D9F1D01A595776007905ED /* icn_pause.png */; };
@@ -65,21 +60,48 @@
 		65DC60BC1A2DB64D00D7415F /* debug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60AE1A2DB64D00D7415F /* debug.cpp */; };
 		65DC60BD1A2DB64D00D7415F /* timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60B51A2DB64D00D7415F /* timer.cpp */; };
 		65E7636C1A31BC610015EECF /* apu_noise_channel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */; };
+		65EBDE9C1A693B3300CEBD13 /* Pokemon - Goldene Edition (D).gbc in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65EBDE9B1A693B2400CEBD13 /* Pokemon - Goldene Edition (D).gbc */; };
 		65EECF581A57EB59005CC9D5 /* wxioprovider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */; };
 		65EECF5B1A57EBAD005CC9D5 /* wxiopane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */; };
 		65EECF5E1A57EBEC005CC9D5 /* wxapp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5C1A57EBEC005CC9D5 /* wxapp.cpp */; };
 		65EECF611A580D35005CC9D5 /* wxmainframe.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */; };
 		65F10D8F1A4F005600D78DD8 /* libgtest_main.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC251A4EC7B20028D528 /* libgtest_main.a */; };
 		65F10D901A4F005600D78DD8 /* libgtest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 65D9DC261A4EC7B20028D528 /* libgtest.a */; };
+		65F34EF01A68492E004F9198 /* Test Drive 6 (USA).gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		6517215F1AD5150A0064B733 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				651721661AD5150A0064B733 /* KarouGB_GTEST.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+		651721731AD516D30064B733 /* Copy Cartridges */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				651721741AD516E50064B733 /* cpu_instrs.gb in Copy Cartridges */,
+			);
+			name = "Copy Cartridges";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6557F5181A2DC43400F870DA /* Copy Cartridges */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = roms;
 			dstSubfolderSpec = 16;
 			files = (
+				65EBDE9C1A693B3300CEBD13 /* Pokemon - Goldene Edition (D).gbc in Copy Cartridges */,
+				65F34EF01A68492E004F9198 /* Test Drive 6 (USA).gb in Copy Cartridges */,
+				6559891C1A68483400BD0FB1 /* runtime-testrom-gbc.gb in Copy Cartridges */,
+				6534338F1A6284B900C49CA8 /* pokemon-crystal.gb in Copy Cartridges */,
 				65D9F1E11A5957D2007905ED /* cpu_instrs.gb in Copy Cartridges */,
 				65D9F1E21A5957D2007905ED /* DonkeyKongLand.gb in Copy Cartridges */,
 				65D9F1E31A5957D2007905ED /* LegendOfZelda.gb in Copy Cartridges */,
@@ -90,14 +112,15 @@
 			name = "Copy Cartridges";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		65D9DC151A4EC2770028D528 /* CopyFiles */ = {
+		65D9DC151A4EC2770028D528 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in CopyFiles */,
+				65D9DC1C1A4EC2770028D528 /* KarouGB_Unit_Tests.1 in Copy Files */,
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 1;
 		};
 		65D9F1C61A5956D7007905ED /* Copy Icons */ = {
@@ -125,18 +148,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		65F10D921A4F079700D78DD8 /* CopyFiles */ = {
+		65F10D921A4F079700D78DD8 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
 			);
+			name = "Copy Files";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		651721611AD5150A0064B733 /* KarouGB GTEST */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "KarouGB GTEST"; sourceTree = BUILT_PRODUCTS_DIR; };
+		651721631AD5150A0064B733 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		651721651AD5150A0064B733 /* KarouGB_GTEST.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = KarouGB_GTEST.1; sourceTree = "<group>"; };
+		651721751AD51A820064B733 /* instrtest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = instrtest.h; sourceTree = "<group>"; };
 		651958E41A50089E00A18E8A /* mem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mem.cpp; sourceTree = "<group>"; };
 		651958E51A50089E00A18E8A /* mem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mem.h; sourceTree = "<group>"; };
 		651958E81A50264600A18E8A /* cart_mbc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc.h; sourceTree = "<group>"; };
@@ -147,10 +175,11 @@
 		6528F5B31A569A4000423B54 /* kemulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kemulation.h; sourceTree = "<group>"; };
 		6528F5BB1A56AC9F00423B54 /* kbgbemulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kbgbemulation.cpp; sourceTree = "<group>"; };
 		6528F5BC1A56AC9F00423B54 /* kbgbemulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kbgbemulation.h; sourceTree = "<group>"; };
+		6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "pokemon-crystal.gb"; sourceTree = "<group>"; };
 		65381CAC1A5154D0004433EA /* cartridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cartridge.cpp; sourceTree = "<group>"; };
 		65381CAD1A5154D0004433EA /* cartridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cartridge.h; sourceTree = "<group>"; };
 		65381CB01A515734004433EA /* cart_loader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_loader.h; sourceTree = "<group>"; };
-		65381CB11A515A19004433EA /* newmemtest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = newmemtest.h; sourceTree = "<group>"; };
+		65381CB11A515A19004433EA /* newmemtest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = newmemtest.h; path = "../KarouGB Unit Tests/newmemtest.h"; sourceTree = "<group>"; };
 		65381CB31A515F8E004433EA /* cart_mbc1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc1.cpp; sourceTree = "<group>"; };
 		65381CB41A515F8E004433EA /* cart_mbc1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc1.h; sourceTree = "<group>"; };
 		6555147E1A30BCAF007CAAD4 /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu.cpp; sourceTree = "<group>"; };
@@ -165,6 +194,7 @@
 		6557F51D1A2DC77400F870DA /* timewarp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timewarp.cpp; sourceTree = "<group>"; };
 		6557F51E1A2DC77400F870DA /* timewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timewarp.h; sourceTree = "<group>"; };
 		6557F5221A2DCFC000F870DA /* rom_bios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rom_bios.h; sourceTree = "<group>"; };
+		6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "runtime-testrom-gbc.gb"; sourceTree = "<group>"; };
 		6591339A1A30C0010085193B /* io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_provider.h; sourceTree = "<group>"; };
 		6591339B1A30C0010085193B /* sdl_io_provider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdl_io_provider.cpp; sourceTree = "<group>"; };
 		6591339C1A30C0010085193B /* sdl_io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_io_provider.h; sourceTree = "<group>"; };
@@ -181,7 +211,7 @@
 		659133AD1A30C0290085193B /* cpu_timing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cpu_timing.h; sourceTree = "<group>"; };
 		65B135201A5413B70004202E /* cart_mbc3_rtc.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc3_rtc.cpp; sourceTree = "<group>"; };
 		65B135211A5413B70004202E /* cart_mbc3_rtc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc3_rtc.h; sourceTree = "<group>"; };
-		65B135241A5414830004202E /* mbc3rtctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mbc3rtctest.h; sourceTree = "<group>"; };
+		65B135241A5414830004202E /* mbc3rtctest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = mbc3rtctest.h; path = "../KarouGB Unit Tests/mbc3rtctest.h"; sourceTree = "<group>"; };
 		65BDB53C1A4DA167000678B8 /* log.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = log.h; sourceTree = "<group>"; };
 		65D8DC391A52A7DB00A06FBD /* cart_mbc3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cart_mbc3.cpp; sourceTree = "<group>"; };
 		65D8DC3A1A52A7DB00A06FBD /* cart_mbc3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cart_mbc3.h; sourceTree = "<group>"; };
@@ -190,7 +220,6 @@
 		65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = KarouGB_Unit_Tests.1; sourceTree = "<group>"; };
 		65D9DC251A4EC7B20028D528 /* libgtest_main.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest_main.a; path = ../../../../../usr/local/lib/libgtest_main.a; sourceTree = "<group>"; };
 		65D9DC261A4EC7B20028D528 /* libgtest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgtest.a; path = ../../../../../usr/local/lib/libgtest.a; sourceTree = "<group>"; };
-		65D9DC2A1A4ECB000028D528 /* mbc1test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mbc1test.h; path = ../KarouGB/test/mbc1test.h; sourceTree = "<group>"; };
 		65D9F1CE1A595776007905ED /* icn_loadgame.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_loadgame.png; sourceTree = "<group>"; };
 		65D9F1CF1A595776007905ED /* icn_opencart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_opencart.png; sourceTree = "<group>"; };
 		65D9F1D01A595776007905ED /* icn_pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icn_pause.png; sourceTree = "<group>"; };
@@ -219,6 +248,8 @@
 		65E763691A31B4890015EECF /* noise_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise_generator.h; sourceTree = "<group>"; };
 		65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_noise_channel.cpp; sourceTree = "<group>"; };
 		65E7636B1A31BC610015EECF /* apu_noise_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_noise_channel.h; sourceTree = "<group>"; };
+		65EBDE981A69185400CEBD13 /* wxevents.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wxevents.h; sourceTree = "<group>"; };
+		65EBDE9B1A693B2400CEBD13 /* Pokemon - Goldene Edition (D).gbc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pokemon - Goldene Edition (D).gbc"; sourceTree = "<group>"; };
 		65EECF561A57EB59005CC9D5 /* wxioprovider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxioprovider.cpp; sourceTree = "<group>"; };
 		65EECF571A57EB59005CC9D5 /* wxioprovider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxioprovider.h; sourceTree = "<group>"; };
 		65EECF591A57EBAD005CC9D5 /* wxiopane.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxiopane.cpp; sourceTree = "<group>"; };
@@ -227,15 +258,24 @@
 		65EECF5D1A57EBEC005CC9D5 /* wxapp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxapp.h; sourceTree = "<group>"; };
 		65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wxmainframe.cpp; sourceTree = "<group>"; };
 		65EECF601A580D35005CC9D5 /* wxmainframe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wxmainframe.h; sourceTree = "<group>"; };
+		65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Test Drive 6 (USA).gb"; sourceTree = "<group>"; };
 		65F7C38D1A308D6000F495CC /* apu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = apu.cpp; path = sound/apu.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6517215E1AD5150A0064B733 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6517216A1AD515C50064B733 /* libgtest_main.a in Frameworks */,
+				6517216B1AD515C70064B733 /* libgtest.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		65D9DC141A4EC2770028D528 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65D9DC391A4ECD200028D528 /* SDL2.framework in Frameworks */,
 				65F10D8F1A4F005600D78DD8 /* libgtest_main.a in Frameworks */,
 				65F10D901A4F005600D78DD8 /* libgtest.a in Frameworks */,
 			);
@@ -252,6 +292,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		651721621AD5150A0064B733 /* KarouGB GTEST */ = {
+			isa = PBXGroup;
+			children = (
+				65B135241A5414830004202E /* mbc3rtctest.h */,
+				65381CB11A515A19004433EA /* newmemtest.h */,
+				651721631AD5150A0064B733 /* main.cpp */,
+				651721651AD5150A0064B733 /* KarouGB_GTEST.1 */,
+				651721751AD51A820064B733 /* instrtest.h */,
+			);
+			path = "KarouGB GTEST";
+			sourceTree = "<group>";
+		};
 		651958E31A50089E00A18E8A /* mem */ = {
 			isa = PBXGroup;
 			children = (
@@ -391,11 +443,8 @@
 		65D9DC181A4EC2770028D528 /* KarouGB Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
-				65D9DC2A1A4ECB000028D528 /* mbc1test.h */,
 				65D9DC191A4EC2770028D528 /* main.cpp */,
 				65D9DC1B1A4EC2770028D528 /* KarouGB_Unit_Tests.1 */,
-				65381CB11A515A19004433EA /* newmemtest.h */,
-				65B135241A5414830004202E /* mbc3rtctest.h */,
 			);
 			path = "KarouGB Unit Tests";
 			sourceTree = "<group>";
@@ -416,6 +465,10 @@
 		65D9F1DA1A5957C0007905ED /* cartridges */ = {
 			isa = PBXGroup;
 			children = (
+				65EBDE9B1A693B2400CEBD13 /* Pokemon - Goldene Edition (D).gbc */,
+				65F34EEF1A684926004F9198 /* Test Drive 6 (USA).gb */,
+				6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */,
+				6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */,
 				65D9F1DB1A5957C0007905ED /* cpu_instrs.gb */,
 				65D9F1DC1A5957C0007905ED /* DonkeyKongLand.gb */,
 				65D9F1DD1A5957C0007905ED /* LegendOfZelda.gb */,
@@ -434,6 +487,7 @@
 				65DC60971A2DB56200D7415F /* SDL2.framework */,
 				65DC60891A2DB51900D7415F /* KarouGB */,
 				65D9DC181A4EC2770028D528 /* KarouGB Unit Tests */,
+				651721621AD5150A0064B733 /* KarouGB GTEST */,
 				65DC60881A2DB51900D7415F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -443,6 +497,7 @@
 			children = (
 				65DC60871A2DB51900D7415F /* KarouGB */,
 				65D9DC171A4EC2770028D528 /* KarouGB Unit Tests */,
+				651721611AD5150A0064B733 /* KarouGB GTEST */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -474,6 +529,7 @@
 				65EECF5D1A57EBEC005CC9D5 /* wxapp.h */,
 				65EECF5F1A580D35005CC9D5 /* wxmainframe.cpp */,
 				65EECF601A580D35005CC9D5 /* wxmainframe.h */,
+				65EBDE981A69185400CEBD13 /* wxevents.h */,
 			);
 			name = wxgui;
 			sourceTree = "<group>";
@@ -481,14 +537,32 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		651721601AD5150A0064B733 /* KarouGB GTEST */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 651721671AD5150A0064B733 /* Build configuration list for PBXNativeTarget "KarouGB GTEST" */;
+			buildPhases = (
+				6517215D1AD5150A0064B733 /* Sources */,
+				6517215E1AD5150A0064B733 /* Frameworks */,
+				6517215F1AD5150A0064B733 /* CopyFiles */,
+				651721731AD516D30064B733 /* Copy Cartridges */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "KarouGB GTEST";
+			productName = "KarouGB GTEST";
+			productReference = 651721611AD5150A0064B733 /* KarouGB GTEST */;
+			productType = "com.apple.product-type.tool";
+		};
 		65D9DC161A4EC2770028D528 /* KarouGB Unit Tests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 65D9DC1F1A4EC2770028D528 /* Build configuration list for PBXNativeTarget "KarouGB Unit Tests" */;
 			buildPhases = (
 				65D9DC131A4EC2770028D528 /* Sources */,
 				65D9DC141A4EC2770028D528 /* Frameworks */,
-				65D9DC151A4EC2770028D528 /* CopyFiles */,
-				65F10D921A4F079700D78DD8 /* CopyFiles */,
+				65D9DC151A4EC2770028D528 /* Copy Files */,
+				65F10D921A4F079700D78DD8 /* Copy Files */,
 			);
 			buildRules = (
 			);
@@ -541,36 +615,34 @@
 			targets = (
 				65DC60861A2DB51900D7415F /* KarouGB */,
 				65D9DC161A4EC2770028D528 /* KarouGB Unit Tests */,
+				651721601AD5150A0064B733 /* KarouGB GTEST */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6517215D1AD5150A0064B733 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				651721771AD51D9D0064B733 /* debug.cpp in Sources */,
+				651721761AD51D850064B733 /* cpu.cpp in Sources */,
+				6517216C1AD516350064B733 /* cart_mbc3_rtc.cpp in Sources */,
+				6517216D1AD516350064B733 /* cart_mbc3.cpp in Sources */,
+				6517216E1AD516350064B733 /* cart_mbc0.cpp in Sources */,
+				6517216F1AD516350064B733 /* cart_mbc1.cpp in Sources */,
+				651721701AD516350064B733 /* cart_loader.cpp in Sources */,
+				651721711AD516350064B733 /* cartridge.cpp in Sources */,
+				651721721AD516350064B733 /* mem.cpp in Sources */,
+				651721641AD5150A0064B733 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		65D9DC131A4EC2770028D528 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65D9DC3A1A4ECD500028D528 /* apu_noise_channel.cpp in Sources */,
-				65D9DC301A4ECBAD0028D528 /* apu.cpp in Sources */,
-				65D9DC3B1A4ECD500028D528 /* apu_squarewave_channel.cpp in Sources */,
-				65D9DC3C1A4ECD500028D528 /* sound.cpp in Sources */,
-				65D8DC3C1A52A7DB00A06FBD /* cart_mbc3.cpp in Sources */,
-				65D9DC361A4ECBBF0028D528 /* cpu.cpp in Sources */,
-				65D9DC371A4ECBBF0028D528 /* osx.cpp in Sources */,
-				65D9DC381A4ECBBF0028D528 /* sdl_io_provider.cpp in Sources */,
-				65381CAF1A5154D0004433EA /* cartridge.cpp in Sources */,
-				65381CB61A515F8E004433EA /* cart_mbc1.cpp in Sources */,
-				65D9DC311A4ECBAD0028D528 /* gpu.cpp in Sources */,
-				65B135231A5413B70004202E /* cart_mbc3_rtc.cpp in Sources */,
-				65D9DC321A4ECBAD0028D528 /* buttons.cpp in Sources */,
-				65D9DC331A4ECBAD0028D528 /* debug.cpp in Sources */,
-				65255BBD1A518B13003EC57D /* cart_loader.cpp in Sources */,
-				65D9DC341A4ECBAD0028D528 /* timer.cpp in Sources */,
-				65255BBA1A518864003EC57D /* cart_mbc0.cpp in Sources */,
-				65D9DC351A4ECBAD0028D528 /* timewarp.cpp in Sources */,
-				651958E71A50089E00A18E8A /* mem.cpp in Sources */,
-				65D9DC2C1A4ECB890028D528 /* ResourcePath.mm in Sources */,
-				65D9DC2B1A4ECB430028D528 /* main.cpp in Sources */,
+				6517215C1AD5121F0064B733 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -610,6 +682,38 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		651721681AD5150A0064B733 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		651721691AD5150A0064B733 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					/usr/local/include,
+				);
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		65D9DC1D1A4EC2770028D528 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -867,6 +971,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		651721671AD5150A0064B733 /* Build configuration list for PBXNativeTarget "KarouGB GTEST" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				651721681AD5150A0064B733 /* Debug */,
+				651721691AD5150A0064B733 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		65D9DC1F1A4EC2770028D528 /* Build configuration list for PBXNativeTarget "KarouGB Unit Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

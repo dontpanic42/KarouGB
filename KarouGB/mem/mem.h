@@ -54,6 +54,19 @@ namespace emu
          der jeweils aktivierten Bank (ein bankswitch mit aktiviertem Bootrom
          ist z.B. möglich) */
         bool bootromEnabled;
+        
+        /* WRAM-Banks des CGB */
+        u08i cgbWRAM[0x8][0x1000];
+        /* Setter für CGB-WRAM-Banks */
+        void cgbOnWriteWRAM(u16i addr, u08i value, u08i * ptr);
+        void cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr);
+        /* Getter für CGB-WRAM-Banks */
+        u08i cgbOnReadWRAM(u16i addr, u08i * ptr) const;
+        u08i cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const;
+        /* Dies ist eine CGB-Emulation */
+        const bool cgb;
+        /* Diese CGB-Emulation unterstützt CGB-Features */
+        const bool cgb_mode;
     public:
         /* Eine Writermethode, die alle Schreibversuche unterbindet. */
         const static writer_t WRITER_READ_ONLY;
@@ -70,7 +83,7 @@ namespace emu
         /* Anzahl sichtbarer Bänke */
         const static std::size_t BANK_COUNT;
         
-        KMemory();
+        KMemory(bool cgb, bool cgb_mode);
         
         /* Blendet eine externe Speicherbank ein */
         void setActiveBank(u08i bankno, bank_t * bank);
@@ -115,6 +128,9 @@ namespace emu
                 wb(addr + i, buffer[i]);
             }
         }
+        
+        bool isCGB() const;
+        bool inCGBMode() const;
     };
 }
 

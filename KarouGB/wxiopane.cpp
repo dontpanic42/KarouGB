@@ -8,17 +8,23 @@
 
 #include "wxiopane.h"
 
+#include "wxevents.h"
+
 namespace gui
 {
     const int SCALE = 4;
     
-    BEGIN_EVENT_TABLE(IOPane, wxPanel)
+    wxDEFINE_EVENT(emevt_REQUEST_REDRAW, wxThreadEvent);
+    wxDEFINE_EVENT(emevt_EMULATION_ERROR, wxThreadEvent);
+    
+    wxBEGIN_EVENT_TABLE(IOPane, wxPanel)
     
     EVT_PAINT(IOPane::paintEvent)
     EVT_KEY_DOWN(IOPane::onKeyDown)
     EVT_KEY_UP(IOPane::onKeyUp)
-    
-    END_EVENT_TABLE()
+    EVT_CUSTOM_THREADED(emevt_REQUEST_REDRAW, wxID_ANY, IOPane::flipBuffer)
+    EVT_CUSTOM_THREADED(emevt_EMULATION_ERROR, wxID_ANY, IOPane::onEmulationError)
+    wxEND_EVENT_TABLE()
     
     IOPane::IOPane(wxFrame * parent)
     : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize((SCALE * 160) + 2, (SCALE * 144) + 35))
@@ -53,7 +59,8 @@ namespace gui
         }
     }
     
-    void IOPane::flipBuffer()
+    /* Event-Handler für emevt_REQUEST_REDRAW events */
+    void IOPane::flipBuffer(wxThreadEvent & evt)
     {
         std::unique_lock<std::mutex> lkc(currentBuffer.mutex, std::defer_lock);
         std::unique_lock<std::mutex> lkb(buffer.mutex, std::defer_lock);
@@ -65,6 +72,14 @@ namespace gui
         
         lkc.unlock();
         lkb.unlock();
+        
+        evt.Skip();
+    }
+    
+    /* Event-Handler für emevt_EMULATION_ERROR events */
+    void IOPane::onEmulationError(wxThreadEvent & evt)
+    {
+        wxMessageBox(evt.GetString(), wxT("Emulation error."), wxICON_INFORMATION);
     }
     
     void IOPane::onKeyDown(wxKeyEvent & event)

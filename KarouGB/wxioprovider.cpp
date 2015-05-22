@@ -7,7 +7,9 @@
 //
 
 #include "wxioprovider.h"
+#include "wxevents.h"
 #include "log.h"
+#include "debug.h"
 
 namespace emu
 {
@@ -68,6 +70,11 @@ namespace emu
                     }
                 }
             }
+            else
+            {
+                Debugger::getInstance()->interrupt();
+            }
+            
             iopane->keyQueue.queue.pop();
         }
     }
@@ -87,7 +94,9 @@ namespace emu
     
     void WXIOProvider::display()
     {
-        iopane->flipBuffer();
+        //iopane->flipBuffer();
+        wxThreadEvent * evt = new wxThreadEvent(gui::emevt_REQUEST_REDRAW);        
+        iopane->GetEventHandler()->QueueEvent(evt);
     }
     
     void WXIOProvider::registerButtonCallback(Button btn,
@@ -96,5 +105,13 @@ namespace emu
     {
         pressCallbacks[static_cast<char>(btn)] = onPress;
         releaseCallbacks[static_cast<char>(btn)] = onRelease;
+    }
+    
+    void WXIOProvider::handleError(const std::exception & exception)
+    {
+        wxThreadEvent * evt = new wxThreadEvent(gui::emevt_EMULATION_ERROR);
+        evt->SetString(exception.what());
+        
+        iopane->GetEventHandler()->QueueEvent(evt);
     }
 }

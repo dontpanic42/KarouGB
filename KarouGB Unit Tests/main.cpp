@@ -6,18 +6,18 @@
 //  Copyright (c) 2014 Daniel. All rights reserved.
 //
 
-#include <iostream>
+//#include <iostream>
 #include <gtest/gtest.h>
 
-#include "log.h"
-#include "mbc1test.h"
-#include "newmemtest.h"
-#include "mbc3rtctest.h"
+//#include "log.h"
+//#include "mbc1test.h"
+//#include "newmemtest.h"
+//#include "mbc3rtctest.h"
 
 int main(int argc, char * argv[])
 {
     /* Deaktiviere Logging < ERROR */
-    lg::setLevel(lg::LOG_DISABLED);
+    //lg::setLevel(lg::LOG_DISABLED);
     
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

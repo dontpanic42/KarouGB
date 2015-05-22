@@ -8,6 +8,7 @@
 
 #include "gpu.h"
 #include <sstream>
+#include <algorithm>
 
 #define GPU_TILE_SIZE 8
 #define GPU_NUM_TILES 384
@@ -19,11 +20,26 @@
 #define SPRITE_ATTRIBUTE_TABLE 0xFE00
 #define SPRITE_MAX_PER_SCANLINE 10
 
+#define CGB_BCPS_REG 0xFF68
+#define CGB_BCPD_REG 0xFF69
+#define CGB_OCPS_REG 0xFF6A
+#define CGB_OCPD_REG 0xFF6B
+
+#define CGB_DMA_SRCH 0xFF51
+#define CGB_DMA_SRCL 0xFF52
+#define CGB_DMA_DSTH 0xFF53
+#define CGB_DMA_DSTL 0xFF54
+#define CGB_DMA_CTRL 0xFF55
+
+#define CGB_VBK_REG 0xFF4F
+
 namespace emu
 {
     GPU::GPU(std::shared_ptr<KMemory> mmu,
              std::shared_ptr<IOProvider> ioprovider,
-             std::shared_ptr<cpu::Z80> cpu)
+             std::shared_ptr<cpu::Z80> cpu,
+             bool cgb,
+             bool cgb_mode)
     //: modeclock(0)
     //, mode(2)
     : line(0)
@@ -49,11 +65,22 @@ namespace emu
     , gpu_line(0)
     , gpu_vblank_line_counter(0)
     /* Neu Ende */
+    
+    /* CGB */
+    , cgb(cgb)
+    , cgb_mode(cgb_mode)
+    , reg_cgb_bcpd(mmu->getDMARef(CGB_BCPD_REG))
+    , reg_cgb_bcps(mmu->getDMARef(CGB_BCPS_REG))
+    , reg_cgb_ocpd(mmu->getDMARef(CGB_OCPD_REG))
+    , reg_cgb_ocps(mmu->getDMARef(CGB_OCPS_REG))
+    , reg_cgb_vbk(mmu->getDMARef(CGB_VBK_REG))
     {
         colors[0] = 255;
         colors[1] = 192;
         colors[2] =  96;
         colors[3] =   0;
+        
+        
         
         //Default palette: 0=White, 3=black
         reg_bgp = 0xE4;
@@ -69,6 +96,67 @@ namespace emu
         mmu->intercept(GPU_REG_ADDR_LY, [this](u16i addr, u08i value, u08i * ptr) {
             this->onResetLy(addr, value, ptr);
         });
+        
+        if(isCGB() && inCGBMode())
+        {
+            /* Schreibe ein Byte in eine Background-Color-Palette */
+            mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteBCPD(addr, value, ptr);
+            });
+            /* Lese ein Byte aus einer Background-Color-Palette */
+            mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadBCPD(addr, ptr);
+            });
+            
+            /* Schreibe ein Byte in eine Sprite-Color-Palette */
+            mmu->intercept(CGB_OCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteOCPD(addr, value, ptr);
+            });
+            /* Lese ein Byte aus einer Sprite-Color-Palette */
+            mmu->intercept(CGB_OCPD_REG, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadOCPD(addr, ptr);
+            });
+            
+            /* Schreiben in das VRAM */
+            mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteVRAM(addr, value, ptr);
+            });
+            /* Lesen aus dem VRAM */
+            mmu->intercept(0x8000, 0x2000, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadVRAM(addr, ptr);
+            });
+            
+            /* Schreiben in das CGB-DMA Kontrollregister */
+            mmu->intercept(CGB_DMA_CTRL, [this](u16i addr, u08i value, u08i * ptr) {
+                this->cgbOnWriteDMACTRL(addr, value, ptr);
+            });
+            
+            /* Lesen aus dem CGB-DMA Kontrollregister */
+            mmu->intercept(CGB_DMA_CTRL, [this](u16i addr, u08i * ptr) {
+                return this->cgbOnReadDMACTRL(addr, ptr);
+            });
+            
+            /* Initialisiere die Hintergrund-Paletten mit der Farbe weiß (0xFFFF) */
+            for(std::size_t i = 0; i < 8; i++)
+            {
+                for(std::size_t k = 0; k < 4; k++)
+                {
+                    cgbBGPData[i][k][0] = 0xFF;
+                    cgbBGPData[i][k][1] = 0xFF;
+                }
+            }
+            
+            /* Initialisiere die Farbtabellen (Mappen einer CGB-Farbe auf den RGB-Raum)
+               TODO: Irgend eine Interpolationsmethode, die originalgetreuer ist verwenden */
+            for(std::size_t i = 0; i < 0x20; i++)
+            {
+                float f = (i == 0)? 0.f : static_cast<float>(i) / 32.f;
+                u08i c = static_cast<u08i>(f * 255.f);
+                cgbColorTable.r[i] = c;
+                cgbColorTable.g[i] = c;
+                cgbColorTable.b[i] = c;
+            }
+        }
         
         clearAlphaBuffer();
     }
@@ -98,13 +186,7 @@ namespace emu
         renderWindow();
         
         renderSprites();
-        
-#ifdef RENDER_ON_SCANLINE
-        ioprovider->poll();
-        ioprovider->display();
-#endif
     }
-    
     
     /* Rendert die bgmaps, wenn aktiviert */
     void GPU::renderBackground()
@@ -125,8 +207,9 @@ namespace emu
         u08i y = line;
         u08i mapX, mapY;
         u16i mapLinear;
-        u08i tileX, tileY, tileIndex, rgbvalue;
+        u08i tileX, tileY, tileIndex, rgbvalue, cgbTileAttrb = 0;
         Color pixel;
+        RGBColor cgb_rgb_color;
         
         /* Finde den BG-Map Index für die aktuelle y-position. */
         /* Das offset ergibt sich aus der y-Position + dem y-Scroll-offset. */
@@ -149,26 +232,46 @@ namespace emu
             /* Die BG-Map sind "Zeilen" von 32 Bytes hintereinander, d.h. das Lineare
              Speicher-Offset ergibt sich als (y-index * 32) + x-index. */
             mapLinear = (mapY * 32) + mapX;
-            /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
-            tileIndex = mmu->rb(bgmap + mapLinear);
+            
+            if(isCGB() && inCGBMode())
+            {
+                /* Im CGB-Modus liegt die BG-Map immer in VRAM Bank 0 (?) */
+                tileIndex =     cgbVRAM[0][bgmap + mapLinear - 0x8000];
+                /* An der selben Adresse in Bank 1 befindet sich jeweils 
+                   ein Attributsbyte */
+                cgbTileAttrb =  cgbVRAM[1][bgmap + mapLinear - 0x8000];
+            }
+            else
+            {
+                /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
+                tileIndex = mmu->rb(bgmap + mapLinear);
+            }
             
             /* x-Position inherhalb der 8-Pixel-Tile sind die letzten 3 bit */
             tileX = reg_scx + x;
             tileX &= 0x07;
             
             /* Hole die Pixel-Daten aus der entsprechenden Tile */
-            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY);
+            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY, cgbTileAttrb);
             
             /* Schreibe in den alphabuffer, damit nachher die Sprite-Prioritäten
              bestimmt werden können
              (pixel = 1..3=true; 0=false) */
             alphabuffer[(line * GPU_SCREENWIDTH) + x] = pixel;
             
-            /* Übersetze die Codierte Farbe in RGB */
-            rgbvalue = decodeColor(pixel, reg_bgp);
-            /* Zeichne den Pixel. */
-            //std::printf("Trying to draw %u, %u\n", x, line);
-            ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            if(isCGB() && inCGBMode())
+            {
+                /* Die Palette is in Bit 0..2 des Tile-Attributs codiert */
+                cgb_rgb_color = cgbDecodeColor(BGP, pixel, cgbTileAttrb & 0x07);
+                ioprovider->draw(x, line, cgb_rgb_color.r, cgb_rgb_color.g, cgb_rgb_color.b);
+            }
+            else
+            {
+                /* Übersetze die Codierte Farbe in RGB */
+                rgbvalue = decodeColor(pixel, reg_bgp);
+                /* Zeichne den Pixel. */
+                ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            }
         }
         
     }
@@ -176,12 +279,32 @@ namespace emu
     void GPU::renderWindow()
     {
         /* Wenn das Window-Rendering NICHT aktiviert ist */
-        if(!(reg_lcdc & BIT_5))
+        if(isCGB())
         {
-            /* ... mache garnichts. */
-            return;
+            if(inCGBMode())
+            {
+                /* TODO: Implementieren */
+            }
+            else
+            {
+                /* CGB im nicht-CGB-modus: Das Window wird nur angezeigt,
+                   wenn SOWOHL Bit 0 als auch Bit 5 gesetzt sind! */
+                if(!(reg_lcdc & BIT_0) || !(reg_lcdc & BIT_5))
+                {
+                    return;
+                }
+            }
         }
-        
+        else
+        {
+            /* Bei klassischen Gameboy ist Bit 5 ausschlaggebend dafür,
+               ob das Window angezeigt wird. */
+            if(!(reg_lcdc & BIT_5))
+            {
+                /* ... mache garnichts. */
+                return;
+            }
+        }
         
         /* Die Window-Map sind 32*32 Bytes. Jedes Byte zeigt auf eine Tile
          in der Tile-Data-Sektion, das ergibt einen virtuellen Bildschirm von
@@ -208,9 +331,9 @@ namespace emu
         u08i wx, wy;
         u08i mapX, mapY;
         u16i mapLinear;
-        u08i tileX, tileY, tileIndex, rgbvalue;
+        u08i tileX, tileY, tileIndex, rgbvalue, cgbTileAttrb = 0;
         Color pixel;
-        
+        RGBColor cgb_rgb_color;
         
         /* Die y-Position des gesuchten Fenster Pixels */
         wy = y - y0;
@@ -249,23 +372,44 @@ namespace emu
             /* Die Window-Map sind "Zeilen" von 32 Bytes hintereinander, d.h. das Lineare
              Speicher-Offset ergibt sich als (y-index * 32) + x-index. */
             mapLinear = (mapY * 32) + mapX;
-            /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
-            tileIndex = mmu->rb(bgmap + mapLinear);
+            
+            if(isCGB() && inCGBMode())
+            {
+                /* Im CGB-Modus liegt die BG-Map immer in VRAM Bank 0 (?) */
+                tileIndex =     cgbVRAM[0][bgmap + mapLinear - 0x8000];
+                /* An der selben Adresse in Bank 1 befindet sich jeweils
+                 ein Attributsbyte */
+                cgbTileAttrb =  cgbVRAM[1][bgmap + mapLinear - 0x8000];
+            }
+            else
+            {
+                /* Lese den BG-Map Eintrag (d.h. den Tile-Index) aus dem Speicher */
+                tileIndex = mmu->rb(bgmap + mapLinear);
+            }
             
             /* x-Position inherhalb der 8-Pixel-Tile sind die letzten 3 bit */
             tileX = wx;
             tileX &= 0x07;
             
             /* Hole die Pixel-Daten aus der entsprechenden Tile */
-            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY);
+            pixel = getBGTilePixel(tileset, tileIndex, tileX, tileY, cgbTileAttrb);
             
             /* Das Fenster ist _nie_ transparent */
             alphabuffer[(line * GPU_SCREENWIDTH) + x] = true;
             
-            /* Übersetze die Codierte Farbe in RGB */
-            rgbvalue = decodeColor(pixel, reg_bgp);
-            /* Zeichne den Pixel. */
-            ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            if(isCGB() && inCGBMode())
+            {
+                /* Die Palette is in Bit 0..2 des Tile-Attributs codiert */
+                cgb_rgb_color = cgbDecodeColor(BGP, pixel, cgbTileAttrb & 0x07);
+                ioprovider->draw(x, line, cgb_rgb_color.r, cgb_rgb_color.g, cgb_rgb_color.b);
+            }
+            else
+            {
+                /* Übersetze die Codierte Farbe in RGB */
+                rgbvalue = decodeColor(pixel, reg_bgp);
+                /* Zeichne den Pixel. */
+                ioprovider->draw(x, line, rgbvalue, rgbvalue, rgbvalue);
+            }
         }
     }
     
@@ -314,6 +458,7 @@ namespace emu
         u08i tile_y;
         Color color;
         u08i rgbvalue;
+        RGBColor cgb_rgb_color;
         
         while(queue.size())
         {
@@ -334,14 +479,36 @@ namespace emu
                     continue;
                 }
                 
-                /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
-                 Wenn die pixelposition nicht transparenten bg oder transparentes
-                 Window enthält*/
-                if((current_sprite.attr & BIT_7) &&
-                   (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+                /* Wenn der CGBMode aktiviert ist, beachte das Master-Priority-Bit im
+                   LCDC-Register (Bit 0) */
+                if(isCGB() && inCGBMode())
                 {
-                    /* Zeichne nichts */
-                    continue;
+                    /* Wenn Bit 0 nicht gesetzt ist, haben sprites _immer_ priorität.
+                       Wenn es gestetzt ist, nutze die üblichen Mechanismen. */
+                    if(reg_lcdc & BIT_0)
+                    {
+                        /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
+                         Wenn die pixelposition nicht transparenten bg oder transparentes
+                         Window enthält*/
+                        if((current_sprite.attr & BIT_7) &&
+                           (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+                        {
+                            /* Zeichne nichts */
+                            continue;
+                        }
+                    }
+                }
+                else
+                {
+                    /* Wenn das Sprite _hinter_ dem bg angezeigt werden soll UND
+                     Wenn die pixelposition nicht transparenten bg oder transparentes
+                     Window enthält*/
+                    if((current_sprite.attr & BIT_7) &&
+                       (alphabuffer[(line * GPU_SCREENWIDTH) + sx + tile_x]))
+                    {
+                        /* Zeichne nichts */
+                        continue;
+                    }
                 }
                 
                 color = getSPTilePixel(current_sprite, tile_x, tile_y, mode8x16);
@@ -353,8 +520,18 @@ namespace emu
                     continue;
                 }
                 
-                rgbvalue = decodeColor(color, (current_sprite.attr & BIT_4)? reg_obp1 : reg_obp0);
-                ioprovider->draw(sx + tile_x, line, rgbvalue, rgbvalue, rgbvalue);
+                if(isCGB() && inCGBMode())
+                {
+                    /* Schaue die Farbe in der OBP-Tabelle (u08i cgbSPPData[0x08][0x04][0x02])
+                       nach (Bit 0..2 im Sprite Attribut) */
+                    cgb_rgb_color = cgbDecodeColor(OBP, color, current_sprite.attr & 0x07);
+                    ioprovider->draw(sx + tile_x, line, cgb_rgb_color.r, cgb_rgb_color.g, cgb_rgb_color.b);
+                }
+                else
+                {
+                    rgbvalue = decodeColor(color, (current_sprite.attr & BIT_4)? reg_obp1 : reg_obp0);
+                    ioprovider->draw(sx + tile_x, line, rgbvalue, rgbvalue, rgbvalue);
+                }
             } // for
             queue.pop();
         } // while
@@ -372,16 +549,31 @@ namespace emu
         /* Wenn der 8x16-Sprite-mode aktiviert ist, ignoriere
          das erste bit... */
         u08i tile = (mode8x16)? sprite.tile & ~BIT_0 : sprite.tile;
-        u16i addr = 0x8000 + (tile * 16) + (y * 2);
+        u16i addr = (tile * 16) + (y * 2);
+        
+        u08i byte0, byte1;
+        if(isCGB() && inCGBMode())
+        {
+            /* Wenn der CGB-Mode aktiv ist, berücksichtige die Bank-
+               Spezifikation im Sprite-Attribut (Bit 3) */
+            byte0 = cgbVRAM[(sprite.attr & BIT_3) >> 3][addr];
+            byte1 = cgbVRAM[(sprite.attr & BIT_3) >> 3][addr + 1];
+        }
+        else
+        {
+            /* Wenn nicht im CGB-Mode, nehme was im Speicher steht. */
+            byte0 = mmu->rb(0x8000 + addr);
+            byte1 = mmu->rb(0x8000 + addr + 1);
+        }
         
         u08i value;
-        value = (mmu->rb(addr)     & (BIT_0 << (7-x)))? 1 : 0;
-        value+= (mmu->rb(addr + 1) & (BIT_0 << (7-x)))? 2 : 0;
+        value = (byte0 & (BIT_0 << (7-x)))? 1 : 0;
+        value+= (byte1 & (BIT_0 << (7-x)))? 2 : 0;
         
         return static_cast<Color>(value);
     }
     
-    GPU::Color GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y)
+    GPU::Color GPU::getBGTilePixel(u16i tileset, u08i index, u08i x, u08i y, u08i cgbTileAttribute)
     {
         //Wenn das tileset 0x8800 gewählt ist, muss der index als
         //signed char interpretiert werden. index = 0 entspricht dann
@@ -400,9 +592,26 @@ namespace emu
         
         addr += y * 2;
         
+        u08i byte0, byte1;
+        if(isCGB() && inCGBMode())
+        {
+            /* TODO: x/y flip */
+            /* TODO: BG-Priority */
+            /* Wenn der CGB-Mode aktiv ist, berücksichtige die Bank-
+               Spezifikation im Tile-Attribut (Bit 3) */
+            byte0 = cgbVRAM[(cgbTileAttribute & 0x03) >> 3][addr - 0x8000];
+            byte1 = cgbVRAM[(cgbTileAttribute & 0x03) >> 3][addr + 1 - 0x8000];
+        }
+        else
+        {
+            /* Wenn nicht im CGB-Mode, nehme was im Speicher steht. */
+            byte0 = mmu->rb(addr);
+            byte1 = mmu->rb(addr + 1);
+        }
+        
         u08i value;
-        value = (mmu->rb(addr)     & (BIT_0 << (7-x)))? 1 : 0;
-        value+= (mmu->rb(addr + 1) & (BIT_0 << (7-x)))? 2 : 0;
+        value = (byte0 & (BIT_0 << (7-x)))? 1 : 0;
+        value+= (byte1 & (BIT_0 << (7-x)))? 2 : 0;
         
         return static_cast<Color>(value);
     }
@@ -422,12 +631,57 @@ namespace emu
         return colors[shade];
     }
     
+    GPU::RGBColor GPU::cgbDecodeColor(cgb_palette paletteName, Color color, u08i palette)
+    {
+        RGBColor result;
+        
+        /* Wenn die Palette OBP und die Farbe 0 ist, 
+           übersetze dies nach 'transparent' */
+        if(paletteName == OBP &&
+           color == 0)
+        {
+            result.r = 255;
+            result.g = 255;
+            result.b = 255;
+            
+            return result;
+        }
+        else
+        {
+            u16i pavalue;
+            palette &= 0x07;
+            
+            if(paletteName == OBP)
+            {
+                pavalue  = cgbSPPData[palette][color][1] << 8;
+                pavalue |= cgbSPPData[palette][color][0];
+            }
+            else
+            {
+                pavalue  = cgbBGPData[palette][color][1] << 8;
+                pavalue |= cgbBGPData[palette][color][0];
+            }
+            
+            /* Die Farben sind jeweils mit 5 bit als r-g-b in pavalue codiert. */
+            result.r = cgbColorTable.r[(pavalue)       & 0x1F];
+            result.g = cgbColorTable.g[(pavalue >> 5)  & 0x1F];
+            result.b = cgbColorTable.b[(pavalue >> 10) & 0x1F];
+            
+            return result;
+        }
+    }
+    
     void GPU::render()
     {
-#ifndef RENDER_ON_SCANLINE
         ioprovider->poll();
-        ioprovider->display();
-#endif
+        /* Wenn der Bildschirm aktiviert ist */
+        if(reg_lcdc & BIT_7)
+        {
+            ioprovider->display();
+        }
+        /* TODO: Zeige einen weißen Bildschrim
+           oä. */
+        
         clearAlphaBuffer();
     }
     
@@ -517,6 +771,18 @@ namespace emu
                 /* Wenn HBLANK beendet ist... */
                 if(gpu_modeclock >= GPU_TIMING_HBLANK)
                 {
+                    /* CGB H-Blank DMA-Transfers aktualisieren, wenn
+                     CGB und in CGB-Mode */
+                    if(isCGB() && inCGBMode())
+                    {
+                        /* Transfers finden nur Statt, wenn LY <= 143 ist */
+                        if(gpu_line <= 143)
+                        {
+                            /* Aktualisiere laufende Transfers */
+                            cgbDoTransfer();
+                        }
+                    }
+                    
                     /* Inkrementiere die Zeile */
                     gpu_line++;
                     gpu_modeclock -= GPU_TIMING_HBLANK;
@@ -616,6 +882,269 @@ namespace emu
         else
         {
             reg_stat &= ~BIT_2;
+        }
+    }
+    
+    bool GPU::isCGB() const
+    {
+        return cgb;
+    }
+    
+    bool GPU::inCGBMode() const
+    {
+        return cgb_mode;
+    }
+    
+    /* Wenn sich die Emulation im CGB-Modus befindet, schreibt diese
+       methode ein byte in das BGP-Feld. Der index 0x00..0x3F wird durch
+       reg_cgb_bcps festgelegt.
+       Das BGP-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte 
+       (8 * 4 * 2 = 64 = 0x3F). */
+    void GPU::cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_bcps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            cgbBGPData[palette][color][index & 0x01] = value;
+            
+            /* Inkrementiere das Index-Register, falls notwendig. */
+            if(reg_cgb_bcps & BIT_7)
+            {
+                /* inkrementiere den Index im bcps register */
+                u08i inc_index = index + 1;
+                /* Der index sind die Bits 0..5 */
+                reg_cgb_bcps &= ~0x3F;
+                /* Auf register-überlauf checken */
+                reg_cgb_bcps |= (inc_index > 0x3F)? 0 : inc_index;
+            }
+        }
+        
+        (*ptr) = value;
+    }
+    
+    /* Wenn sich die Emulation im CGB-Modus befindet, ließt diese
+     methode ein byte in das BGP-Feld. Der index 0x00..0x3F wird durch
+     reg_cgb_bcps festgelegt.
+     Das BGP-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte
+     (8 * 4 * 2 = 64 = 0x3F). */
+    u08i GPU::cgbOnReadBCPD(u16i addr, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_bcps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            return cgbBGPData[palette][color][index & 0x01];
+        }
+        
+        return (*ptr);
+    }
+    
+    /* Wenn sich die Emulation im CGB-Modus befindet, schreibt diese
+     methode ein byte in das Sprte-Palette-Feld. Der index 0x00..0x3F wird durch
+     reg_cgb_ocps (Sprite Palette Selector) festgelegt.
+     Das Sprte-Palette-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte
+     (8 * 4 * 2 = 64 = 0x3F). */
+    void GPU::cgbOnWriteOCPD(u16i addr, u08i value, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_ocps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            cgbSPPData[palette][color][index & 0x01] = value;
+            
+            /* Inkrementiere das Index-Register, falls notwendig. */
+            if(reg_cgb_ocps & BIT_7)
+            {
+                /* inkrementiere den Index im bcps register */
+                u08i inc_index = index + 1;
+                /* Der index sind die Bits 0..5 */
+                reg_cgb_ocps &= ~0x3F;
+                /* Auf register-überlauf checken */
+                reg_cgb_ocps |= (inc_index > 0x3F)? 0 : inc_index;
+            }
+        }
+        
+        (*ptr) = value;
+    }
+    
+    /* Wenn sich die Emulation im CGB-Modus befindet, ließt diese
+       methode ein byte aus dem Sprte-Palette-Feld. Der index 0x00..0x3F wird durch
+       reg_cgb_ocps (Sprite Palette Selector) festgelegt.
+       Das Sprte-Palette-Feld besteht aus 8 Paletten mit jeweils 4 Farben á 2 Byte
+       (8 * 4 * 2 = 64 = 0x3F). */
+    u08i GPU::cgbOnReadOCPD(u16i addr, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            const u08i index = reg_cgb_ocps & 0x3F;
+            
+            /* BIT_3, BIT_4, BIT_5 sind die Palette */
+            u08i palette =  (index & ~0x07)  >> 3;
+            /* BIT_1 und BIT_2 sind die Farbe */
+            u08i color =    (index &  0x07)  >> 1;
+            /* BIT_0 ist das high/low byte */
+            return cgbSPPData[palette][color][index & 0x01];
+        }
+        
+        return (*ptr);
+    }
+    
+    /* Setter für das CGB-VRAM */
+    void GPU::cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr)
+    {
+        if(inCGBMode())
+        {
+            /* schreibe in VRAM-Bank 0 */
+            cgbVRAM[reg_cgb_vbk & 0x01][addr - 0x8000] = value;
+        }
+        else
+        {
+            cgbVRAM[0][addr - 0x8000] = value;
+        }
+    }
+
+    /* Getter für das CGB-VRAM */
+    u08i GPU::cgbOnReadVRAM(u16i addr, u08i * ptr) const
+    {
+        if(inCGBMode())
+        {
+            /* gib den Wert aus der VRAM-Bank 0 oder 1 zurück */
+            return cgbVRAM[reg_cgb_vbk & 0x01][addr - 0x8000];
+        }
+        else
+        {
+            return cgbVRAM[0][addr - 0x8000];
+        }
+    }
+    
+    /* Schreibefunktion für das CGB DMA-Kontrollregister */
+    void GPU::cgbOnWriteDMACTRL(u16i addr, u08i value, u08i * ptr)
+    {
+
+        if(cgbCurrentTransfer.isActive)
+        {
+            /* Wenn ein H-Blank Transfer aktiv ist, und BIT_7 = 0
+               geschrieben wird, breche den H-Blank Transfer ab. */
+            if(!(value & BIT_7))
+            {
+                cgbCurrentTransfer.isActive = false;
+            }
+            
+            /* Wenn der H-Blank Transfer aktiv ist, und BIT_7 = 1
+               geschrieben wird, ignoriere den Schreibvorgang */
+        }
+        else
+        {
+            /* Die unteren 4 Bit der SRC-Arddesse werden irgnoriert... */
+            u16i src =  static_cast<u16i>(mmu->rb(CGB_DMA_SRCH)) << 8;
+            src |=      static_cast<u16i>(mmu->rb(CGB_DMA_SRCL) & ~0x0F);
+            
+            /* Die unteren 4 Bit der Adresse werden ignoriert und die
+             Die oberen 3 Bit der Adresse werden ignoriert.
+             Größte darzustellende Zahl: 0x1FF0, erffektiver Ziel-
+             Addressbereich: 0x8000 - 0x9FF0 */
+            u16i dst =  static_cast<u16i>(mmu->rb(CGB_DMA_DSTH) & ~0xE0) << 8;
+            dst |=      static_cast<u16i>(mmu->rb(CGB_DMA_DSTL) & ~0x0F);
+            dst +=      0x8000;
+            
+            /* Die Transfer-Größe sind die ersten 7 Bit des Kontroll-
+             registers (x). Die tatsächliche Größe ergibt sich als
+             len = (x + 0x01) * 0x10
+             D.h. die Größen 0x01...0x800 sind möglich. */
+            u16i len =  (static_cast<u16i>(value & 0x7F) + 0x01) * 0x10;
+            
+            /* Wenn Bit 7 0 ist und kein H-Blank DMA-Transfer statt
+             findet, starte den synchronen General Purpose DMA-
+             Transfer. */
+            if((value & BIT_7))
+            {
+                /* Kopiere src...(src+len) nach  dst...(dst+len) */
+                for(std::size_t i = 0; i < len; i++)
+                {
+                    mmu->wb(dst + i, mmu->rb(src + i));
+                }
+            }
+            /* Wenn Bit 7 1 ist und kein H-Blank DMA-Transfer statt
+               findet, starte den H-Blank DMA-Transfer */
+            else
+            {
+                cgbCurrentTransfer.isActive = true;
+                cgbCurrentTransfer.src = src;
+                cgbCurrentTransfer.dst = dst;
+                cgbCurrentTransfer.length = len;
+                cgbCurrentTransfer.currentOffset = 0;
+                
+                /* Der Rest des Transfers wird von cgbDoTransfer() abgewickelt */
+            }
+        }
+    }
+    
+    /* Lesefunktion für das CGB DMA-Kontrollregister */
+    u08i GPU::cgbOnReadDMACTRL(u16i addr, u08i * ptr)
+    {
+        if(cgbCurrentTransfer.isActive)
+        {
+            /* Wenn ein Transfer aktiv ist, enthält dieses Register die anzahl noch zu schreibender bytes
+               in kurzform. Das Bit 7 ist _nicht_ gesetzt (false = Flag, das ein DMA-Transfer stattfindet). */
+            u16i remaining = cgbCurrentTransfer.length - cgbCurrentTransfer.currentOffset;
+            if(remaining != 0)
+            {
+                remaining = (remaining / 0x10) - 1;
+            }
+            
+            return static_cast<u08i>(remaining) & ~BIT_7;
+        }
+        else
+        {
+            /* Wenn kein Transfer aktiv ist, ist Bit 7 gesetzt und der Rest des bytes (Bit 0..6)
+               ist = 0x7F */
+            return 0xFF;
+        }
+    }
+    
+    /* Wird in der H-Blank Periode mit LY = 0..143 ausgeführt und führt einen Teil 
+       des H-Blank DMA Transfers durch, falls einer aktiv ist. 
+       -> Wird von der GPU.tick() Methode ausgeführt! */
+    void GPU::cgbDoTransfer()
+    {
+        if(cgbCurrentTransfer.isActive)
+        {
+            cgb_dma_transfer_t & t(cgbCurrentTransfer);
+            
+            /* Kopiere maximal 0x10 bytes, oder bis zum ende des Transfers */
+            const u16i max = (t.length < t.currentOffset + 0x10)? t.length : t.currentOffset + 0x10;
+            
+            /* Kopiere Daten von src nach dst */
+            for(u16i i = t.currentOffset; i < max; i++)
+            {
+                mmu->wb(t.dst + i, mmu->rb(t.src + i));
+            }
+            
+            /* Das Offset zeigt jetzt auf das nächste zu kopierende Byte */
+            t.currentOffset = max;
+            
+            /* Wenn das offset >= der der maximalen Länge ist, ist der 
+               Transfer abgeschlossen. */
+            if(t.currentOffset >= t.length)
+            {
+                t.isActive = false;
+            }
         }
     }
 }

@@ -42,6 +42,8 @@ namespace emu
         virtual void registerButtonCallback(Button btn,
                                             IOProvider::on_press_t onPress,
                                             IOProvider::on_release_t onRelease);
+        
+        virtual void handleError(const std::exception & exception);
     };
 }
 
