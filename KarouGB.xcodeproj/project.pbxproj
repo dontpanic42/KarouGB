@@ -35,6 +35,8 @@
 		6555148D1A30BCAF007CAAD4 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 655514871A30BCAF007CAAD4 /* sound.cpp */; };
 		6557F51F1A2DC77400F870DA /* timewarp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6557F51D1A2DC77400F870DA /* timewarp.cpp */; };
 		6559891C1A68483400BD0FB1 /* runtime-testrom-gbc.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */; };
+		657612CB1B106EC00034BD4A /* gpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 65DC60A71A2DB64D00D7415F /* gpu.cpp */; };
+		657612CC1B106ED60034BD4A /* pokemon-crystal.gb in Copy Cartridges */ = {isa = PBXBuildFile; fileRef = 6534338E1A6284A800C49CA8 /* pokemon-crystal.gb */; };
 		659133A51A30C0150085193B /* osx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A11A30C0150085193B /* osx.cpp */; };
 		659133A61A30C0150085193B /* ResourcePath.mm in Sources */ = {isa = PBXBuildFile; fileRef = 659133A41A30C0150085193B /* ResourcePath.mm */; };
 		659133AE1A30C0290085193B /* cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 659133A81A30C0290085193B /* cpu.cpp */; };
@@ -87,6 +89,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
+				657612CC1B106ED60034BD4A /* pokemon-crystal.gb in Copy Cartridges */,
 				651721741AD516E50064B733 /* cpu_instrs.gb in Copy Cartridges */,
 			);
 			name = "Copy Cartridges";
@@ -195,6 +198,7 @@
 		6557F51E1A2DC77400F870DA /* timewarp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timewarp.h; sourceTree = "<group>"; };
 		6557F5221A2DCFC000F870DA /* rom_bios.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rom_bios.h; sourceTree = "<group>"; };
 		6559891B1A68482800BD0FB1 /* runtime-testrom-gbc.gb */ = {isa = PBXFileReference; lastKnownFileType = file; path = "runtime-testrom-gbc.gb"; sourceTree = "<group>"; };
+		657612C71B106C5C0034BD4A /* gputest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gputest.h; sourceTree = "<group>"; };
 		6591339A1A30C0010085193B /* io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_provider.h; sourceTree = "<group>"; };
 		6591339B1A30C0010085193B /* sdl_io_provider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdl_io_provider.cpp; sourceTree = "<group>"; };
 		6591339C1A30C0010085193B /* sdl_io_provider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdl_io_provider.h; sourceTree = "<group>"; };
@@ -300,6 +304,7 @@
 				651721631AD5150A0064B733 /* main.cpp */,
 				651721651AD5150A0064B733 /* KarouGB_GTEST.1 */,
 				651721751AD51A820064B733 /* instrtest.h */,
+				657612C71B106C5C0034BD4A /* gputest.h */,
 			);
 			path = "KarouGB GTEST";
 			sourceTree = "<group>";
@@ -625,6 +630,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				657612CB1B106EC00034BD4A /* gpu.cpp in Sources */,
 				651721771AD51D9D0064B733 /* debug.cpp in Sources */,
 				651721761AD51D850064B733 /* cpu.cpp in Sources */,
 				6517216C1AD516350064B733 /* cart_mbc3_rtc.cpp in Sources */,
@@ -978,6 +984,7 @@
 				651721691AD5150A0064B733 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		65D9DC1F1A4EC2770028D528 /* Build configuration list for PBXNativeTarget "KarouGB Unit Tests" */ = {
 			isa = XCConfigurationList;

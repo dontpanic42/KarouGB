@@ -12,6 +12,7 @@
 #include "newmemtest.h"
 //#include "mbc3rtctest.h"
 #include "instrtest.h"
+#include "gputest.h"
 
 #include "log.h"
 
