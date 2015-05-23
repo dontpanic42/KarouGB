@@ -112,11 +112,11 @@ namespace emu
             });
             
             /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Schreiben */
-            intercept(0xE000, 0x0E00, [this](u16i addr, u08i value, u08i * ptr) {
+            intercept(0xF000, 0x0E00, [this](u16i addr, u08i value, u08i * ptr) {
                 this->cgbOnWriteShadowWRAM(addr, value, ptr);
             });
             /* Aktiviere Shadow-Banking in Addr. 0xF000 - 0xFDFF, Lesen */
-            intercept(0xE000, 0x0E00, [this](u16i addr, u08i * ptr) {
+            intercept(0xF000, 0x0E00, [this](u16i addr, u08i * ptr) {
                 return this->cgbOnReadShadowWRAM(addr, ptr);
             });
         }
@@ -263,7 +263,7 @@ namespace emu
     /* Setter für CGB-WRAM-Banks im Shadow-Memory */
     void KMemory::cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr)
     {
-        addr -= 0xE000;
+        addr -= 0xF000;
         if(inCGBMode())
         {
             /* Bankno = Bits 0..2 des Registes 0xFF70 */
@@ -299,7 +299,7 @@ namespace emu
     /* Getter für CGB-WRAM-Banks im Shadow-Memory */
     u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const
     {
-        addr -= 0xE000;
+        addr -= 0xF000;
         if(inCGBMode())
         {
             /* Bankno = Bits 0..2 des Registes 0xFF70 */

@@ -241,4 +241,35 @@ TEST_F(instruction_test, TestInstr_ADD)
     test_add_rxx(c->HL, c->SP, 0x39);
 }
 
+/**
+ If the contents of the Program Counter are 3535H, the contents of the Stack
+ Pointer are 2000H, the contents of memory location 2000H are B5H, and
+ the contents of memory location of memory location 2001H are 18H. At
+ execution of RET the contents of the Stack Pointer is 2002H, and the
+ contents of the Program Counter is 18B5H, pointing to the address of the
+ next program Op Code to be fetched.
+ Quelle: http://www.phy.davidson.edu/FacHome/dmb/py310/Z80.Instruction%20set.pdf
+ **/
+TEST_F(instruction_test, TestInstr_RET)
+{
+    c->FLAG = 0;
+    c->SP = 0xD000;
+    mmu->wb(0xD000, 0xB5);
+    mmu->wb(0xD001, 0x18);
+    
+    ASSERT_EQ(mmu->rb(0xD000), 0xB5);
+    ASSERT_EQ(mmu->rb(0xD001), 0x18);
+    ASSERT_EQ(c->SP, 0xD000);
+    
+    c->PC = baseAddress;
+    mmu->wb(baseAddress, 0xC9); //RET
+    
+    ASSERT_EQ(c->PC, baseAddress);
+    ASSERT_EQ(mmu->rb(baseAddress), 0xC9);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->SP, 0xD002);
+    ASSERT_EQ(c->PC, 0x18B5);
+}
 #endif
