@@ -94,7 +94,9 @@ namespace emu
                       }
                   });
         
-        /* Spiegle 0xC000 - 0xDDFF an Addresse 0xE000 - 0xFDFF */
+        /* Spiegle 0xC000 - 0xDDFF an Addresse 0xE000 - 0xFDFF.
+           Die Upper-banks werden durch cgbOn*ShadowRAM erstezt,
+           wenn dies ein CGB ist. */
         for(std::size_t i = 0xC000, k = 0xE000; i <= 0xDDFF; i++, k++)
         {
             MEMPTR(k) = MEMPTR(i);
@@ -242,7 +244,7 @@ namespace emu
         return cgb_mode;
     }
     
-    /* Setter für CGB-WRAM-Banks */
+    /* Setter für CGB-WRAM-Banks, wird nur für Upper-Banks aufgerufen. */
     void KMemory::cgbOnWriteWRAM(u16i addr, u08i value, u08i * ptr)
     {
         addr -= 0xD000;
@@ -260,7 +262,7 @@ namespace emu
         }
     }
     
-    /* Setter für CGB-WRAM-Banks im Shadow-Memory */
+    /* Setter für CGB-WRAM-Banks im Shadow-Memory, wird nur für Upper-Banks aufgerufen. */
     void KMemory::cgbOnWriteShadowWRAM(u16i addr, u08i value, u08i * ptr)
     {
         addr -= 0xF000;
@@ -278,7 +280,7 @@ namespace emu
         }
     }
     
-    /* Getter für CGB-WRAM-Banks */
+    /* Getter für CGB-WRAM-Banks, wird nur für Upper-Banks aufgerufen. */
     u08i KMemory::cgbOnReadWRAM(u16i addr, u08i * ptr) const
     {
         addr -= 0xD000;
@@ -296,7 +298,7 @@ namespace emu
         }
     }
     
-    /* Getter für CGB-WRAM-Banks im Shadow-Memory */
+    /* Getter für CGB-WRAM-Banks im Shadow-Memory, wird nur für Upper-Banks aufgerufen. */
     u08i KMemory::cgbOnReadShadowWRAM(u16i addr, u08i * ptr) const
     {
         addr -= 0xF000;
