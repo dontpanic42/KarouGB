@@ -160,6 +160,13 @@ namespace emu
             u16i length;
             /* Anzahl der Bytes, die schon übertragen wurden */
             u16i currentOffset;
+            
+            cgb_dma_transfer_t()
+            : isActive(false)
+            , src(0), dst(0), length(0)
+            , currentOffset(0)
+            {
+            }
         };
         
         struct cgb_color_table_t
