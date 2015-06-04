@@ -113,7 +113,6 @@ TEST_F(cgb_vram_dma_test, general_purpose_dma)
         mmu->wb(i, 42);
     }
     
-    std::printf("Starte transfer \n");
     //starte den transfer
     mmu->wb(0xFF55, transfer_len);
     
