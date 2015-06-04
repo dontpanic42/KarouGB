@@ -13,6 +13,7 @@
 //#include "mbc3rtctest.h"
 #include "instrtest.h"
 #include "gputest.h"
+#include "vram_dma_transfer_test.h"
 
 #include "log.h"
 
@@ -21,6 +22,8 @@ int main(int argc, char * argv[])
     lg::setLevel(lg::LOG_DISABLED);
     
     testing::InitGoogleTest(&argc, argv);
+    
+    
     return RUN_ALL_TESTS();
 }
 

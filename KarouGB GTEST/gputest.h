@@ -10,26 +10,13 @@
 #define KarouGB_gputest_h
 
 #include <gtest/gtest.h>
+#include "bogus_ioprovider.h"
 #include <memory>
 #include "../KarouGB/mem/cart_loader.h"
 #include "../KarouGB/cpu/cpu.h"
 #include "../KarouGB/gpu.h"
 
 using namespace emu;
-
-class BogusIOProvider : public IOProvider {
-public:
-    virtual void init(const std::string & wintitle) { }
-    virtual void poll() { }
-    virtual void draw(u08i x, u08i y, u08i r, u08i g, u08i b) { }
-    virtual void display() { }
-    virtual bool isClosed() { return false; }
-    virtual void printDebugString(const std::string & str) {};
-    virtual void registerButtonCallback(Button btn,
-                                        std::function<void(u08i)> onPress,
-                                        std::function<void(u08i)> onRelease) {}
-};
-
 using namespace cpu;
 
 class gpu_test : public testing::Test
@@ -216,7 +203,35 @@ TEST_F(gpu_test, GPUTest_CGB_ColorPalettes_BGPD)
     }
 }
 
-
+TEST_F(gpu_test, GPUTest_OAM_DMA_Transfer)
+{
+    const u16i srcReg = 0xFF46;
+    const u08i srcAdd = 0xC0;
+    
+    u16i start = srcAdd << 8;
+    
+    //Schreibe testdaten für den Transfer
+    for(u16i i = start; i <= start + 0xA0; i++)
+    {
+        mmu->wb(i, 42);
+    }
+    
+    //Schreibe die Addresse (0xC0) und starte den Transfer
+    mmu->wb(srcReg, srcAdd);
+    //Das register sollte vom callback in den speicher geschrieben
+    //worden sein
+    ASSERT_EQ(mmu->rb(srcReg), srcAdd);
+    
+    //Im bereich 0xFE000-0xFE9F sollten jetzt die daten
+    //aus 0xC000 - 0xC09F stehhen..
+    for(u16i i = 0xFE00; i <= 0xFE9F; i++)
+    {
+        ASSERT_EQ(mmu->rb(i), 42);
+    }
+    
+    //Danach sollte nichts mehr geschrieben worden sein
+    ASSERT_NE(mmu->rb(0xFF00), 42);
+}
 
 TEST_F(gpu_test, GPUTest_CGB_VRAM)
 {

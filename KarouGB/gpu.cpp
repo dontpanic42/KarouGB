@@ -171,7 +171,7 @@ namespace emu
         //Source:      XX00-XX9F * 0x100
         //Destination: FE00-FE9F
         u16i src = ((u16i) value) << 8;
-        for(u16i i = 0; i < 0x9F; i++)
+        for(u16i i = 0; i <= 0x9F; i++)
         {
             mmu->wb(SPRITE_ATTRIBUTE_TABLE + i, mmu->rb(src + i));
         }
@@ -1036,7 +1036,6 @@ namespace emu
     /* Schreibefunktion für das CGB DMA-Kontrollregister */
     void GPU::cgbOnWriteDMACTRL(u16i addr, u08i value, u08i * ptr)
     {
-
         if(cgbCurrentTransfer.isActive)
         {
             /* Wenn ein H-Blank Transfer aktiv ist, und BIT_7 = 0
@@ -1069,15 +1068,17 @@ namespace emu
              D.h. die Größen 0x01...0x800 sind möglich. */
             u16i len =  (static_cast<u16i>(value & 0x7F) + 0x01) * 0x10;
             
+            
+            //std::printf("Habe transfer, src = %x, dst = %x, len = 0x%x, val=0x%x\n", src, dst, len, value);
             /* Wenn Bit 7 0 ist und kein H-Blank DMA-Transfer statt
              findet, starte den synchronen General Purpose DMA-
              Transfer. */
-            if((value & BIT_7))
+            if(!(value & BIT_7))
             {
                 /* Kopiere src...(src+len) nach  dst...(dst+len) */
-                for(std::size_t i = 0; i < len; i++)
+                for(u16i src_i = src, dst_i = dst; dst_i < dst + len; src_i++, dst_i++)
                 {
-                    mmu->wb(dst + i, mmu->rb(src + i));
+                    mmu->wb(dst_i, mmu->rb(src_i));
                 }
             }
             /* Wenn Bit 7 1 ist und kein H-Blank DMA-Transfer statt

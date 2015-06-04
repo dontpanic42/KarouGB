@@ -249,6 +249,8 @@
 		65DC60B01A2DB64D00D7415F /* debug_translation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = debug_translation.h; sourceTree = "<group>"; };
 		65DC60B51A2DB64D00D7415F /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		65DC60B61A2DB64D00D7415F /* timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = timer.h; sourceTree = "<group>"; };
+		65E50EF41B203E95003D944A /* vram_dma_transfer_test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vram_dma_transfer_test.h; sourceTree = "<group>"; };
+		65E50EF51B203EE1003D944A /* bogus_ioprovider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bogus_ioprovider.h; sourceTree = "<group>"; };
 		65E763691A31B4890015EECF /* noise_generator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = noise_generator.h; sourceTree = "<group>"; };
 		65E7636A1A31BC610015EECF /* apu_noise_channel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = apu_noise_channel.cpp; sourceTree = "<group>"; };
 		65E7636B1A31BC610015EECF /* apu_noise_channel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = apu_noise_channel.h; sourceTree = "<group>"; };
@@ -305,6 +307,8 @@
 				651721651AD5150A0064B733 /* KarouGB_GTEST.1 */,
 				651721751AD51A820064B733 /* instrtest.h */,
 				657612C71B106C5C0034BD4A /* gputest.h */,
+				65E50EF41B203E95003D944A /* vram_dma_transfer_test.h */,
+				65E50EF51B203EE1003D944A /* bogus_ioprovider.h */,
 			);
 			path = "KarouGB GTEST";
 			sourceTree = "<group>";

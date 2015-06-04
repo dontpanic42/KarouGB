@@ -132,7 +132,6 @@ TEST(NewMemTest, CGB_Shadow_WRAMTest)
     
 }
 
-
 TEST(NewMemTest, CGB_WRAMTest)
 {
     std::shared_ptr<KCartridgeLoader> loader(KCartridgeLoader::load("pokemon-crystal.gb"));
