@@ -26,7 +26,7 @@ public:
     std::shared_ptr<KCartridgeLoader> loader;
     std::shared_ptr<KMemory> mmu;
     std::shared_ptr<Z80> cpu;
-    std::unique_ptr<Context> c;
+    std::shared_ptr<Context> c;
     std::unique_ptr<GPU> gpu;
     
     u16i baseAddress;
@@ -48,7 +48,7 @@ public:
         ASSERT_TRUE(mmu != nullptr);
         
         cpu =       std::make_shared<Z80>(mmu);
-        c =         std::move(std::unique_ptr<Context>(new Context));
+        c =         std::make_shared<Context>();
         
         ASSERT_TRUE(cpu != nullptr);
         ASSERT_TRUE(c != nullptr);
@@ -63,6 +63,28 @@ public:
         
         ASSERT_TRUE(mmu->isCGB());
         ASSERT_TRUE(mmu->inCGBMode());
+    }
+    
+    void stepToEnterHblank()
+    {
+        while(gpu->gpu_mode != GPU::MODE_HBLANK)
+        {
+            /* Inkrementiere die CPU-Masterclock in 4er-Schritten
+               (als wenn NOPs ausgeführt würde) */
+            c->T += 4;
+            gpu->step(*c);
+        }
+    }
+    
+    void stepToExitHblank()
+    {
+        while(gpu->gpu_mode == GPU::MODE_HBLANK)
+        {
+            /* Inkrementiere die CPU-Masterclock in 4er-Schritten
+             (als wenn NOPs ausgeführt würde) */
+            c->T += 4;
+            gpu->step(*c);
+        }
     }
     
     void TearDown()

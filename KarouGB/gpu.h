@@ -83,8 +83,9 @@ namespace emu
         /* True, wenn der Pixel _NICHT_ transparent ist,
          false, wenn der Pixel Transparent ist. */
         bool alphabuffer[GPU_SCREENWIDTH * GPU_SCREENHEIGHT];
-        
-        /* Neu */
+     
+    /* Public für Tests */
+    public:
         enum GPUMode
         {
             MODE_HBLANK = 0x00,
@@ -100,6 +101,7 @@ namespace emu
         u16i gpu_modeclock;
         u08i gpu_line;
         u16i gpu_vblank_line_counter;
+    private:
         
         void compareLYC();
         /* Neu Ende */
