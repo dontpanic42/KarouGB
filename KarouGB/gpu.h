@@ -52,6 +52,18 @@ namespace emu
 {
     class GPU
     {
+    /* Public ausschließlich für Tests */
+    public:
+        enum GPUMode
+        {
+            MODE_HBLANK = 0x00,
+            MODE_VBLANK = 0x01,
+            MODE_OAM    = 0x02,
+            MODE_VRAM   = 0x03,
+            
+            MODE_INVALID = 0x10
+        };
+        
     private:
         enum Color
         {
@@ -80,28 +92,15 @@ namespace emu
         std::shared_ptr<KMemory>    mmu;
         std::shared_ptr<cpu::Z80> cpu;
         
-        /* True, wenn der Pixel _NICHT_ transparent ist,
-         false, wenn der Pixel Transparent ist. */
-        bool alphabuffer[GPU_SCREENWIDTH * GPU_SCREENHEIGHT];
-     
-    /* Public für Tests */
-    public:
-        enum GPUMode
-        {
-            MODE_HBLANK = 0x00,
-            MODE_VBLANK = 0x01,
-            MODE_OAM    = 0x02,
-            MODE_VRAM   = 0x03,
-            
-            MODE_INVALID = 0x10
-        };
-        
         u08i gpu_mode;
         u08i gpu_last_mode;
         u16i gpu_modeclock;
         u08i gpu_line;
         u16i gpu_vblank_line_counter;
-    private:
+        
+        /* True, wenn der Pixel _NICHT_ transparent ist,
+         false, wenn der Pixel Transparent ist. */
+        bool alphabuffer[GPU_SCREENWIDTH * GPU_SCREENHEIGHT];
         
         void compareLYC();
         /* Neu Ende */
@@ -217,6 +216,8 @@ namespace emu
         cgb_color_table_t cgbColorTable;
         
         /* CGB-Sachen ende */
+        u08i line;
+        void renderScanline();
     public:
         GPU(std::shared_ptr<KMemory> mmu,
             std::shared_ptr<IOProvider> ioprovider,
@@ -224,13 +225,23 @@ namespace emu
             bool cgb,
             bool cgb_mode);
         
-        u08i line;
-        void renderScanline();
         
         void step(cpu::Context & c);
         
+        /* Gibt zurück, ob die Emulation GPU einen Gameboy Color emuliert */
         bool isCGB() const;
+        /* Gibt zurück, ob sich der emulierte Gameboy Color im 
+           Gameboy Color-Modus befindet */
         bool inCGBMode() const;
+        
+        /* Für Tests */
+        /* Gibt den aktuellen GPUMode zurück, in dem
+           sich die GPU befindet. */
+        GPUMode getCurrentState();
+        /* Gibt die aktuelle Y-Line zurück, die derzeit
+           bearbeitet wird. */
+        u08i getCurrentLine();
+        /* Für Tests ende */
     };
 }
 

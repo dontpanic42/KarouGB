@@ -1107,16 +1107,15 @@ namespace emu
             if(remaining != 0)
             {
                 remaining = (remaining / 0x10) - 1;
+                return static_cast<u08i>(remaining) & ~BIT_7;
             }
             
-            return static_cast<u08i>(remaining) & ~BIT_7;
         }
-        else
-        {
-            /* Wenn kein Transfer aktiv ist, ist Bit 7 gesetzt und der Rest des bytes (Bit 0..6)
-               ist = 0x7F */
-            return 0xFF;
-        }
+        
+        /* Wenn kein Transfer aktiv ist, ist Bit 7 gesetzt und der Rest des bytes (Bit 0..6)
+           ist = 0x7F */
+        return 0xFF;
+        
     }
     
     /* Wird in der H-Blank Periode mit LY = 0..143 ausgeführt und führt einen Teil 
@@ -1147,5 +1146,17 @@ namespace emu
                 t.isActive = false;
             }
         }
+    }
+    
+    /* Gibt den aktuellen GPUMode zurück, in dem  sich die GPU befindet. */
+    GPU::GPUMode GPU::getCurrentState()
+    {
+        return static_cast<GPUMode>(gpu_mode);
+    }
+    
+    /* Gibt die aktuelle Y-Line zurück, die derzeit bearbeitet wird. */
+    u08i GPU::getCurrentLine()
+    {
+        return gpu_line;
     }
 }
