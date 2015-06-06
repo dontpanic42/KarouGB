@@ -16,6 +16,13 @@
 
 using namespace cpu;
 
+#define SETUP_OPCODE(x) zero_registers();\
+                        c->PC = baseAddress;\
+                        mmu->wb(baseAddress, x)
+#define SET_IMMEDIATE1(x)  mmu->wb(c->PC + 1, x)
+#define SET_IMMEDIATE2(x)  mmu->wb(c->PC + 2, x)
+#define RUN(x) cpu->execute(*x)
+
 class instruction_test : public testing::Test
 {
 public:
@@ -56,9 +63,113 @@ public:
     {
     }
     
+    void zero_registers()
+    {
+        c->AF = 0;
+        c->BC = 0;
+        c->DE = 0;
+        c->HL = 0;
+        c->PC = 0;
+        c->SP = 0;
+        c->FLAG = 0;
+        c->ime = 0;
+    }
+    
     /* Multi-Tests */
+    
+    /* 8-Bit-Register Ladefunktionen. Schema:
+        LD r1, r2
+        Lade r2 nach r1 */
+    void test_ld(u08i & dst, u08i & src, u08i opcode)
+    {
+        zero_registers();
+        
+        c->PC = baseAddress;
+        c->FLAG = 0;
+        mmu->wb(c->PC, opcode);
+        
+        dst = 0;
+        src = 42;
+        
+        cpu->execute(*c);
+        
+        ASSERT_EQ(src, dst);
+        ASSERT_EQ(c->FLAG, 0);
+        ASSERT_EQ(c->PC, baseAddress + 1);
+    }
+    
+    //tests (HL) -> R
+    void test_ld_mem_hl(u08i & dst, u08i opcode)
+    {
+        zero_registers();
+        
+        c->PC = baseAddress;
+        c->FLAG = 0;
+        dst = 0;
+        
+        mmu->wb(c->PC, opcode);
+        mmu->wb(0xC200, 42);
+        c->HL = 0xC200;
+        
+        ASSERT_EQ(mmu->rb(c->HL), 42);
+        ASSERT_EQ(mmu->rb(c->PC), opcode);
+        
+        cpu->execute(*c);
+                
+        ASSERT_EQ(dst, 42);
+        ASSERT_EQ(c->FLAG, 0);
+        ASSERT_EQ(c->PC, baseAddress + 1);
+    }
+    
+    //tests R -> (HL)
+    //Funktioniert NICHT für H -> (HL), L -> (HL)
+    void test_ld_hl_mem(u08i & src, u08i opcode)
+    {
+        zero_registers();
+        
+        c->PC = baseAddress;
+        c->FLAG = 0;
+        mmu->wb(c->PC, opcode);
+        mmu->wb(0xC200, 0);
+        c->HL = 0xC200;
+        src = 42;
+        
+        ASSERT_EQ(mmu->rb(0xC200), 0);
+        ASSERT_EQ(mmu->rb(c->PC), opcode);
+        
+        cpu->execute(*c);
+        
+        ASSERT_EQ(mmu->rb(0xC200), 42);
+        ASSERT_EQ(c->FLAG, 0);
+        ASSERT_EQ(c->PC, baseAddress + 1);
+    }
+    
+    void test_ld_mem_a(u16i & src, u08i opcode)
+    {
+        zero_registers();
+        
+        c->PC = baseAddress;
+        c->FLAG = 0;
+        c->A = 0;
+        
+        mmu->wb(c->PC, opcode);
+        mmu->wb(0xC211, 42);
+        src = 0xC211;
+        
+        ASSERT_EQ(mmu->rb(src), 42);
+        ASSERT_EQ(mmu->rb(c->PC), opcode);
+        
+        cpu->execute(*c);
+        
+        ASSERT_EQ(c->A, 42);
+        ASSERT_EQ(c->FLAG, 0);
+        ASSERT_EQ(c->PC, baseAddress + 1);
+    }
+    
     void test_inc_rxx(u16i & reg, u08i opcode)
     {
+        zero_registers();
+        
         const u08i flag_full = 0xFF;
         const u08i flag_zero = 0x00;
         
@@ -104,6 +215,8 @@ public:
     
     void test_inc_rx(u08i & reg, u08i opcode)
     {
+        zero_registers();
+        
         /* Teste INC A, A=0 */
         reg = 0;
         c->PC = baseAddress;
@@ -177,6 +290,8 @@ public:
     
     void test_add_rxx(u16i & regA, u16i & regB, u08i opcode)
     {
+        zero_registers();
+        
         /* Teste INC A, A=0 */
         regA = 0xFFFF;
         regB = 0x0001;
@@ -204,6 +319,387 @@ public:
     }
 };
 
+TEST_F(instruction_test, LoadInstrs_LD_8BIT_REG)
+{
+    test_ld(c->A, c->A, 0x7F);
+    test_ld(c->A, c->B, 0x78);
+    test_ld(c->A, c->C, 0x79);
+    test_ld(c->A, c->D, 0x7A);
+    test_ld(c->A, c->E, 0x7B);
+    test_ld(c->A, c->H, 0x7C);
+    test_ld(c->A, c->L, 0x7D);
+    test_ld_mem_hl(c->A, 0x7E);
+
+    test_ld(c->B, c->A, 0x47);
+    test_ld(c->B, c->B, 0x40);
+    test_ld(c->B, c->C, 0x41);
+    test_ld(c->B, c->D, 0x42);
+    test_ld(c->B, c->E, 0x43);
+    test_ld(c->B, c->H, 0x44);
+    test_ld(c->B, c->L, 0x45);
+    test_ld_mem_hl(c->B, 0x46);
+    
+    test_ld(c->C, c->A, 0x4F);
+    test_ld(c->C, c->B, 0x48);
+    test_ld(c->C, c->C, 0x49);
+    test_ld(c->C, c->D, 0x4A);
+    test_ld(c->C, c->E, 0x4B);
+    test_ld(c->C, c->H, 0x4C);
+    test_ld(c->C, c->L, 0x4D);
+    test_ld_mem_hl(c->C, 0x4E);
+    
+    test_ld(c->D, c->A, 0x57);
+    test_ld(c->D, c->B, 0x50);
+    test_ld(c->D, c->C, 0x51);
+    test_ld(c->D, c->D, 0x52);
+    test_ld(c->D, c->E, 0x53);
+    test_ld(c->D, c->H, 0x54);
+    test_ld(c->D, c->L, 0x55);
+    test_ld_mem_hl(c->D, 0x56);
+    
+    test_ld(c->E, c->A, 0x5F);
+    test_ld(c->E, c->B, 0x58);
+    test_ld(c->E, c->C, 0x59);
+    test_ld(c->E, c->D, 0x5A);
+    test_ld(c->E, c->E, 0x5B);
+    test_ld(c->E, c->H, 0x5C);
+    test_ld(c->E, c->L, 0x5D);
+    test_ld_mem_hl(c->E, 0x5E);
+    
+    test_ld(c->H, c->A, 0x67);
+    test_ld(c->H, c->B, 0x60);
+    test_ld(c->H, c->C, 0x61);
+    test_ld(c->H, c->D, 0x62);
+    test_ld(c->H, c->E, 0x63);
+    test_ld(c->H, c->H, 0x64);
+    test_ld(c->H, c->L, 0x65);
+    test_ld_mem_hl(c->H, 0x66);
+    
+    test_ld(c->L, c->A, 0x6F);
+    test_ld(c->L, c->B, 0x68);
+    test_ld(c->L, c->C, 0x69);
+    test_ld(c->L, c->D, 0x6A);
+    test_ld(c->L, c->E, 0x6B);
+    test_ld(c->L, c->H, 0x6C);
+    test_ld(c->L, c->L, 0x6D);
+    test_ld_mem_hl(c->L, 0x6E);
+    
+    
+    test_ld_hl_mem(c->A, 0x77);
+    test_ld_hl_mem(c->B, 0x70);
+    test_ld_hl_mem(c->C, 0x71);
+    test_ld_hl_mem(c->D, 0x72);
+    test_ld_hl_mem(c->E, 0x73);
+}
+
+TEST_F(instruction_test, TestInstr_LD_A_C)
+{
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0xF2);
+    
+    mmu->wb(0xFF01, 42);
+    ASSERT_EQ(mmu->rb(0xFF01), 42);
+    
+    c->C = 0x01;
+    c->A = 0x00;
+    c->FLAG = 0;
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->C, 0x01);
+    ASSERT_EQ(c->FLAG, 0x00);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+}
+
+TEST_F(instruction_test, TestInstr_LD_C_A)
+{
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0xE2);
+    
+    c->A = 42;
+    c->C = 01;
+    c->FLAG = 0;
+    
+    mmu->wb(0xFF01, 0);
+    ASSERT_EQ(mmu->rb(0xFF01), 0);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(mmu->rb(0xFF01), 42);
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->C, 01);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+}
+
+TEST_F(instruction_test, TestInstr_LD_XX_TO_A)
+{
+    test_ld_mem_a(c->BC, 0x0A);
+    test_ld_mem_a(c->DE, 0x1A);
+    test_ld_mem_a(c->HL, 0x7E);
+}
+
+TEST_F(instruction_test, LDD_A_HL)
+{
+    zero_registers();
+    
+    c->HL = 0xC211;
+    mmu->wb(c->HL, 42);
+    ASSERT_EQ(mmu->rb(0xC211), 42);
+    
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0x3A);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->HL, 0xC210);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+    ASSERT_EQ(c->FLAG, 0);
+}
+
+TEST_F(instruction_test, LDD_HL_A)
+{
+    zero_registers();
+    
+    mmu->wb(0xC211, 0);
+    c->HL = 0xC211;
+    c->A = 42;
+    
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0x32);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(mmu->rb(0xC211), 42);
+    ASSERT_EQ(c->HL, 0xC210);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+}
+
+TEST_F(instruction_test, TestInstr_LDI_A_HL)
+{
+    zero_registers();
+    
+    mmu->wb(0xC211, 42);
+    c->HL = 0xC211;
+    
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0x2A);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->HL, 0xC212);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+    ASSERT_EQ(mmu->rb(0xC211), 42);
+}
+
+TEST_F(instruction_test, TestInstr_LDI_HL_A)
+{
+    zero_registers();
+    
+    mmu->wb(0xC211, 0);
+    c->HL = 0xC211;
+    c->A = 42;
+    
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0x22);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(mmu->rb(0xC211), 42);
+    ASSERT_EQ(c->HL, 0xC212);
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+}
+
+TEST_F(instruction_test, TestInstr_LDH_N_A)
+{
+    SETUP_OPCODE(0xE0);
+    SET_IMMEDIATE1(01);
+    
+    mmu->wb(0xFF01, 0);
+    c->A = 42;
+    
+    RUN(c);
+    
+    ASSERT_EQ(mmu->rb(0xFF01), 42);
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 2);
+}
+
+TEST_F(instruction_test, TestInstr_LDH_A_N)
+{
+    SETUP_OPCODE(0xF0);
+    SET_IMMEDIATE1(01);
+    
+    mmu->wb(0xFF01, 42);
+    
+    RUN(c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(mmu->rb(0xFF01), 42);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 2);
+}
+
+TEST_F(instruction_test, TestInstr_LD_BC_NN)
+{
+    SETUP_OPCODE(0x01);
+    SET_IMMEDIATE1(0x11);
+    SET_IMMEDIATE2(0xC2);
+    RUN(c);
+    ASSERT_EQ(c->BC, 0xC211);
+    ASSERT_EQ(c->PC, baseAddress + 3);
+    ASSERT_EQ(c->FLAG, 0);
+}
+
+TEST_F(instruction_test, TestInstr_LD_DE_NN)
+{
+    SETUP_OPCODE(0x11);
+    SET_IMMEDIATE1(0x11);
+    SET_IMMEDIATE2(0xC2);
+    RUN(c);
+    ASSERT_EQ(c->DE, 0xC211);
+    ASSERT_EQ(c->PC, baseAddress + 3);
+    ASSERT_EQ(c->FLAG, 0);
+}
+
+TEST_F(instruction_test, TestInstr_LD_HL_NN)
+{
+    SETUP_OPCODE(0x21);
+    SET_IMMEDIATE1(0x11);
+    SET_IMMEDIATE2(0xC2);
+    RUN(c);
+    ASSERT_EQ(c->HL, 0xC211);
+    ASSERT_EQ(c->PC, baseAddress + 3);
+    ASSERT_EQ(c->FLAG, 0);
+}
+
+TEST_F(instruction_test, TestInstr_LD_SP_NN)
+{
+    SETUP_OPCODE(0x31);
+    SET_IMMEDIATE1(0x11);
+    SET_IMMEDIATE2(0xC2);
+    RUN(c);
+    ASSERT_EQ(c->SP, 0xC211);
+    ASSERT_EQ(c->PC, baseAddress + 3);
+    ASSERT_EQ(c->FLAG, 0);
+}
+
+TEST_F(instruction_test, TestInstr_LD_SP_HL)
+{
+    SETUP_OPCODE(0xF9);
+    c->HL = 0xC211;
+    c->SP = 0;
+    RUN(c);
+    ASSERT_EQ(c->SP, 0xC211);
+    ASSERT_EQ(c->HL, 0xC211);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+    ASSERT_EQ(c->FLAG, 0);
+}
+
+TEST_F(instruction_test, TestInstr_LD_NN_TO_A)
+{
+    SETUP_OPCODE(0xFA);
+    SET_IMMEDIATE1(0x11);
+    SET_IMMEDIATE2(0xC2);
+    
+    mmu->wb(0xC211, 42);
+    
+    ASSERT_EQ(mmu->rw(c->PC + 1), 0xC211);
+    ASSERT_EQ(mmu->rb(0xC211), 42);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 3);
+}
+
+TEST_F(instruction_test, TestInstr_LD_Immediate_TO_A)
+{
+    zero_registers();
+    
+    c->PC = baseAddress;
+    mmu->wb(c->PC, 0x3E);
+    mmu->wb(c->PC + 1, 42);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(c->A, 42);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 2);
+}
+
+TEST_F(instruction_test, TestInstr_LD_H_TO_HL)
+{
+    zero_registers();
+    /* Tests H -> (HL) (opcode:0x74) */
+    c->PC = baseAddress;
+    c->FLAG = 0;
+    mmu->wb(c->PC, 0x74);
+    mmu->wb(0xC211, 0);
+    c->HL = 0xC211;
+    
+    ASSERT_EQ(mmu->rb(0xC211), 0);
+    ASSERT_EQ(mmu->rb(c->PC), 0x74);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(mmu->rb(0xC211), c->H);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+}
+
+
+TEST_F(instruction_test, TestInstr_LD_L_TO_HL)
+{
+    zero_registers();
+    /* Tests L -> (HL) (opcode:0x75) */
+    c->PC = baseAddress;
+    c->FLAG = 0;
+    mmu->wb(c->PC, 0x75);
+    mmu->wb(0xC211, 0);
+    c->HL = 0xC211;
+    
+    ASSERT_EQ(mmu->rb(0xC211), 0);
+    ASSERT_EQ(mmu->rb(c->PC), 0x75);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(mmu->rb(0xC211), c->L);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 1);
+}
+
+TEST_F(instruction_test, TestInstr_LD_n_TO_HL)
+{
+    zero_registers();
+    /* Tests n -> (HL) (opcode:0x36) */
+    c->PC = baseAddress;
+    c->FLAG = 0;
+    mmu->wb(c->PC, 0x36);
+    mmu->wb(c->PC + 1, 42);
+    
+    mmu->wb(0xC211, 0);
+    c->HL = 0xC211;
+    
+    ASSERT_EQ(mmu->rb(0xC211), 0);
+    ASSERT_EQ(mmu->rb(c->PC), 0x36);
+    
+    cpu->execute(*c);
+    
+    ASSERT_EQ(mmu->rb(0xC211), 42);
+    ASSERT_EQ(c->FLAG, 0);
+    ASSERT_EQ(c->PC, baseAddress + 2);
+}
 
 TEST_F(instruction_test, TestInstr_INC)
 {
