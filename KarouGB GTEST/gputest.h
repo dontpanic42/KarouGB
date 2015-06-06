@@ -64,11 +64,74 @@ public:
         ASSERT_TRUE(mmu->inCGBMode());
     }
     
+    void skipToMode(GPU::GPUMode mode)
+    {
+        while(gpu->getCurrentState() != mode)
+        {
+            c->T = 4;
+            gpu->step(*c);
+        }
+    }
+    
     void TearDown()
     {
     }
     
 };
+
+TEST_F(gpu_test, GPUTest_LCD_STAT_Mode)
+{
+    skipToMode(GPU::MODE_VRAM);
+    ASSERT_EQ(gpu->getCurrentState(), GPU::MODE_VRAM);
+    /* Während des VRAM-States sollte das STAT-Register den
+       wert '3' in den unteren beiden Bits (BIT_0 und BIT_1)
+       haben */
+    ASSERT_EQ(mmu->rb(0xFF41) & (BIT_0 | BIT_1), 3);
+    
+    skipToMode(GPU::MODE_HBLANK);
+    ASSERT_EQ(gpu->getCurrentState(), GPU::MODE_HBLANK);
+    /* Während des HBLANK-States sollte das STAT-Register den
+     wert '0' in den unteren beiden Bits (BIT_0 und BIT_1)
+     haben */
+    ASSERT_EQ(mmu->rb(0xFF41) & (BIT_0 | BIT_1), 0);
+    
+    skipToMode(GPU::MODE_VBLANK);
+    ASSERT_EQ(gpu->getCurrentState(), GPU::MODE_VBLANK);
+    /* Während des VBLANK-States sollte das STAT-Register den
+     wert '1' in den unteren beiden Bits (BIT_0 und BIT_1)
+     haben */
+    ASSERT_EQ(mmu->rb(0xFF41) & (BIT_0 | BIT_1), 1);
+    
+    skipToMode(GPU::MODE_OAM);
+    ASSERT_EQ(gpu->getCurrentState(), GPU::MODE_OAM);
+    /* Während des OAM-States sollte das STAT-Register den
+     wert '2' in den unteren beiden Bits (BIT_0 und BIT_1)
+     haben */
+    ASSERT_EQ(mmu->rb(0xFF41) & (BIT_0 | BIT_1), 2);
+}
+
+TEST_F(gpu_test, GPUTest_STAT_Interrupt_HBLANK)
+{
+    c->ime = 1;
+    // Aktiviere alle Interrupts
+    mmu->wb(0xFFFF, 0xFF);
+    // Lösche alle interrupts
+    mmu->wb(0xFF0F, 0);
+    // Aktivieren den STAT-Interrupt bei H-Blank
+    mmu->wb(0xFF41, BIT_3);
+    
+    skipToMode(GPU::MODE_HBLANK);
+    ASSERT_EQ(gpu->getCurrentState(), GPU::MODE_HBLANK);
+    
+    /* Der Status, der von getCurrentState() zurückgegeben
+       wird, bezieht sich auf den nächsten durchlauf, daher
+       führe einen Tick manuell durch */
+    c->T = 4;
+    gpu->step(*c);
+    
+    // Das LCD-Stat-Interrupt-Flag sollte gesetzt sein.
+    ASSERT_TRUE(mmu->rb(0xFF0F) & BIT_1);
+}
 
 /**
  FF68 - BCPS/BGPI - CGB Mode Only - Background Palette Index
