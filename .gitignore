@@ -9,6 +9,7 @@ KarouGB/mm/*
 KarouGB/rom_bios.h
 vendor/
 vendor/*
+.vs/
 
 # Xcode
 .DS_Store
