@@ -6,6 +6,7 @@
 #include <QAction>
 #include <QMenu>
 #include <memory>
+#include "screenwidget.h"
 #include "../io/io_provider.h"
 #include "../types.h"
 #include "../emulator.h"
@@ -14,7 +15,8 @@ namespace ui {
 
 	class EmulatorWindow 
 		: public QMainWindow
-		, public emu::IOProvider {
+		, public emu::IOProvider 
+	{
 
 		Q_OBJECT
 
@@ -24,13 +26,11 @@ namespace ui {
 		QAction * exit_action;
 		QAction * open_action;
 
-		std::shared_ptr<QImage> current_framebuffer_edit;
-		std::shared_ptr<QImage> current_framebuffer_view;
+		ScreenWidget * screenWidget;
 
 		std::unique_ptr<emu::Emulator> emulator = nullptr;
 
 		void create_framebuffers();
-		void flip_framebuffers();
 		void create_actions();
 		void create_menu();
 		void create_toolbar();
@@ -38,11 +38,10 @@ namespace ui {
 
 	public:
 
-		explicit EmulatorWindow(QWidget *parent = nullptr);
+		explicit EmulatorWindow(QWidget * parent = nullptr);
 
 		bool isClosed();
 
-		void paintEvent(QPaintEvent *event);
 		void tick();
 
 		// IOProvider stuff
