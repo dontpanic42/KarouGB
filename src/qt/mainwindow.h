@@ -30,7 +30,6 @@ namespace ui {
 
 		std::unique_ptr<emu::Emulator> emulator = nullptr;
 
-		void create_framebuffers();
 		void create_actions();
 		void create_menu();
 		void create_toolbar();
