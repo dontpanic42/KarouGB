@@ -30,6 +30,7 @@ set(SOURCES
 	src/timewarp.cpp 
 	src/qt/main.cpp
 	src/qt/mainwindow.cpp
+	src/qt/screenwidget.cpp
 )
 
 set(HEADERS
@@ -60,6 +61,7 @@ set(HEADERS
 	src/timewarp.h
 	src/types.h
 	src/qt/mainwindow.h
+	src/qt/screenwidget.h
 )
 
 add_executable(karougb ${SOURCES} ${HEADERS})

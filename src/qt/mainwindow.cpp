@@ -8,10 +8,12 @@ namespace ui {
 	EmulatorWindow::EmulatorWindow(QWidget *parent) 
 	: QMainWindow(parent)
 	{
-		create_framebuffers();
 		create_actions();
 		create_menu();
 		create_toolbar();
+
+		screenWidget = new ScreenWidget(160, 144, this);
+		setCentralWidget(screenWidget);
 	}
 
 	void EmulatorWindow::init(const std::string & wintitle)
@@ -19,17 +21,6 @@ namespace ui {
 		resize(640, 480);
 		setWindowTitle(tr(wintitle.c_str()));
 		show();
-	}
-
-	void EmulatorWindow::create_framebuffers()
-	{
-		current_framebuffer_edit = std::make_shared<QImage>(160, 144, QImage::Format_RGB888);
-		current_framebuffer_view = std::make_shared<QImage>(160, 144, QImage::Format_RGB888);
-	}
-
-	void EmulatorWindow::flip_framebuffers()
-	{
-		current_framebuffer_edit.swap(current_framebuffer_view);
 	}
 
 	void EmulatorWindow::create_actions()
@@ -76,12 +67,6 @@ namespace ui {
 		}
 	}
 
-	void EmulatorWindow::paintEvent(QPaintEvent * event)
-	{
-		QPainter painter(this);
-		painter.drawImage(0, 0, *current_framebuffer_view);
-	}
-
 	void EmulatorWindow::handleError(const std::exception & exception)
 	{
 		QMessageBox msgBox;
@@ -94,13 +79,12 @@ namespace ui {
 
 	void EmulatorWindow::draw(u08i x, u08i y, u08i r, u08i g, u08i b)
 	{
-		current_framebuffer_edit->setPixel(x, y, qRgb(r, g, b));
+		screenWidget->draw(x, y, r, g, b);
 	}
 
 	void EmulatorWindow::display()
 	{
-		flip_framebuffers();
-		repaint();
+		screenWidget->flip_buffers();
 	}
 
 	void EmulatorWindow::poll()
