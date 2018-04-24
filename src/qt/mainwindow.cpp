@@ -9,6 +9,7 @@ namespace ui {
 		: QMainWindow(parent)
 		, key_event_mapper(new KeyEventMapper(this))
 		, screen_widget(new ScreenWidget(160, 144, this))
+		, paused(false)
 	{
 		// Create window components
 		create_actions();
@@ -51,6 +52,11 @@ namespace ui {
 		open_action = new QAction(tr("&Open"), this);
 		open_action->setIcon(QPixmap("icons/open.png"));
 		connect(open_action, &QAction::triggered, this, &EmulatorWindow::open_cart);
+
+		pause_action = new QAction(tr("&Play/Pause"), this);
+		pause_action->setDisabled(true);
+		pause_action->setIcon(QPixmap("icons/play.png"));
+		connect(pause_action, &QAction::triggered, this, &EmulatorWindow::toggle_paused);
 	}
 
 	void EmulatorWindow::create_menu()
@@ -65,6 +71,8 @@ namespace ui {
 	{
 		toolbar = addToolBar(tr("main toolbar"));
 		toolbar->addAction(open_action);
+		toolbar->addSeparator();
+		toolbar->addAction(pause_action);
 	}
 
 	bool EmulatorWindow::isClosed()
@@ -81,7 +89,45 @@ namespace ui {
 		if (!file_name.isEmpty() && !file_name.isNull()) {
 			emulator = std::move(std::make_unique<emu::Emulator>(io_provider, file_name.toStdString().c_str()));
 			emulator->initialize();
+			resume();
 		}
+	}
+
+	/// <summary>
+	/// Toggles the play/pause state
+	/// </summary>
+	void EmulatorWindow::toggle_paused()
+	{
+		if (paused)
+		{
+			resume();
+		}
+		else
+		{
+			pause();
+		}
+	}
+
+	/// <summary>
+	/// Resumes the (paused) emulator
+	/// </summary>
+	void EmulatorWindow::resume()
+	{
+		pause_action->setDisabled(false);
+		pause_action->setIcon(QPixmap("icons/pause.png"));
+		pause_action->setText(tr("Pause"));
+		paused = false;
+	}
+
+	/// <summary>
+	/// Pauses the emulator
+	/// </summary>
+	void EmulatorWindow::pause()
+	{
+		pause_action->setDisabled(false);
+		pause_action->setIcon(QPixmap("icons/play.png"));
+		pause_action->setText(tr("Resume"));
+		paused = true;
 	}
 
 	/// <summary>
@@ -89,7 +135,7 @@ namespace ui {
 	/// </summary>
 	void EmulatorWindow::tick()
 	{
-		if (emulator)
+		if (emulator && !paused)
 		{
 			emulator->tick();
 		}
