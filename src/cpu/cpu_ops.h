@@ -805,12 +805,16 @@ namespace opfuncs
         
         clear(c, HALFCARRY);
         
-        set_if(c, CARRY, ((a & 0x100) == 0x100));
+		// Set (but not clear!) the carry flag
+		if ((a & 0x100) == 0x100)
+		{
+			set(c, CARRY);
+		}
         
         a &= 0xFF;
-        
-        set_if(c, ZERO, a == 0);
-        
+
+		set_if(c, ZERO, a == 0);
+     
         c.A = static_cast<u08i>(a);
     }
     
