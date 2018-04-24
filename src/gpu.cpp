@@ -97,7 +97,7 @@ namespace emu
             this->onResetLy(addr, value, ptr);
         });
         
-        if(isCGB() && inCGBMode())
+        if(cgb && cgb_mode)
         {
             /* Schreibe ein Byte in eine Background-Color-Palette */
             mmu->intercept(CGB_BCPD_REG, [this](u16i addr, u08i value, u08i * ptr) {
@@ -233,7 +233,7 @@ namespace emu
              Speicher-Offset ergibt sich als (y-index * 32) + x-index. */
             mapLinear = (mapY * 32) + mapX;
             
-            if(isCGB() && inCGBMode())
+            if(cgb && cgb_mode)
             {
                 /* Im CGB-Modus liegt die BG-Map immer in VRAM Bank 0 (?) */
                 tileIndex =     cgbVRAM[0][bgmap + mapLinear - 0x8000];
@@ -259,7 +259,7 @@ namespace emu
              (pixel = 1..3=true; 0=false) */
             alphabuffer[(line * GPU_SCREENWIDTH) + x] = pixel;
             
-            if(isCGB() && inCGBMode())
+            if(cgb && cgb_mode)
             {
                 /* Die Palette is in Bit 0..2 des Tile-Attributs codiert */
                 cgb_rgb_color = cgbDecodeColor(BGP, pixel, cgbTileAttrb & 0x07);
@@ -279,9 +279,9 @@ namespace emu
     void GPU::renderWindow()
     {
         /* Wenn das Window-Rendering NICHT aktiviert ist */
-        if(isCGB())
+        if(cgb)
         {
-            if(inCGBMode())
+            if(cgb_mode)
             {
                 /* TODO: Implementieren */
             }
@@ -373,7 +373,7 @@ namespace emu
              Speicher-Offset ergibt sich als (y-index * 32) + x-index. */
             mapLinear = (mapY * 32) + mapX;
             
-            if(isCGB() && inCGBMode())
+            if(cgb && cgb_mode)
             {
                 /* Im CGB-Modus liegt die BG-Map immer in VRAM Bank 0 (?) */
                 tileIndex =     cgbVRAM[0][bgmap + mapLinear - 0x8000];
@@ -397,7 +397,7 @@ namespace emu
             /* Das Fenster ist _nie_ transparent */
             alphabuffer[(line * GPU_SCREENWIDTH) + x] = true;
             
-            if(isCGB() && inCGBMode())
+            if(cgb && cgb_mode)
             {
                 /* Die Palette is in Bit 0..2 des Tile-Attributs codiert */
                 cgb_rgb_color = cgbDecodeColor(BGP, pixel, cgbTileAttrb & 0x07);
@@ -481,7 +481,7 @@ namespace emu
                 
                 /* Wenn der CGBMode aktiviert ist, beachte das Master-Priority-Bit im
                    LCDC-Register (Bit 0) */
-                if(isCGB() && inCGBMode())
+                if(cgb && cgb_mode)
                 {
                     /* Wenn Bit 0 nicht gesetzt ist, haben sprites _immer_ priorität.
                        Wenn es gestetzt ist, nutze die üblichen Mechanismen. */
@@ -520,7 +520,7 @@ namespace emu
                     continue;
                 }
                 
-                if(isCGB() && inCGBMode())
+                if(cgb && cgb_mode)
                 {
                     /* Schaue die Farbe in der OBP-Tabelle (u08i cgbSPPData[0x08][0x04][0x02])
                        nach (Bit 0..2 im Sprite Attribut) */
@@ -552,7 +552,7 @@ namespace emu
         u16i addr = (tile * 16) + (y * 2);
         
         u08i byte0, byte1;
-        if(isCGB() && inCGBMode())
+        if(cgb && cgb_mode)
         {
             /* Wenn der CGB-Mode aktiv ist, berücksichtige die Bank-
                Spezifikation im Sprite-Attribut (Bit 3) */
@@ -593,7 +593,7 @@ namespace emu
         addr += y * 2;
         
         u08i byte0, byte1;
-        if(isCGB() && inCGBMode())
+        if(cgb && cgb_mode)
         {
             /* TODO: x/y flip */
             /* TODO: BG-Priority */
@@ -773,7 +773,7 @@ namespace emu
                 {
                     /* CGB H-Blank DMA-Transfers aktualisieren, wenn
                      CGB und in CGB-Mode */
-                    if(isCGB() && inCGBMode())
+                    if(cgb && cgb_mode)
                     {
                         /* Transfers finden nur Statt, wenn LY <= 143 ist */
                         if(gpu_line <= 143)
@@ -884,16 +884,7 @@ namespace emu
             reg_stat &= ~BIT_2;
         }
     }
-    
-    bool GPU::isCGB() const
-    {
-        return cgb;
-    }
-    
-    bool GPU::inCGBMode() const
-    {
-        return cgb_mode;
-    }
+   
     
     /* Wenn sich die Emulation im CGB-Modus befindet, schreibt diese
        methode ein byte in das BGP-Feld. Der index 0x00..0x3F wird durch
@@ -902,7 +893,7 @@ namespace emu
        (8 * 4 * 2 = 64 = 0x3F). */
     void GPU::cgbOnWriteBCPD(u16i addr, u08i value, u08i * ptr)
     {
-        if(inCGBMode())
+        if(cgb_mode)
         {
             const u08i index = reg_cgb_bcps & 0x3F;
             
@@ -935,7 +926,7 @@ namespace emu
      (8 * 4 * 2 = 64 = 0x3F). */
     u08i GPU::cgbOnReadBCPD(u16i addr, u08i * ptr)
     {
-        if(inCGBMode())
+        if(cgb_mode)
         {
             const u08i index = reg_cgb_bcps & 0x3F;
             
@@ -957,7 +948,7 @@ namespace emu
      (8 * 4 * 2 = 64 = 0x3F). */
     void GPU::cgbOnWriteOCPD(u16i addr, u08i value, u08i * ptr)
     {
-        if(inCGBMode())
+        if(cgb_mode)
         {
             const u08i index = reg_cgb_ocps & 0x3F;
             
@@ -990,7 +981,7 @@ namespace emu
        (8 * 4 * 2 = 64 = 0x3F). */
     u08i GPU::cgbOnReadOCPD(u16i addr, u08i * ptr)
     {
-        if(inCGBMode())
+        if(cgb_mode)
         {
             const u08i index = reg_cgb_ocps & 0x3F;
             
@@ -1008,7 +999,7 @@ namespace emu
     /* Setter für das CGB-VRAM */
     void GPU::cgbOnWriteVRAM(u16i addr, u08i value, u08i * ptr)
     {
-        if(inCGBMode())
+        if(cgb_mode)
         {
             /* schreibe in VRAM-Bank 0 */
             cgbVRAM[reg_cgb_vbk & 0x01][addr - 0x8000] = value;
@@ -1022,7 +1013,7 @@ namespace emu
     /* Getter für das CGB-VRAM */
     u08i GPU::cgbOnReadVRAM(u16i addr, u08i * ptr) const
     {
-        if(inCGBMode())
+        if(cgb_mode)
         {
             /* gib den Wert aus der VRAM-Bank 0 oder 1 zurück */
             return cgbVRAM[reg_cgb_vbk & 0x01][addr - 0x8000];

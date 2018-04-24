@@ -228,12 +228,6 @@ namespace emu
         
         void step(cpu::Context & c);
         
-        /* Gibt zurück, ob die Emulation GPU einen Gameboy Color emuliert */
-        bool isCGB() const;
-        /* Gibt zurück, ob sich der emulierte Gameboy Color im 
-           Gameboy Color-Modus befindet */
-        bool inCGBMode() const;
-        
         /* Für Tests */
         /* Gibt den aktuellen GPUMode zurück, in dem
            sich die GPU befindet. */
