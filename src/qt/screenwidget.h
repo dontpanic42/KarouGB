@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QImage>
 #include <memory>
+#include <chrono>
 #include "../types.h"
 
 namespace ui {
@@ -20,6 +21,15 @@ namespace ui {
 
 		int buffer_width;
 		int buffer_height;
+
+		std::chrono::system_clock::time_point old_frametime;
+		std::chrono::system_clock::time_point old_update_frametime;
+		double fps_sum;
+		double fps_avg;
+		int fps_tick_count;
+
+		void tick_frame_counter();
+		double get_average_frame_rate();
 
 	public:
 
