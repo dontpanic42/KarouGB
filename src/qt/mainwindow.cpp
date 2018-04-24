@@ -45,10 +45,11 @@ namespace ui {
 	void EmulatorWindow::create_actions()
 	{
 		exit_action = new QAction(tr("&Exit"), this);
+		exit_action->setIcon(QPixmap("icons/exit.png"));
 		connect(exit_action, &QAction::triggered, this, &QWidget::close);
 
 		open_action = new QAction(tr("&Open"), this);
-		open_action->setIcon(QPixmap("icons/icn_play.png"));
+		open_action->setIcon(QPixmap("icons/open.png"));
 		connect(open_action, &QAction::triggered, this, &EmulatorWindow::open_cart);
 	}
 
@@ -77,8 +78,10 @@ namespace ui {
 	void EmulatorWindow::open_cart()
 	{
 		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.cgb *.gb)"));
-		emulator = std::move(std::make_unique<emu::Emulator>(io_provider, file_name.toStdString().c_str()));
-		emulator->initialize();
+		if (!file_name.isEmpty() && !file_name.isNull()) {
+			emulator = std::move(std::make_unique<emu::Emulator>(io_provider, file_name.toStdString().c_str()));
+			emulator->initialize();
+		}
 	}
 
 	/// <summary>

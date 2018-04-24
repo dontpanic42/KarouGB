@@ -26,6 +26,7 @@ namespace ui {
 		QToolBar * toolbar;
 		QAction * exit_action;
 		QAction * open_action;
+		QAction * pause_action;
 
 		ScreenWidget * screen_widget;
 		KeyEventMapper * key_event_mapper;
