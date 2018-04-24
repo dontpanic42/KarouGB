@@ -40,8 +40,6 @@ namespace emu
              std::shared_ptr<cpu::Z80> cpu,
              bool cgb,
              bool cgb_mode)
-    //: modeclock(0)
-    //, mode(2)
     : line(0)
     , cpu(cpu)
     , mmu(mmu)
@@ -58,13 +56,11 @@ namespace emu
     , reg_wx  (mmu->getDMARef(GPU_REG_ADDR_WX))
     , reg_wy  (mmu->getDMARef(GPU_REG_ADDR_WY))
     
-    /* Neu */
     , gpu_mode(MODE_OAM)
     , gpu_last_mode(MODE_INVALID)
     , gpu_modeclock(0)
     , gpu_line(0)
     , gpu_vblank_line_counter(0)
-    /* Neu Ende */
     
     /* CGB */
     , cgb(cgb)
@@ -79,8 +75,6 @@ namespace emu
         colors[1] = 192;
         colors[2] =  96;
         colors[3] =   0;
-        
-        
         
         //Default palette: 0=White, 3=black
         reg_bgp = 0xE4;

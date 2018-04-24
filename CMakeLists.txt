@@ -7,10 +7,15 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_PREFIX_PATH "C:\\Qt\\Qt5.10.1\\5.10.1\\msvc2017_64")
 
-INCLUDE_DIRECTORIES( ${CMAKE_CURRENT_BINARY_DIR} )
+include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 
-find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED)
+
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${Qt5Core_INCLUDE_DIRS})
+include_directories(${Qt5Gui_INCLUDE_DIRS})
 
 set(SOURCES
 	src/buttons.cpp                          
@@ -69,15 +74,27 @@ set(HEADERS
 )
 
 add_executable(karougb ${SOURCES} ${HEADERS})
-target_link_libraries(karougb Qt5::Core Qt5::Widgets)
+target_link_libraries(karougb Qt5::Widgets)
 
 # Copy Qt5 DLLs
-add_custom_command (TARGET karougb POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll ${CMAKE_BINARY_DIR}
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Cored.dll ${CMAKE_BINARY_DIR}
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Guid.dll ${CMAKE_BINARY_DIR}
-	COMMENT "Copying Qt binaries" VERBATIM
-)
+# Qt uses different dlls for debug and release
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	# Debug mode
+	add_custom_command (TARGET karougb POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Widgetsd.dll ${CMAKE_BINARY_DIR}
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Cored.dll ${CMAKE_BINARY_DIR}
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Guid.dll ${CMAKE_BINARY_DIR}
+		COMMENT "Copying Qt binaries (debug)" VERBATIM
+	)
+else()
+	# Release mode
+	add_custom_command (TARGET karougb POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Widgets.dll ${CMAKE_BINARY_DIR}
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Core.dll ${CMAKE_BINARY_DIR}
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${Qt5Core_DIR}/../../../bin/Qt5Gui.dll ${CMAKE_BINARY_DIR}
+		COMMENT "Copying Qt binaries (release)" VERBATIM
+	)
+endif()
 
 # Copy Resources
 add_custom_command (TARGET karougb POST_BUILD

@@ -1,62 +1,34 @@
-# License
+Font Awesome Free License
+-------------------------
 
-Please carefully understand the license and download the latest icons at ModernUIIcons.com.
+Font Awesome Free is free, open source, and GPL friendly. You can use it for
+commercial projects, open source projects, or really almost whatever you want.
+Full Font Awesome Free license: https://fontawesome.com/license.
 
-## Understand Your Rights
-No Attribution and No Derived Works
-http://creativecommons.org/licenses/by-nd/3.0/ *
+# Icons: CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
+In the Font Awesome Free download, the CC BY 4.0 license applies to all icons
+packaged as SVG and JS file types.
 
-- If your project is open source include this license file in the source.
-- Nothing is needed in the front facing project (UNLESS you
-  are using any of the icons listed below in the attribution section).
-- Commercial use is not only allowed but encouraged. If it is an icon
-  in the attribution list below, you still need to attribute those!
-- Do not distribute the entire package (I've allowed this dozens of
-  times for open source projects, but email me first).
+# Fonts: SIL OFL 1.1 License (https://scripts.sil.org/OFL)
+In the Font Awesome Free download, the SIL OLF license applies to all icons
+packaged as web and desktop font files.
 
-## Creator
-- Austin Andrews (@templarian)
+# Code: MIT License (https://opensource.org/licenses/MIT)
+In the Font Awesome Free download, the MIT license applies to all non-font and
+non-icon files.
 
-## Contributor**
-- Jay Zawrotny (@JayZawrotny)
-  - A Bunch
-- Oren Nachman
-  - appbar.chevron.down
-  - appbar.chevron.up
-  - appbar.chevron.left
-  - appbar.chevron.right
+# Attribution
+Attribution is required by MIT, SIL OLF, and CC BY licenses. Downloaded Font
+Awesome Free files already contain embedded comments with sufficient
+attribution, so you shouldn't need to do anything additional when using these
+files normally.
 
-## Derived Works
-- Alex Peattie
-  - Social: http://www.alexpeattie.com/projects/justvector_icons/
+We've kept attribution comments terse, so we ask that you do not actively work
+to remove them from files, especially code. They're a great way for folks to 
+learn about Font Awesome.
 
-## Attribution***
-- Kris Vandermotten (@kvandermotten)
-  - appbar.medical.pulse
-- Constantin Kichinsky (@kichinsky)
-  - appbar.currency.rubles
-  - appbar.currency.grivna
-- Massimo Savazzi (@msavazzi)
-  - List of missing exported icons
-- Proletkult Graphik, from The Noun Project
-  - appbar.draw.pen (inspired)
-- Olivier Guin, from The Noun Project
-  - appbar.draw.marker
-- Gibran Bisio, from The Noun Project
-  - appbar.draw.bucket
-Andrew Forrester, from The Noun Project
-  - appbar.fingerprint
-
-* The license is for attribution, but this is not required.
-** Developers and designers that emailed Templarian the source .design icons to be added into the package. PNGs also accepted, but may take longer to be added.
-*** Icons I've copied so closely you want to attribute them and are also under the CC license.
-
-Contact
-- http://templarian.com/
-- admin[@]templarian[.]com
-
-* Does not apply to copyrighted logos
-- Skype
-- Facebook
-- Twitter
-- etc...
+# Brand Icons
+All brand icons are trademarks of their respective owners. The use of these
+trademarks does not indicate endorsement of the trademark holder by Font
+Awesome, nor vice versa. **Please do not use brand logos for any purpose except
+to represent the company, product, or service to which they refer.**
