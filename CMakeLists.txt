@@ -28,8 +28,10 @@ set(SOURCES
 	src/os/osx/osx.cpp                                    
 	src/timer.cpp                            
 	src/timewarp.cpp 
+	src/qt/keyeventmapper.cpp
 	src/qt/main.cpp
 	src/qt/mainwindow.cpp
+	src/qt/qtioprovider.cpp
 	src/qt/screenwidget.cpp
 )
 
@@ -60,7 +62,9 @@ set(HEADERS
 	src/timer.h
 	src/timewarp.h
 	src/types.h
+	src/qt/keyeventmapper.h
 	src/qt/mainwindow.h
+	src/qt/qtioprovider.h
 	src/qt/screenwidget.h
 )
 

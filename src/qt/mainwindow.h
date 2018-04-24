@@ -7,6 +7,8 @@
 #include <QMenu>
 #include <memory>
 #include "screenwidget.h"
+#include "keyeventmapper.h"
+#include "qtioprovider.h"
 #include "../io/io_provider.h"
 #include "../types.h"
 #include "../emulator.h"
@@ -15,7 +17,6 @@ namespace ui {
 
 	class EmulatorWindow 
 		: public QMainWindow
-		, public emu::IOProvider 
 	{
 
 		Q_OBJECT
@@ -26,32 +27,28 @@ namespace ui {
 		QAction * exit_action;
 		QAction * open_action;
 
-		ScreenWidget * screenWidget;
+		ScreenWidget * screen_widget;
+		KeyEventMapper * key_event_mapper;
 
 		std::unique_ptr<emu::Emulator> emulator = nullptr;
+		std::shared_ptr<QtIoProvider> io_provider = nullptr;
+
 
 		void create_actions();
 		void create_menu();
 		void create_toolbar();
 		void open_cart();
 
-	public:
 
+	public:
 		explicit EmulatorWindow(QWidget * parent = nullptr);
 
+		void init(const std::string & wintitle);
 		bool isClosed();
 
 		void tick();
-
-		// IOProvider stuff
-
-		void init(const std::string & wintitle);
-		void handleError(const std::exception & exception);
-		void draw(u08i x, u08i y, u08i r, u08i g, u08i b);
-		void display();
-
-		void poll();
-		void registerButtonCallback(Button btn, on_press_t onPress, on_release_t onRelease);
+	public slots:
+		void on_destroyed();
 	};
 
 }

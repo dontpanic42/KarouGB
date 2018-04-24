@@ -17,8 +17,10 @@ namespace emu
     class IOProvider
     {
     public:
-        typedef std::function<void(u08i)> on_press_t;
-        typedef std::function<void(u08i)> on_release_t;
+		typedef std::function<void(u08i)> key_event_handler_t;
+        typedef key_event_handler_t on_press_t;
+        typedef key_event_handler_t on_release_t;
+
         
         virtual ~IOProvider() {};
         

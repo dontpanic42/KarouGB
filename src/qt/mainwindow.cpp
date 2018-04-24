@@ -5,17 +5,32 @@
 #include "mainwindow.h"
 
 namespace ui {
-	EmulatorWindow::EmulatorWindow(QWidget *parent) 
-	: QMainWindow(parent)
+	EmulatorWindow::EmulatorWindow(QWidget * parent) 
+		: QMainWindow(parent)
+		, key_event_mapper(new KeyEventMapper(this))
+		, screen_widget(new ScreenWidget(160, 144, this))
 	{
+		// Create window components
 		create_actions();
 		create_menu();
 		create_toolbar();
 
-		screenWidget = new ScreenWidget(160, 144, this);
-		setCentralWidget(screenWidget);
+		// Show the screen widget
+		setCentralWidget(screen_widget);
+
+		// Handle key presses
+		installEventFilter(key_event_mapper);
+
+		// Create a new io provider
+		io_provider = std::make_shared<QtIoProvider>(screen_widget, key_event_mapper);
+
+		// Listen for destruction of this window
+		connect(this, SIGNAL(destroyed()), this, SLOT(on_destroyed()));
 	}
 
+	/// <summary>
+	/// Window setup
+	/// </summary>
 	void EmulatorWindow::init(const std::string & wintitle)
 	{
 		resize(640, 480);
@@ -23,6 +38,10 @@ namespace ui {
 		show();
 	}
 
+	/// <summary>
+	/// Creates actions that can be used by the menu and/or toolbar.
+	/// Has to be called <strong>before</strong> <code>create_menu</code> or <code>create_toolbar</code>
+	/// </summary>
 	void EmulatorWindow::create_actions()
 	{
 		exit_action = new QAction(tr("&Exit"), this);
@@ -52,13 +71,19 @@ namespace ui {
 		return !isVisible();
 	}
 
+	/// <summary>
+	/// Open a cartridge and create a new emulation
+	/// </summary>
 	void EmulatorWindow::open_cart()
 	{
 		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.cgb *.gb)"));
-		emulator = std::move(std::make_unique<emu::Emulator>(std::shared_ptr<IOProvider>(this), file_name.toStdString().c_str()));
+		emulator = std::move(std::make_unique<emu::Emulator>(io_provider, file_name.toStdString().c_str()));
 		emulator->initialize();
 	}
 
+	/// <summary>
+	/// Method that advances the emulation by one tick
+	/// </summary>
 	void EmulatorWindow::tick()
 	{
 		if (emulator)
@@ -67,33 +92,14 @@ namespace ui {
 		}
 	}
 
-	void EmulatorWindow::handleError(const std::exception & exception)
+	/// <summary>
+	/// Slot that is called when the window is about to be destroyed
+	/// </summary>
+	void EmulatorWindow::on_destroyed()
 	{
-		QMessageBox msgBox;
-		msgBox.setText("An error occured.");
-		msgBox.setInformativeText("An error occured during emulation");
-		msgBox.setDetailedText(exception.what());
-		msgBox.setIcon(QMessageBox::Icon::Critical);
-		msgBox.show();
-	}
-
-	void EmulatorWindow::draw(u08i x, u08i y, u08i r, u08i g, u08i b)
-	{
-		screenWidget->draw(x, y, r, g, b);
-	}
-
-	void EmulatorWindow::display()
-	{
-		screenWidget->flip_buffers();
-	}
-
-	void EmulatorWindow::poll()
-	{
-		// TBD (?)
-	}
-
-	void EmulatorWindow::registerButtonCallback(Button btn, on_press_t onPress, on_release_t onRelease)
-	{
-		// TBD
+		// The io provider might still be used by the emulation. But since qt (i.e. this window) is in control
+		// of the resources the io_provider uses, after destruction the resources would no longer be available.
+		// So this way, we notify the io provider of its childrens destruction
+		io_provider->destroy();
 	}
 }
