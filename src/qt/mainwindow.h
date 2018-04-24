@@ -34,12 +34,15 @@ namespace ui {
 		std::unique_ptr<emu::Emulator> emulator = nullptr;
 		std::shared_ptr<QtIoProvider> io_provider = nullptr;
 
+		bool paused;
 
 		void create_actions();
 		void create_menu();
 		void create_toolbar();
 		void open_cart();
-
+		void toggle_paused();
+		void resume();
+		void pause();
 
 	public:
 		explicit EmulatorWindow(QWidget * parent = nullptr);

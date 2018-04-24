@@ -17,7 +17,6 @@ namespace emu
     
     KCartridgeLoader::KCartridgeLoader(const std::string & cartname)
     : cartname(cartname)
-//    , memory(new memory_t())
     , cart(new cart_t())
     , mbc(nullptr)
     {
