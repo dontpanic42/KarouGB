@@ -21,10 +21,10 @@ namespace ui
 		{ Qt::Key::Key_W, BTN_UP },
 		{ Qt::Key::Key_D, BTN_RIGHT },
 		{ Qt::Key::Key_S, BTN_DOWN },
-		{ Qt::Key::Key_V, BTN_START },
-		{ Qt::Key::Key_B, BTN_SELECT },
-		{ Qt::Key::Key_J, BTN_A },
-		{ Qt::Key::Key_K, BTN_B }
+		{ Qt::Key::Key_V, BTN_SELECT },
+		{ Qt::Key::Key_B, BTN_START },
+		{ Qt::Key::Key_J, BTN_B },
+		{ Qt::Key::Key_K, BTN_A }
 	});
 
 	/// <summary>

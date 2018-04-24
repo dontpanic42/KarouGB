@@ -77,7 +77,7 @@ namespace ui {
 	/// </summary>
 	void EmulatorWindow::open_cart()
 	{
-		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.cgb *.gb)"));
+		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.gbc *.gb)"));
 		if (!file_name.isEmpty() && !file_name.isNull()) {
 			emulator = std::move(std::make_unique<emu::Emulator>(io_provider, file_name.toStdString().c_str()));
 			emulator->initialize();
