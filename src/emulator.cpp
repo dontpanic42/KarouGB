@@ -39,10 +39,10 @@ namespace emu {
 			return;
 		}
 
-		if (!debugger->poll())
-		{
-			return;
-		}
+		//if (!debugger->poll())
+		//{
+		//	return;
+		//}
 
 		timer->tick(*cpu_context);
 		cpu->execute(*cpu_context);

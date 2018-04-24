@@ -19,7 +19,7 @@ namespace ui
 	std::unordered_map<Qt::Key, Button> KeyEventMapper::keymap({
 		{ Qt::Key::Key_A, BTN_LEFT },
 		{ Qt::Key::Key_W, BTN_UP },
-		{ Qt::Key::Key_W, BTN_RIGHT },
+		{ Qt::Key::Key_D, BTN_RIGHT },
 		{ Qt::Key::Key_S, BTN_DOWN },
 		{ Qt::Key::Key_V, BTN_START },
 		{ Qt::Key::Key_B, BTN_SELECT },
