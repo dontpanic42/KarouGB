@@ -14,6 +14,7 @@
 #include "../src/mem/cart_loader.h"
 #include "../src/cpu/cpu.h"
 
+using namespace emu;
 using namespace cpu;
 
 #define SETUP_OPCODE(x) zero_registers();\
@@ -43,7 +44,7 @@ public:
     
     void SetUp()
     {
-        loader = KCartridgeLoader::load("cpu_instrs.gb");
+        loader = KCartridgeLoader::load("testroms/cpu_instrs.gb");
         ASSERT_TRUE(loader != nullptr);
         mmu = loader->getMemory();
         ASSERT_TRUE(mmu != nullptr);

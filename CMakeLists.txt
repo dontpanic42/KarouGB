@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 project(karougb)
 
+# Make building tests optional
+option(test "Build all tests." ON) # Makes boolean 'test' available.
+enable_testing()
+
 set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_AUTOMOC ON)
@@ -17,6 +21,8 @@ include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Core_INCLUDE_DIRS})
 include_directories(${Qt5Gui_INCLUDE_DIRS})
 
+# Application source files
+# Do *not* add main.cpp, it is added below. Otherwise we would get issues with the testsuit
 set(SOURCES
 	src/buttons.cpp                          
 	src/cpu/cpu.cpp                          
@@ -34,12 +40,12 @@ set(SOURCES
 	src/timer.cpp                            
 	src/timewarp.cpp 
 	src/qt/keyeventmapper.cpp
-	src/qt/main.cpp
 	src/qt/mainwindow.cpp
 	src/qt/qtioprovider.cpp
 	src/qt/screenwidget.cpp
 )
 
+# Application headers
 set(HEADERS
 	src/buttons.h
 	src/cpu/cpu.h
@@ -73,7 +79,20 @@ set(HEADERS
 	src/qt/screenwidget.h
 )
 
-add_executable(karougb ${SOURCES} ${HEADERS})
+# Test sources (addin main is required here)
+set(TEST_SOURCES
+	test/main.cpp
+)
+
+# Test headers
+set(TEST_HEADERS
+	test/bogus_ioprovider.h 
+	test/gputest.h 
+	test/instrtest.h 
+	test/vram_dma_transfer_test.h
+)
+
+add_executable(karougb ${SOURCES} src/qt/main.cpp ${HEADERS})
 target_link_libraries(karougb Qt5::Widgets)
 
 # Copy Qt5 DLLs
@@ -101,3 +120,50 @@ add_custom_command (TARGET karougb POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_CURRENT_SOURCE_DIR}/src/resources ${CMAKE_BINARY_DIR}
 	COMMENT "Copying Resources" VERBATIM
 )
+
+# Test setup and execution
+if (test)
+	# gtest download magic
+	configure_file(CMakeLists.txt.in googletest-download/CMakeLists.txt)
+	execute_process(COMMAND ${CMAKE_COMMAND} -G "${CMAKE_GENERATOR}" .
+	  RESULT_VARIABLE result
+	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+	if(result)
+	  message(FATAL_ERROR "CMake step for googletest failed: ${result}")
+	endif()
+	execute_process(COMMAND ${CMAKE_COMMAND} --build .
+	  RESULT_VARIABLE result
+	  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/googletest-download )
+	if(result)
+	  message(FATAL_ERROR "Build step for googletest failed: ${result}")
+	endif()
+
+	# Prevent overriding the parent project's compiler/linker settings on Windows
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+	# This defines the gtest and gtest_main targets.
+	add_subdirectory(${CMAKE_BINARY_DIR}/googletest-src
+					 ${CMAKE_BINARY_DIR}/googletest-build
+					 EXCLUDE_FROM_ALL)
+	# gtest download magic end
+	 
+	# Include gtest headers
+	include_directories(${gtest_SOURCE_DIR}/include)
+	# Define test project
+	project(karougb_unit_tests)
+	# Add our main app as library so we can link the tests against it
+	add_library(karougb_lib ${SOURCES} ${HEADERS})
+	target_link_libraries(karougb_lib Qt5::Widgets)
+	# Create the test executable
+	add_executable(karougb_unit_tests ${TEST_SOURCES} ${TEST_HEADERS})
+	# Link the test executable agains gtest and our app (lib)
+	target_link_libraries(karougb_unit_tests gtest gtest_main karougb_lib)
+	# Declare the test executable as test
+	add_test(NAME karougb_tests COMMAND karougb_unit_tests)
+
+	# Add test resources
+	add_custom_command (TARGET karougb_unit_tests POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory  ${CMAKE_CURRENT_SOURCE_DIR}/test/resources ${CMAKE_BINARY_DIR}
+		COMMENT "Copying test resources (debug)" VERBATIM
+	)
+endif(test)

@@ -9,13 +9,11 @@
 #include <iostream>
 #include <gtest/gtest.h>
 
-#include "newmemtest.h"
-//#include "mbc3rtctest.h"
 #include "instrtest.h"
 #include "gputest.h"
 #include "vram_dma_transfer_test.h"
 
-#include "log.h"
+#include "../src/log.h"
 
 int main(int argc, char * argv[])
 {

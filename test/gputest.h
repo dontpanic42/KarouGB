@@ -41,7 +41,7 @@ public:
     void SetUp()
     {
         //Lade CGB-Image
-        loader = KCartridgeLoader::load("pokemon-crystal.gb");
+        loader = KCartridgeLoader::load("testroms/cpu_instrs.gb");
         ASSERT_TRUE(loader != nullptr);
         mmu = loader->getMemory();
         ASSERT_TRUE(mmu != nullptr);
