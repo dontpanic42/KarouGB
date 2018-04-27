@@ -12,7 +12,7 @@ Some Gameboy Color games might work. Gameboy Color support is considered experim
 
 Lots of stuff. Only pure ROM and MBC-1/MBC-3 cartridges are supported at the time.
 
-No sound support at all, although i'm working on that :-)
+No sound support at all.
 
 ### Screenshots
 ![Settings Window](https://raw.githubusercontent.com/dontpanic42/KarouGB/master/docs/screenshots/pokemon.png)
@@ -30,8 +30,8 @@ https://github.com/sinamas/gambatte
 
 ### Building
 
-Depends on the SDL2.framework (Sound, Disabled by default), WxWidgets for UI and GTEST for Testing.
+Depends on Qt5 for UI and GTest for Testing. GTest is downloaded/built automatically as part of the build process.
 
-Requires you to create an "rom_bios.h" file, which contains the bootrom (readily available via google search) as an array (u08i rom_bios[]). The bios might be copyrighted (?).
+Requires you to create an "rom_bios.h" file, which contains the bootrom (readily available via google search) as an array (u08i rom_bios[]).
 
 
