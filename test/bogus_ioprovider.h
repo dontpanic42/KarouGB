@@ -9,7 +9,7 @@
 #ifndef KarouGB_bogus_ioprovider_h
 #define KarouGB_bogus_ioprovider_h
 
-#include "../KarouGB/gpu.h"
+#include "../src/gpu.h"
 
 using namespace emu;
 
