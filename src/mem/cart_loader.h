@@ -23,9 +23,9 @@ namespace emu
         
         void setupMBC();
         
-        KCartridgeLoader(const std::string & cartname);
+        KCartridgeLoader(const std::string & cartname, const bool forceCGBMode = false);
     public:
-        static std::shared_ptr<KCartridgeLoader> load(const std::string & cartname);
+        static std::shared_ptr<KCartridgeLoader> load(const std::string & cartname, const bool forceCGBMode = false);
         
         const std::string & getCartridgeName() const;
         const std::shared_ptr<memory_t> & getMemory() const;

@@ -12,9 +12,11 @@
 #include <iostream>
 #include "../types.h"
 #include "../mem/mem.h"
+#include "../log.h"
 
 #define CPU_REG_ADDR_IE 0xFFFF
 #define CPU_REG_ADDR_IF 0xFF0F
+#define CPU_REG_ADDR_KEY_1 0xFF4D
 
 namespace emu
 {
@@ -88,6 +90,11 @@ namespace emu
             
             bool branch_taken;
             u08i dbg_ivector;
+
+			/// <summary>
+			/// CGB double speed mode enabled/disabled (disabled by default)
+			/// </summary>
+			bool double_speed_mode;
             
             Context();
             Context(const Context & other);

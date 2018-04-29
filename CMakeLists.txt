@@ -90,6 +90,7 @@ set(TEST_HEADERS
 	test/gputest.h 
 	test/instrtest.h 
 	test/vram_dma_transfer_test.h
+	test/gbctest_doublespeedmode.h
 )
 
 add_executable(karougb ${SOURCES} src/qt/main.cpp ${HEADERS})

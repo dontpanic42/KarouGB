@@ -820,15 +820,38 @@ namespace opfuncs
     
     OP(STOP) {
         //TODO: Implement!!
-        
         /* For now: Endless loop */
         //c.PC--;
-        
-        std::printf("PC: 0x%x, OP: 0x%x, OP-PC-1: 0x%x\n", c.PC - 1, mmu.rb(c.PC - 1), mmu.rb(c.PC -2));
-        std::cout << "Stopped!!" << std::endl;
-        //Debugger::getInstance()->interrupt();
-        
         /* Todo: Check for button presses! */
+
+		// CGB Speed switch is implemented using the stop command
+		if (mmu.isCGB() && mmu.inCGBMode())
+		{
+			// Check if the speed witch prepare is set, otherwise this is just the normal stop command
+			u08i regKey1 = mmu.rb(CPU_REG_ADDR_KEY_1);
+			if (regKey1 & BIT_0)
+			{
+				c.double_speed_mode = !c.double_speed_mode;
+				// Clear the speed switch prepare bit
+				regKey1 &= ~BIT_0;
+				// Clear/set the current speed bit
+				if (c.double_speed_mode)
+				{
+					// When in double speed mode, set BIT_7
+					regKey1 |= BIT_7;
+					lg::debug(std::string("CPU"), std::string("Speed switch: Now in 2x mode."));
+				}
+				else
+				{
+					// When in single speed mode, clear BIT_7
+					regKey1 &= ~BIT_7;
+					lg::debug(std::string("CPU"), std::string("Speed switch: Now in 1x mode."));
+				}
+
+				// Write back the register
+				mmu.wb(CPU_REG_ADDR_KEY_1, regKey1);
+			}
+		}
     }
     
     /** End cpu instructions **/

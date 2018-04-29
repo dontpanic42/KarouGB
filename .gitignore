@@ -32,3 +32,4 @@ DerivedData
 # Pods - for those of you who use CocoaPods
 Pods
 src/rom_bios.h
+docs/technical

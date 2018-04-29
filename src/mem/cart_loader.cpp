@@ -9,13 +9,25 @@ namespace emu
 {
     const std::string TAG("ctld");
     
-    std::shared_ptr<KCartridgeLoader> KCartridgeLoader::load(const std::string & cartname)
+	/// <summary>
+	/// Loads a cartridge
+	/// <param name="cartname">Absolute file name of the cartridge file to load</param>
+	/// <param name="foceCGBMode">Optional. Forces the cartridge loader to switch to cgb mode, even if the cartridge does not
+	/// indicate supporting cgb mode.</param>
+	/// </summary>
+    std::shared_ptr<KCartridgeLoader> KCartridgeLoader::load(const std::string & cartname, const bool forceCGBMode)
     {
         std::shared_ptr<KCartridgeLoader> loader(new KCartridgeLoader(cartname));
         return loader;
     }
-    
-    KCartridgeLoader::KCartridgeLoader(const std::string & cartname)
+
+	/// <summary>
+	/// Cartridge loader constructor
+	/// <param name="cartname">Absolute file name of the cartridge file to load</param>
+	/// <param name="foceCGBMode">Optional. Forces the cartridge loader to switch to cgb mode, even if the cartridge does not
+	/// indicate supporting cgb mode.</param>
+	/// </summary>
+    KCartridgeLoader::KCartridgeLoader(const std::string & cartname, const bool forceCGBMode)
     : cartname(cartname)
     , cart(new cart_t())
     , mbc(nullptr)
@@ -25,7 +37,8 @@ namespace emu
         assert(cart != nullptr);
         
         bool cgb = (cart->header().cgb_flag == 0x80) ||
-                   (cart->header().cgb_flag == 0xC0);
+                   (cart->header().cgb_flag == 0xC0) ||
+					forceCGBMode;
         
         lg::info(TAG, "CGB/CGBMODE Enabled: %s\n", (cgb)? "Yes." : "No.");
         

@@ -88,6 +88,7 @@ namespace emu
         , L(rHL.l),     FLAG(rAF.l)
         //system
         , ime(1),       halt(0),        branch_taken(false)
+		, double_speed_mode(false)
         {
             setup();
         }
@@ -104,6 +105,7 @@ namespace emu
         , L(rHL.l),     FLAG(rAF.l)
         //system
         , ime(other.ime),       halt(other.halt), branch_taken(other.branch_taken)
+		, double_speed_mode(other.double_speed_mode)
         
         //Copy stuff
         , rAF(other.rAF), rBC(other.rBC), rDE(other.rDE)
