@@ -4,9 +4,9 @@
 *.1
 # Ignoriere Savefiles
 *.ksv
-KarouGB/mm
-KarouGB/mm/*
-KarouGB/rom_bios.h
+src/mm
+src/mm/*
+src/rom_bios.h
 vendor/
 vendor/*
 .vs/
@@ -31,5 +31,6 @@ DerivedData
 .idea/
 # Pods - for those of you who use CocoaPods
 Pods
-src/rom_bios.h
+
+# Technical docs might be copyrighted, so don't add them to git
 docs/technical
