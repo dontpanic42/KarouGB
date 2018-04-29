@@ -32,6 +32,17 @@ https://github.com/sinamas/gambatte
 
 Depends on Qt5 for UI and GTest for Testing. GTest is downloaded/built automatically as part of the build process.
 
-Requires you to create an "rom_bios.h" file, which contains the bootrom (readily available via google search) as an array (u08i rom_bios[]).
+Requires you to create an "rom_bios.h" file, which contains the bootrom (readily available via google search) as an array (u08i rom_bios[]). Since a native GBC Rom is currently not supported, to get GBC Games to run you will need to 
+patch your bootrom. To advertise GBC capabilites to your game, set byte 0xFC to 0x11 (is normally 0x01). That way, the last two ops of the bootrom change from
 
+```
+	LD A,$01		; $00fc
+	LD ($FF00+$50),A	; $00fe	;turn off DMG rom
+```	
+to
+```
+	LD A,$11		; $00fc
+	LD ($FF00+$50),A	; $00fe	;turn off DMG rom
+```	
+setting the accumulator to 0x11 on startup.
 
