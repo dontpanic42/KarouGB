@@ -687,7 +687,7 @@ namespace emu
         std::fill_n(&alphabuffer[0], GPU_SCREENHEIGHT * GPU_SCREENWIDTH, false);
     }
     
-    void GPU::step(cpu::Context & c)
+    void GPU::tick(cpu::Context & c)
     {
         //    if(!(reg_lcdc & BIT_7))
         //    {

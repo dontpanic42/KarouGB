@@ -28,14 +28,14 @@ namespace ui {
 		double fps_avg;
 		int fps_tick_count;
 
-		void tick_frame_counter();
-		double get_average_frame_rate();
+		void tickFrameCounter();
+		double getAverageFramerate();
 
 	public:
 
 		ScreenWidget(int buffer_width, int buffer_height, QWidget * parent = nullptr);
 
-		void force_repaint();
+		void forceRepaint();
 		void paintEvent(QPaintEvent * event);
 		void draw(u08i x, u08i y, u08i r, u08i g, u08i b);
 	};

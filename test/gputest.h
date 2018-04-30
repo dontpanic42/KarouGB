@@ -69,7 +69,7 @@ public:
         while(gpu->getCurrentState() != mode)
         {
             c->T = 4;
-            gpu->step(*c);
+            gpu->tick(*c);
         }
     }
     
@@ -127,7 +127,7 @@ TEST_F(gpu_test, GPUTest_STAT_Interrupt_HBLANK)
        wird, bezieht sich auf den nächsten durchlauf, daher
        führe einen Tick manuell durch */
     c->T = 4;
-    gpu->step(*c);
+    gpu->tick(*c);
     
     // Das LCD-Stat-Interrupt-Flag sollte gesetzt sein.
     ASSERT_TRUE(mmu->rb(0xFF0F) & BIT_1);

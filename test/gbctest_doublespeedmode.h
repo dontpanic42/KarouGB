@@ -22,7 +22,7 @@ using namespace cpu;
                         mmu->wb(baseAddress, x)
 #define SET_IMMEDIATE1(x)  mmu->wb(c->PC + 1, x)
 #define SET_IMMEDIATE2(x)  mmu->wb(c->PC + 2, x)
-#define RUN(x) cpu->execute(*x)
+#define RUN(x) cpu->tick(*x)
 
 class CGBTestDoubleSpeedMode : public testing::Test
 {

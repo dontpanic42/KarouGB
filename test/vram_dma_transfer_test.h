@@ -74,7 +74,7 @@ public:
             /* Inkrementiere die CPU-Masterclock in 4er-Schritten
                (als wenn NOPs ausgeführt würden) */
             c->T = 4;
-            gpu->step(*c);
+            gpu->tick(*c);
         }
     }
     
@@ -85,7 +85,7 @@ public:
             /* Inkrementiere die CPU-Masterclock in 4er-Schritten
               (als wenn NOPs ausgeführt würden) */
             c->T = 4;
-            gpu->step(*c);
+            gpu->tick(*c);
         }
     }
     
@@ -99,7 +99,7 @@ public:
         while(gpu->getCurrentLine() >= 144)
         {
             c->T = 4;
-            gpu->step(*c);
+            gpu->tick(*c);
         }
     }
     

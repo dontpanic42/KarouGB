@@ -12,9 +12,9 @@ namespace ui {
 		, paused(false)
 	{
 		// Create window components
-		create_actions();
-		create_menu();
-		create_toolbar();
+		createActions();
+		createMenu();
+		createToolbar();
 
 		// Show the screen widget
 		setCentralWidget(screen_widget);
@@ -26,7 +26,7 @@ namespace ui {
 		io_provider = std::make_shared<QtIoProvider>(screen_widget, key_event_mapper);
 
 		// Listen for destruction of this window
-		connect(this, SIGNAL(destroyed()), this, SLOT(on_destroyed()));
+		connect(this, SIGNAL(destroyed()), this, SLOT(onDestroyed()));
 	}
 
 	/// <summary>
@@ -43,7 +43,7 @@ namespace ui {
 	/// Creates actions that can be used by the menu and/or toolbar.
 	/// Has to be called <strong>before</strong> <code>create_menu</code> or <code>create_toolbar</code>
 	/// </summary>
-	void EmulatorWindow::create_actions()
+	void EmulatorWindow::createActions()
 	{
 		exit_action = new QAction(tr("&Exit"), this);
 		exit_action->setIcon(QPixmap("icons/exit.png"));
@@ -51,15 +51,15 @@ namespace ui {
 
 		open_action = new QAction(tr("&Open"), this);
 		open_action->setIcon(QPixmap("icons/open.png"));
-		connect(open_action, &QAction::triggered, this, &EmulatorWindow::open_cart);
+		connect(open_action, &QAction::triggered, this, &EmulatorWindow::openCart);
 
 		pause_action = new QAction(tr("&Play/Pause"), this);
 		pause_action->setDisabled(true);
 		pause_action->setIcon(QPixmap("icons/play.png"));
-		connect(pause_action, &QAction::triggered, this, &EmulatorWindow::toggle_paused);
+		connect(pause_action, &QAction::triggered, this, &EmulatorWindow::togglePaused);
 	}
 
-	void EmulatorWindow::create_menu()
+	void EmulatorWindow::createMenu()
 	{
 		file_menu = menuBar()->addMenu(tr("&File"));
 		file_menu->addAction(open_action);
@@ -67,7 +67,7 @@ namespace ui {
 		file_menu->addAction(exit_action);
 	}
 
-	void EmulatorWindow::create_toolbar()
+	void EmulatorWindow::createToolbar()
 	{
 		toolbar = addToolBar(tr("main toolbar"));
 		toolbar->addAction(open_action);
@@ -83,7 +83,7 @@ namespace ui {
 	/// <summary>
 	/// Open a cartridge and create a new emulation
 	/// </summary>
-	void EmulatorWindow::open_cart()
+	void EmulatorWindow::openCart()
 	{
 		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.gbc *.gb)"));
 		if (!file_name.isEmpty() && !file_name.isNull()) {
@@ -96,7 +96,7 @@ namespace ui {
 	/// <summary>
 	/// Toggles the play/pause state
 	/// </summary>
-	void EmulatorWindow::toggle_paused()
+	void EmulatorWindow::togglePaused()
 	{
 		if (paused)
 		{
@@ -144,7 +144,7 @@ namespace ui {
 	/// <summary>
 	/// Slot that is called when the window is about to be destroyed
 	/// </summary>
-	void EmulatorWindow::on_destroyed()
+	void EmulatorWindow::onDestroyed()
 	{
 		// The io provider might still be used by the emulation. But since qt (i.e. this window) is in control
 		// of the resources the io_provider uses, after destruction the resources would no longer be available.

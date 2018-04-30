@@ -36,11 +36,11 @@ namespace ui {
 
 		bool paused;
 
-		void create_actions();
-		void create_menu();
-		void create_toolbar();
-		void open_cart();
-		void toggle_paused();
+		void createActions();
+		void createMenu();
+		void createToolbar();
+		void openCart();
+		void togglePaused();
 		void resume();
 		void pause();
 
@@ -52,7 +52,7 @@ namespace ui {
 
 		void tick();
 	public slots:
-		void on_destroyed();
+		void onDestroyed();
 	};
 
 }

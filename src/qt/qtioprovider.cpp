@@ -52,7 +52,7 @@ namespace ui
 	{
 		if (!destroyed)
 		{
-			screen_widget->force_repaint();
+			screen_widget->forceRepaint();
 		}
 	}
 

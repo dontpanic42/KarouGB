@@ -208,7 +208,7 @@ namespace emu
            00 01 02
            op m1 m2
            Die funktion "op" wird ausgeführt, PC zeigt auf m1. */
-        void Z80::execute(cpu::Context &c)
+        void Z80::tick(cpu::Context &c)
         {
             c.dbg_ivector = IR_LAST;
             c.branch_taken = false;

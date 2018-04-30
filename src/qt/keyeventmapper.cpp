@@ -38,13 +38,13 @@ namespace ui
 			{
 				QKeyEvent * key_event = static_cast<QKeyEvent *>(event);
 				auto qt_key = static_cast<Qt::Key>(key_event->key());
-				return handle_key_event(PRESS, qt_key);
+				return handleKeyEvent(PRESS, qt_key);
 			}
 			case QEvent::KeyRelease:
 			{
 				QKeyEvent * key_event = static_cast<QKeyEvent *>(event);
 				auto qt_key = static_cast<Qt::Key>(key_event->key());
-				return handle_key_event(RELEASE, qt_key);
+				return handleKeyEvent(RELEASE, qt_key);
 			}
 			default:
 			{
@@ -65,7 +65,7 @@ namespace ui
 	/// Generic key event handler that checks if the key is a known key and (if so) calls the emus callbacks
 	/// accordingly.
 	/// </summary>
-	bool KeyEventMapper::handle_key_event(event_type type, Qt::Key qt_key)
+	bool KeyEventMapper::handleKeyEvent(event_type type, Qt::Key qt_key)
 	{
 		// Check if the pressed key is a known key
 		if (keymap.find(qt_key) != keymap.end())

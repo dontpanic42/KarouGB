@@ -29,7 +29,7 @@ namespace ui
 	/// <summary>
 	/// Force drawing the buffer
 	/// </summary>
-	void ScreenWidget::force_repaint()
+	void ScreenWidget::forceRepaint()
 	{
 		repaint();
 	}
@@ -61,9 +61,9 @@ namespace ui
 		painter.drawImage(drawArea, *framebuffer_image);
 
 		// Advance the framerate
-		tick_frame_counter();
+		tickFrameCounter();
 		// Draw the framerate
-		painter.drawText(10, 20, (std::string("FPS: ") + std::to_string((int)get_average_frame_rate())).c_str());
+		painter.drawText(10, 20, (std::string("FPS: ") + std::to_string((int)getAverageFramerate())).c_str());
 	}
 
 	/// <summary>
@@ -80,7 +80,7 @@ namespace ui
 	/// <summary>
 	/// Counts a single frame for calculating the average framerate
 	/// </summary>
-	void ScreenWidget::tick_frame_counter()
+	void ScreenWidget::tickFrameCounter()
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = now - old_frametime;
@@ -95,7 +95,7 @@ namespace ui
 	/// Returns the average framerate. The time interval the average framerate is calculated over is controlled
 	/// by <code>FPS_COUNTER_INTERVAL_MILLIS</code>
 	/// </summary>
-	double ScreenWidget::get_average_frame_rate()
+	double ScreenWidget::getAverageFramerate()
 	{
 		std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
 		std::chrono::duration<double> elapsed_seconds = now - old_update_frametime;

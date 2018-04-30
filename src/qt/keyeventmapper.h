@@ -22,7 +22,7 @@ namespace ui {
 
 		static std::unordered_map<Qt::Key, Button> keymap;
 		std::unordered_map<Button, std::pair<emu::IOProvider::on_press_t, emu::IOProvider::on_release_t>> callbacks;
-		bool handle_key_event(event_type type, Qt::Key qt_key);
+		bool handleKeyEvent(event_type type, Qt::Key qt_key);
 
 	public:
 		KeyEventMapper(QObject * parent = nullptr);

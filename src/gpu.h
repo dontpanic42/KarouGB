@@ -226,7 +226,7 @@ namespace emu
             bool cgb_mode);
         
         
-        void step(cpu::Context & c);
+        void tick(cpu::Context & c);
         
         /* Für Tests */
         /* Gibt den aktuellen GPUMode zurück, in dem

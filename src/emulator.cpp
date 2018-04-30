@@ -45,7 +45,7 @@ namespace emu {
 		//}
 
 		timer->tick(*cpu_context);
-		cpu->execute(*cpu_context);
-		gpu->step(*cpu_context);
+		cpu->tick(*cpu_context);
+		gpu->tick(*cpu_context);
 	}
 }

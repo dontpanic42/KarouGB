@@ -22,7 +22,7 @@ using namespace cpu;
                         mmu->wb(baseAddress, x)
 #define SET_IMMEDIATE1(x)  mmu->wb(c->PC + 1, x)
 #define SET_IMMEDIATE2(x)  mmu->wb(c->PC + 2, x)
-#define RUN(x) cpu->execute(*x)
+#define RUN(x) cpu->tick(*x)
 
 class instruction_test : public testing::Test
 {
@@ -92,7 +92,7 @@ public:
         dst = 0;
         src = 42;
         
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         ASSERT_EQ(src, dst);
         ASSERT_EQ(c->FLAG, 0);
@@ -115,7 +115,7 @@ public:
         ASSERT_EQ(mmu->rb(c->HL), 42);
         ASSERT_EQ(mmu->rb(c->PC), opcode);
         
-        cpu->execute(*c);
+        cpu->tick(*c);
                 
         ASSERT_EQ(dst, 42);
         ASSERT_EQ(c->FLAG, 0);
@@ -138,7 +138,7 @@ public:
         ASSERT_EQ(mmu->rb(0xC200), 0);
         ASSERT_EQ(mmu->rb(c->PC), opcode);
         
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         ASSERT_EQ(mmu->rb(0xC200), 42);
         ASSERT_EQ(c->FLAG, 0);
@@ -160,7 +160,7 @@ public:
         ASSERT_EQ(mmu->rb(src), 42);
         ASSERT_EQ(mmu->rb(c->PC), opcode);
         
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         ASSERT_EQ(c->A, 42);
         ASSERT_EQ(c->FLAG, 0);
@@ -184,7 +184,7 @@ public:
         ASSERT_EQ(mmu->rb(baseAddress), opcode);
         
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Der Program Counter sollte baseAddres += 1 sein
         ASSERT_EQ(c->PC, baseAddress+1);
@@ -204,7 +204,7 @@ public:
         ASSERT_EQ(mmu->rb(baseAddress), opcode);
         
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Der Program Counter sollte baseAddres += 1 sein
         ASSERT_EQ(c->PC, baseAddress+1);
@@ -228,7 +228,7 @@ public:
         ASSERT_EQ(mmu->rb(baseAddress), opcode);
         
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Der Program Counter sollte baseAddres += 1 sein
         ASSERT_EQ(c->PC, baseAddress+1);
@@ -249,7 +249,7 @@ public:
         c->PC = baseAddress;
         
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Register A sollte 0 sein.
         ASSERT_EQ(reg, 0);
@@ -267,7 +267,7 @@ public:
         c->PC = baseAddress;
         
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Register sollte 15 sein
         ASSERT_EQ(reg, 15);
@@ -281,7 +281,7 @@ public:
         c->PC = baseAddress;
         
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Register sollte 16 sein
         ASSERT_EQ(reg, 16);
@@ -303,7 +303,7 @@ public:
         mmu->wb(baseAddress, opcode);
         ASSERT_EQ(mmu->rb(baseAddress), opcode);
         // Führe den Befehl aus
-        cpu->execute(*c);
+        cpu->tick(*c);
         
         // Der Program Counter sollte baseAddres += 1 sein
         ASSERT_EQ(c->PC, baseAddress+1);
@@ -405,7 +405,7 @@ TEST_F(instruction_test, TestInstr_LD_A_C)
     c->A = 0x00;
     c->FLAG = 0;
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->A, 42);
     ASSERT_EQ(c->C, 0x01);
@@ -425,7 +425,7 @@ TEST_F(instruction_test, TestInstr_LD_C_A)
     mmu->wb(0xFF01, 0);
     ASSERT_EQ(mmu->rb(0xFF01), 0);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(mmu->rb(0xFF01), 42);
     ASSERT_EQ(c->A, 42);
@@ -452,7 +452,7 @@ TEST_F(instruction_test, LDD_A_HL)
     c->PC = baseAddress;
     mmu->wb(c->PC, 0x3A);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->A, 42);
     ASSERT_EQ(c->HL, 0xC210);
@@ -471,7 +471,7 @@ TEST_F(instruction_test, LDD_HL_A)
     c->PC = baseAddress;
     mmu->wb(c->PC, 0x32);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->A, 42);
     ASSERT_EQ(mmu->rb(0xC211), 42);
@@ -490,7 +490,7 @@ TEST_F(instruction_test, TestInstr_LDI_A_HL)
     c->PC = baseAddress;
     mmu->wb(c->PC, 0x2A);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->A, 42);
     ASSERT_EQ(c->HL, 0xC212);
@@ -510,7 +510,7 @@ TEST_F(instruction_test, TestInstr_LDI_HL_A)
     c->PC = baseAddress;
     mmu->wb(c->PC, 0x22);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(mmu->rb(0xC211), 42);
     ASSERT_EQ(c->HL, 0xC212);
@@ -617,7 +617,7 @@ TEST_F(instruction_test, TestInstr_LD_NN_TO_A)
     ASSERT_EQ(mmu->rw(c->PC + 1), 0xC211);
     ASSERT_EQ(mmu->rb(0xC211), 42);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->A, 42);
     ASSERT_EQ(c->FLAG, 0);
@@ -632,7 +632,7 @@ TEST_F(instruction_test, TestInstr_LD_Immediate_TO_A)
     mmu->wb(c->PC, 0x3E);
     mmu->wb(c->PC + 1, 42);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->A, 42);
     ASSERT_EQ(c->FLAG, 0);
@@ -652,7 +652,7 @@ TEST_F(instruction_test, TestInstr_LD_H_TO_HL)
     ASSERT_EQ(mmu->rb(0xC211), 0);
     ASSERT_EQ(mmu->rb(c->PC), 0x74);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(mmu->rb(0xC211), c->H);
     ASSERT_EQ(c->FLAG, 0);
@@ -673,7 +673,7 @@ TEST_F(instruction_test, TestInstr_LD_L_TO_HL)
     ASSERT_EQ(mmu->rb(0xC211), 0);
     ASSERT_EQ(mmu->rb(c->PC), 0x75);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(mmu->rb(0xC211), c->L);
     ASSERT_EQ(c->FLAG, 0);
@@ -695,7 +695,7 @@ TEST_F(instruction_test, TestInstr_LD_n_TO_HL)
     ASSERT_EQ(mmu->rb(0xC211), 0);
     ASSERT_EQ(mmu->rb(c->PC), 0x36);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(mmu->rb(0xC211), 42);
     ASSERT_EQ(c->FLAG, 0);
@@ -764,7 +764,7 @@ TEST_F(instruction_test, TestInstr_RET)
     ASSERT_EQ(c->PC, baseAddress);
     ASSERT_EQ(mmu->rb(baseAddress), 0xC9);
     
-    cpu->execute(*c);
+    cpu->tick(*c);
     
     ASSERT_EQ(c->SP, 0xD002);
     ASSERT_EQ(c->PC, 0x18B5);

@@ -126,7 +126,7 @@ namespace emu
         public:
             Z80(std::shared_ptr<KMemory> mmu);
             void requestInterrupt(Interrupt ir);
-            void execute(Context & c);
+            void tick(Context & c);
         };
     }
 }
