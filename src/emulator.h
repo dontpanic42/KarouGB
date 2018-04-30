@@ -8,7 +8,6 @@
 #include "gpu.h"
 #include "buttons.h"
 #include "timer.h"
-#include "debug.h"
 #include "mem/cart_loader.h"
 #include "mem/mem.h"
 
@@ -23,11 +22,11 @@ namespace emu {
 		std::unique_ptr<Buttons> buttons;
 		std::unique_ptr<Timer> timer;
 
-		std::shared_ptr<cpu::Z80> cpu;
 		std::shared_ptr<KCartridgeLoader> loader;
 
 	public:
 		std::shared_ptr<KMemory> mmu;
+		std::shared_ptr<cpu::Z80> cpu;
 		std::unique_ptr<cpu::Context> cpuContext;
 
 		Emulator(std::shared_ptr<IOProvider> io_provider, std::string cart_file_name);

@@ -58,6 +58,11 @@ namespace ui {
 		pause_action->setDisabled(true);
 		pause_action->setIcon(QPixmap("icons/play.png"));
 		connect(pause_action, &QAction::triggered, this, &EmulatorWindow::togglePaused);
+
+		debugger_action = new QAction(tr("&Debug"), this);
+		debugger_action->setDisabled(true);
+		debugger_action->setIcon(QPixmap("icons/debugger.png"));
+		connect(debugger_action, &QAction::triggered, this, &EmulatorWindow::showDebugger);
 	}
 
 	void EmulatorWindow::createMenu()
@@ -66,6 +71,9 @@ namespace ui {
 		file_menu->addAction(open_action);
 		file_menu->addSeparator();
 		file_menu->addAction(exit_action);
+
+		tools_menu = menuBar()->addMenu(tr("&Tools"));
+		tools_menu->addAction(debugger_action);
 	}
 
 	void EmulatorWindow::createToolbar()
@@ -74,6 +82,8 @@ namespace ui {
 		toolbar->addAction(open_action);
 		toolbar->addSeparator();
 		toolbar->addAction(pause_action);
+		toolbar->addSeparator();
+		toolbar->addAction(debugger_action);
 	}
 
 	bool EmulatorWindow::isClosed()
@@ -88,13 +98,50 @@ namespace ui {
 	{
 		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.gbc *.gb)"));
 		if (!file_name.isEmpty() && !file_name.isNull()) {
+
+			// If there is a debugger, delete it
+			detachDebugger();
+			// Enable the 'show debugger' action
+			debugger_action->setEnabled(true);
+
 			emulator = std::make_shared<emu::Emulator>(io_provider, file_name.toStdString().c_str());
 			emulator->initialize();
-			// resume();
-			pause();
-
-			debugger = new VDebug(emulator, qobject_cast<QMainWindow *>(this));
+			resume();
 		}
+	}
+
+	/// <summary>
+	/// Closes the debugger window and deletes it
+	/// </summary>
+	void EmulatorWindow::detachDebugger()
+	{
+		if (debugger)
+		{
+			debugger->close();
+			debugger->deleteLater();
+			debugger = nullptr;
+		}
+	}
+
+	/// <summary>
+	/// Creates a new instance of the debugger and attaches it
+	/// </summary>
+	void EmulatorWindow::attachDebugger(std::shared_ptr<emu::Emulator> & emulator)
+	{
+		debugger = new VDebug(emulator, qobject_cast<QMainWindow *>(this));
+	}
+
+	/// <summary>
+	/// Attaches a debugger (if non is attached) and shows the debugger window
+	/// </summary>
+	void EmulatorWindow::showDebugger()
+	{
+		if (!debugger)
+		{
+			attachDebugger(emulator);
+		}
+
+		debugger->show();
 	}
 
 	/// <summary>

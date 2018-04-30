@@ -119,11 +119,11 @@ namespace emu
             
             std::shared_ptr<KMemory> mmu;
             
-            u08i & reg_ie;  //Interrupt enable register
-            u08i & reg_if;  //Interrupt flag register
-            
             void checkInterrupts(Context & c);
         public:
+			u08i & reg_ie;  //Interrupt enable register
+			u08i & reg_if;  //Interrupt flag register
+
             Z80(std::shared_ptr<KMemory> mmu);
             void requestInterrupt(Interrupt ir);
             void tick(Context & c);

@@ -7,7 +7,6 @@
 //
 
 #include "buttons.h"
-#include "debug.h"
 #include <cassert>
 
 #define DIR_SELECTED BIT_4

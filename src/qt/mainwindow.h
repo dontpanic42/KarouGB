@@ -24,10 +24,12 @@ namespace ui {
 
 	private:
 		QMenu * file_menu;
+		QMenu * tools_menu;
 		QToolBar * toolbar;
 		QAction * exit_action;
 		QAction * open_action;
 		QAction * pause_action;
+		QAction * debugger_action;
 
 		ScreenWidget * screen_widget;
 		KeyEventMapper * key_event_mapper;
@@ -46,6 +48,10 @@ namespace ui {
 		void togglePaused();
 		void resume();
 		void pause();
+
+		void detachDebugger();
+		void showDebugger();
+		void attachDebugger(std::shared_ptr<emu::Emulator> & emulator);
 
 	public:
 		explicit EmulatorWindow(QWidget * parent = nullptr);
