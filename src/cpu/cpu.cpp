@@ -8,7 +8,6 @@
 
 #include "cpu.h"
 #include <limits.h>
-#include "../debug.h"
 
 namespace emu
 {
@@ -252,11 +251,6 @@ namespace emu
             if(op == nullptr)
             {
                 std::cout << "Unknown opcode: " << ((cbmode)? "0xCB" : "0x") << std::hex << opcode << std::endl;
-                if(Debugger::getInstance())
-                {
-                    Debugger::getInstance()->interrupt();
-                }
-                
                 return;
                 //throw std::runtime_error("Unknown opcode.");
             }

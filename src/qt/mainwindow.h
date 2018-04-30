@@ -12,6 +12,7 @@
 #include "../io/io_provider.h"
 #include "../types.h"
 #include "../emulator.h"
+#include "debugger/vdebug.h"
 
 namespace ui {
 
@@ -31,8 +32,10 @@ namespace ui {
 		ScreenWidget * screen_widget;
 		KeyEventMapper * key_event_mapper;
 
-		std::unique_ptr<emu::Emulator> emulator = nullptr;
+		std::shared_ptr<emu::Emulator> emulator = nullptr;
 		std::shared_ptr<QtIoProvider> io_provider = nullptr;
+
+		VDebug * debugger;
 
 		bool paused;
 

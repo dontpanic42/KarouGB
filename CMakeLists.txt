@@ -25,8 +25,7 @@ include_directories(${Qt5Gui_INCLUDE_DIRS})
 # Do *not* add main.cpp, it is added below. Otherwise we would get issues with the testsuit
 set(SOURCES
 	src/buttons.cpp                          
-	src/cpu/cpu.cpp                          
-	src/debug.cpp                         
+	src/cpu/cpu.cpp                         
 	src/emulator.cpp                            
 	src/gpu.cpp                                        
 	src/mem/cartridge.cpp                    
@@ -43,6 +42,11 @@ set(SOURCES
 	src/qt/mainwindow.cpp
 	src/qt/qtioprovider.cpp
 	src/qt/screenwidget.cpp
+	src/qt/debugger/vdebug.cpp
+	src/qt/debugger/vmemorymodel.cpp
+	src/qt/debugger/vmemoryview.cpp
+	src/qt/debugger/vcpustatusview.cpp
+	src/qt/debugger/vtools.cpp
 )
 
 # Application headers
@@ -53,7 +57,6 @@ set(HEADERS
 	src/cpu/cpu_mapping.h
 	src/cpu/cpu_ops.h
 	src/cpu/cpu_timing.h
-	src/debug.h
 	src/debug_translation.h
 	src/emulator.h
 	src/gpu.h
@@ -77,6 +80,11 @@ set(HEADERS
 	src/qt/mainwindow.h
 	src/qt/qtioprovider.h
 	src/qt/screenwidget.h
+	src/qt/debugger/vdebug.h
+	src/qt/debugger/vmemorymodel.h
+	src/qt/debugger/vmemoryview.h
+	src/qt/debugger/vcpustatusview.h
+	src/qt/debugger/vtools.h
 )
 
 # Test sources (addin main is required here)

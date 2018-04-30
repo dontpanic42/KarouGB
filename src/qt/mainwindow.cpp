@@ -10,6 +10,7 @@ namespace ui {
 		, key_event_mapper(new KeyEventMapper(this))
 		, screen_widget(new ScreenWidget(160, 144, this))
 		, paused(false)
+		, debugger(nullptr)
 	{
 		// Create window components
 		createActions();
@@ -87,9 +88,12 @@ namespace ui {
 	{
 		QString file_name = QFileDialog::getOpenFileName(this, tr("Open Rom"), "", tr("ROM Files (*.gbc *.gb)"));
 		if (!file_name.isEmpty() && !file_name.isNull()) {
-			emulator = std::move(std::make_unique<emu::Emulator>(io_provider, file_name.toStdString().c_str()));
+			emulator = std::make_shared<emu::Emulator>(io_provider, file_name.toStdString().c_str());
 			emulator->initialize();
-			resume();
+			// resume();
+			pause();
+
+			debugger = new VDebug(emulator, qobject_cast<QMainWindow *>(this));
 		}
 	}
 
