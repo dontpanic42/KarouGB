@@ -22,6 +22,18 @@ namespace emu
 {
     namespace cpu
     {
+		namespace flag
+		{
+			/* Flag masks */
+			enum FlagEnum
+			{
+				CARRY = BIT_4,
+				HALFCARRY = BIT_5,
+				SUBTRACT = BIT_6,
+				ZERO = BIT_7,
+			};
+		}
+
         class Context
         {
         private:

@@ -28,6 +28,7 @@ namespace ui
 		QLabel * interruptFlag;
 		QLabel * haltFlag;
 		QLabel * imeFlag;
+		QLabel * flags;
 	public:
 		VCPUStatusView(std::shared_ptr<emu::Emulator> & emulator, QWidget * parent = nullptr);
 

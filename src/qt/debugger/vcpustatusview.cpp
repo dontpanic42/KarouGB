@@ -1,7 +1,6 @@
 #include "vcpustatusview.h"
 #include <QFormLayout>
 #include <QLabel>
-#include <iostream>
 #include <QHBoxLayout>
 #include "vtools.h"
 
@@ -20,6 +19,7 @@ namespace ui
 		regL = new QLabel();
 		regSP = new QLabel();
 		regPC = new QLabel();
+		flags = new QLabel();
 
 		interruptEnable = new QLabel();
 		interruptFlag = new QLabel();
@@ -29,15 +29,16 @@ namespace ui
 		QHBoxLayout * hbox = new QHBoxLayout;
 
 		QFormLayout * layout = new QFormLayout;
-		layout->addRow(new QLabel("IRE"), interruptEnable);
-		layout->addRow(new QLabel("IRF"), interruptFlag);
-		layout->addRow(new QLabel("IME"), imeFlag);
-		layout->addRow(new QLabel("HLT"), haltFlag);
+		layout->addRow(new QLabel(tr("IRE")), interruptEnable);
+		layout->addRow(new QLabel(tr("IRF")), interruptFlag);
+		layout->addRow(new QLabel(tr("IME")), imeFlag);
+		layout->addRow(new QLabel(tr("HLT")), haltFlag);
 		hbox->addLayout(layout);
 
 		layout = new QFormLayout;
-		layout->addRow(new QLabel("PC"), regPC);
-		layout->addRow(new QLabel("SP"), regSP);
+		layout->addRow(new QLabel(tr("PC")), regPC);
+		layout->addRow(new QLabel(tr("SP")), regSP);
+		layout->addRow(new QLabel(tr("AF")), flags);
 		hbox->addLayout(layout);
 
 		layout = new QFormLayout;
@@ -59,7 +60,6 @@ namespace ui
 
 	void VCPUStatusView::update()
 	{
-		std::cout << "Update!" << std::endl;
 		regA->setText(VTools::toHex(emulator->cpuContext->A));
 		regB->setText(VTools::toHex(emulator->cpuContext->B));
 		regC->setText(VTools::toHex(emulator->cpuContext->C));
@@ -76,5 +76,6 @@ namespace ui
 		interruptFlag->setText(VTools::toBin(emulator->cpu->reg_if));
 		imeFlag->setText(QString::number(emulator->cpuContext->ime));
 		haltFlag->setText(QString::number(emulator->cpuContext->halt));
+		flags->setText(VTools::toFlags(emulator->cpuContext->AF));
 	}
 }

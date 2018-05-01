@@ -9,7 +9,8 @@ namespace ui
 		: QAbstractTableModel()
 		, emulator(emulator)
 	{
-
+		horizontalHeaders[TableColumnValue] = QString(tr("Val"));
+		horizontalHeaders[TableColumnTranslation] = QString(tr("Instr"));
 	}
 
 	/// <summary>
@@ -67,6 +68,21 @@ namespace ui
 		}
 
 		return QVariant::Invalid;
+	}
+
+	QVariant VMemoryModel::headerData(int section, Qt::Orientation orientation, int role) const
+	{
+		if (role == Qt::DisplayRole)
+		{
+			if (orientation == Qt::Orientation::Horizontal)
+			{
+				return horizontalHeaders[section];
+			}
+
+			return VTools::toHex((u16i) section);
+		}
+
+		return QAbstractTableModel::headerData(section, orientation, role);
 	}
 
 	/// <summary>

@@ -19,8 +19,9 @@ namespace ui {
 		std::shared_ptr<emu::Emulator> emulator;
 
 		QAction * stepAction;
-
 		QAction * syncMemAction;
+		QAction * goToAddressAction;
+		QAction * goToPCAction;
 
 		QToolBar * debugControls;
 
@@ -30,6 +31,8 @@ namespace ui {
 
 		void createActions();
 		void createToolbar();
+		void goToAddress();
+		void goToPC();
 
 		void tickEmulator();
 	public:

@@ -2,8 +2,8 @@
 #include <QTableView>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QActionGroup>
 #include "vmemoryview.h"
+#include "vtools.h"
 
 namespace ui
 {
@@ -39,7 +39,10 @@ namespace ui
 	{
 		debugControls = addToolBar(tr("debugger toolbar"));
 		debugControls->addAction(stepAction);
+		debugControls->addSeparator();
 		debugControls->addAction(syncMemAction);
+		debugControls->addAction(goToPCAction);
+		debugControls->addAction(goToAddressAction);
 	}
 
 	void VDebug::createActions()
@@ -52,6 +55,14 @@ namespace ui
 		syncMemAction->setIcon(QPixmap("icons/sync.png"));
 		syncMemAction->setCheckable(true);
 		syncMemAction->setChecked(true);
+
+		goToAddressAction = new QAction(tr("&GoTo Memory Address"), this);
+		goToAddressAction->setIcon(QPixmap("icons/goto.png"));
+		connect(goToAddressAction, &QAction::triggered, this, &VDebug::goToAddress);
+
+		goToPCAction = new QAction(tr("GoTo &PC Address"), this);
+		goToPCAction->setIcon(QPixmap("icons/goto-pc.png"));
+		connect(goToPCAction, &QAction::triggered, this, &VDebug::goToPC);
 	}
 
 	/// <summary>
@@ -66,7 +77,27 @@ namespace ui
 		// If memory synchronization is enabled, set the memory view to the address in PC
 		if (syncMemAction->isChecked())
 		{
-			memoryView->select(emulator->cpuContext->PC);
+			goToPC();
 		}
+	}
+
+	/// <summary>
+	/// Prompts the user to input an address and shows it in the memory view
+	/// </summary>
+	void VDebug::goToAddress()
+	{
+		u16i address;
+		if (VTools::getMemoryAddressInput(&address, this))
+		{
+			memoryView->select(address);
+		}
+	}
+
+	/// <summary>
+	/// Shows the address the PC points to in the memory view
+	/// </summary>
+	void VDebug::goToPC()
+	{
+		memoryView->select(emulator->cpuContext->PC);
 	}
 }

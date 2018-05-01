@@ -11,20 +11,23 @@ namespace ui
 	class VMemoryModel : public QAbstractTableModel
 	{
 	private:
-		std::shared_ptr<emu::Emulator> emulator;
-
 		enum TableColumn
 		{
 			TableColumnValue = 0,
 			TableColumnTranslation = 1,
 			TableColumnLast = 2
 		};
+
+		std::shared_ptr<emu::Emulator> emulator;
+		QString horizontalHeaders[TableColumnLast];
+
 	public:
 		VMemoryModel(std::shared_ptr<emu::Emulator> & emulator);
 
 		int rowCount(const QModelIndex & parent) const;
 		int columnCount(const QModelIndex & parent) const;
 		QVariant data(const QModelIndex & index, int role) const;
+		QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
 		void update();
 	};

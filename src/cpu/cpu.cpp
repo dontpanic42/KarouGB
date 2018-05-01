@@ -18,16 +18,7 @@ namespace emu
         
         /* Hilfsfunktionen zum Handling der CPU-Flags */
         namespace flag
-        {
-            /* Flag masks */
-            enum FlagEnum
-            {
-                CARRY = BIT_4,
-                HALFCARRY = BIT_5,
-                SUBTRACT = BIT_6,
-                ZERO = BIT_7,
-            };
-            
+        {   
             /* Die ersten 4 bit des F-Registers sind immer 0, auch wenn mit
                popaf etwas anderes hinein geschrieben wurde */
             u08i FLAG_ALWAYS_ZERO_MASK = 0xF0;
